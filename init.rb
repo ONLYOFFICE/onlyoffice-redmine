@@ -1,3 +1,5 @@
+require 'redmine'
+
 Redmine::Plugin.register :onlyoffice_redmine do
   name 'Onlyoffice Redmine plugin'
   author 'Author name'
