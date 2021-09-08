@@ -5,4 +5,7 @@ Redmine::Plugin.register :onlyoffice_redmine do
   version '0.0.1'
   url 'http://example.com/path/to/plugin'
   author_url 'http://example.com/about'
+
+
+  settings default: {'oo_address' => 'http://localhost/'}, partial: 'settings/onlyoffice_settings'
 end
