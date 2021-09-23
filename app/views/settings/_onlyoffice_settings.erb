@@ -1,12 +1,73 @@
-<table>
-  <tbody>
-    <tr>
-      <th>Docs Address</th>
-      <td>
-        <input type="text" id="settings_oo_address" 
-                           value="<%= settings['oo_address'] %>" 
-                           name="settings[oo_address]" >
-      </td>
-    </tr>
-  </tbody>
-</table>
+
+<p>
+  <%= content_tag(:label, l(:onlyoffice_settings_doc_url)) %>
+  <%= text_field_tag 'settings[oo_address]', settings['oo_address'] %>
+</p>
+<p>
+  <%= content_tag(:label, l(:onlyoffice_settings_jwtsecret)) %>
+  <%= text_field_tag 'settings[jwtsecret]', settings['jwtsecret'] %>
+</p>
+<p>
+  <%= content_tag(:label, l(:onlyoffice_settings_forcesave)) %>
+  <%= check_box_tag 'settings[forcesave]', settings['forcesave'], settings['forcesave'] %>
+</p>
+
+<fieldset>
+  <legend>
+    <span><%= l(:onlyoffice_settings_file_type) %></span>
+  </legend>
+  <label class="floating">
+    <%= check_box_tag 'settings[editor_format_odt]', settings['editor_format_odt'], settings['editor_format_odt'] %>
+    odt
+  </label>
+  <label class="floating">
+    <%= check_box_tag 'settings[editor_format_ods]', settings['editor_format_ods'], settings['editor_format_ods'] %>
+    ods
+  </label>
+  <label class="floating">
+    <%= check_box_tag 'settings[editor_format_odp]', settings['editor_format_odp'], settings['editor_format_odp'] %>
+    odp
+  </label>
+  <label class="floating">
+    <%= check_box_tag 'settings[editor_format_csv]', settings['editor_format_csv'], settings['editor_format_csv'] %>
+    csv
+  </label>
+  <label class="floating">
+    <%= check_box_tag 'settings[editor_format_txt]', settings['editor_format_txt'], settings['editor_format_txt'] %>
+    txt
+  </label>
+  <label class="floating">
+    <%= check_box_tag 'settings[editor_format_rtf]', settings['editor_format_rtf'], settings['editor_format_rtf'] %>
+    rtf
+  </label>
+</fieldset>
+
+<fieldset>
+  <legend>
+    <span><%= l(:onlyoffice_settings_editor_view) %></span>
+  </legend>
+  <label class="floating">
+    <%= check_box_tag 'settings[editor_chat]', settings['editor_chat'], settings['editor_chat'] %>
+    <%= l(:onlyoffice_settings_editor_view_chat) %>
+  </label>
+  <label class="floating">
+    <%= check_box_tag 'settings[editor_compact_header]', settings['editor_compact_header'], settings['editor_compact_header'] %>
+    <%= l(:onlyoffice_settings_editor_view_header) %>
+  </label>
+  <label class="floating">
+    <%= check_box_tag 'settings[editor_compact_feedback]', settings['editor_compact_feedback'], settings['editor_feedback'] %>
+    <%= l(:onlyoffice_settings_editor_view_feedback) %>
+  </label>
+  <label class="floating">
+    <%= check_box_tag 'settings[editor_help]', settings['editor_help'], settings['editor_help'] %>
+    <%= l(:onlyoffice_settings_editor_view_help) %>
+  </label>
+  <label class="floating">
+    <%= check_box_tag 'settings[editor_toolbar_no_tabs]', settings['editor_toolbar_no_tabs'], settings['editor_toolbar_no_tabs'] %>
+    <%= l(:onlyoffice_settings_editor_view_toolbar) %>
+  </label>
+</fieldset>
+
+<script type="text/javascript" language="javascript">
+    document.getElementsByClassName("box tabular settings")[0].classList.remove("settings")
+</script>

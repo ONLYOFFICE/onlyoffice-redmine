@@ -1,3 +1,13 @@
-# English strings go here for Rails i18n
 en:
-  # my_label: "My label"
+  open_in_onlyoffice: "Open in OnlyOffice"
+  edit_in_onlyoffice: "Edit in OnlyOffice"
+  onlyoffice_settings_doc_url: "Document Editing Service address"
+  onlyoffice_settings_jwtsecret: "Secret key (leave blank to disable)"
+  onlyoffice_settings_forcesave: "Enable Force Save"
+  onlyoffice_settings_file_type: "Open the file for editing (due to format restrictions, the data might be lost when saving to the formats from the list below)"
+  onlyoffice_settings_editor_view: "Editor customization settings"
+  onlyoffice_settings_editor_view_chat: "Display Chat menu button"
+  onlyoffice_settings_editor_view_help: "Display Help menu button"
+  onlyoffice_settings_editor_view_header: "Display the header more compact"
+  onlyoffice_settings_editor_view_feedback: "Display Feedback & Support menu button"
+  onlyoffice_settings_editor_view_toolbar: "Display monochrome toolbar header"
