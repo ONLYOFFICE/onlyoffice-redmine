@@ -1,18 +1,18 @@
-= ONLYOFFICE Redmine plugin
+## ONLYOFFICE Redmine plugin
 
 This plugin enables users to edit office documents from Redmine using ONLYOFFICE Docs packaged as Document Server - Community or Enterprise
 Edition.
 
-== Features
-* Create and edit text documents, spreadsheets, and presentations.
+## Features
+* Edit text documents, spreadsheets, and presentations.
 * Co-edit documents in real-time: use two co-editing modes (Fast and Strict), Track Changes, comments, and built-in chat.
 
 Supported formats:
 
-* For viewing and editing: DOCX, XLSX, PPTX.
-* For converting to Office Open XML: ODT, ODP, ODS, DOC, XLS, PPT.
+* For editing: DOCX, XLSX, PPTX.
+* For viewing only: DOC, DOCX, DOCM, DOT, DOTX, DOTM, ODT, FODT, OTT, RTF, TXT, HTML, HTM, MHT, XML, PDF, DJVU, FB2, EPUB, XPS, XLS, XLSX, XLSM, XLT, XLTX, XLTM, ODS, FODS, OTS, CSV, PPS, PPSX, PPSM, PPT, PPTX, PPTM, POT, POTX, POTM, ODP, FODP, OTP.
 
-== Installing ONLYOFFICE Docs
+## Installing ONLYOFFICE Docs
 
 You will need an instance of ONLYOFFICE Docs (Document Server) that is resolvable and connectable both from Redmine and any end clients. ONLYOFFICE Document Server must also be able to POST to Redmine directly.
 
@@ -24,25 +24,10 @@ To install Enterprise Edition, follow instructions here[https://helpcenter.onlyo
 
 Community Edition vs Enterprise Edition comparison can be found here.
 
-== Installing ONLYOFFICE Redmine plugin
+## Installing ONLYOFFICE Redmine plugin
 
 * steps
 
-== How it works
+## How it works
 
 The ONLYOFFICE integration follows the API documented here[https://api.onlyoffice.com/editors/basic]:
-
-
-== ONLYOFFICE Docs editions
-
-ONLYOFFICE offers different versions of its online document editors that can be deployed on your own servers.
-
-* Community Edition (onlyoffice-documentserver package)
-* Enterprise Edition (onlyoffice-documentserver-ee package)
-
-The table below will help you make the right choice.
-
-
-\* It's possible to add documents for comparison from your local drive and from URL. Adding files for comparison from storage is not available yet.
-
-\** Support for all conditions and gradient. Adding/Editing capabilities are coming soon
