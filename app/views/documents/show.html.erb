@@ -27,7 +27,7 @@
 
 <script type="text/javascript" language="javascript">
     if (<%= view_permission || edit_permission%>) {
-        addOnlyOfficeButton(<%= raw attachments_disk_filenames %>);
+        addOnlyOfficeButton(<%= raw FileUtility.get_all_available_formats %>, <%= raw attachments_disk_filenames %>);
         var onlyofficeButtons = document.getElementsByClassName("onlyoffice-editor-button");
         for (var i = 0; i < onlyofficeButtons.length; i++) {
             if (<%= view_permission %>) {

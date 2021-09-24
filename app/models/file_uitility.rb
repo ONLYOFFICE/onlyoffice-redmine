@@ -8,6 +8,10 @@ class FileUtility
 
   class << self
 
+    def get_all_available_formats
+      return @@exts_document.to_a + @@exts_spreadsheet.to_a + @@exts_presentation
+    end
+
     def get_file_type(file_name)
       ext = File.extname(file_name).downcase
       if @@exts_document.include? ext

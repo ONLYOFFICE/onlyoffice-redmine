@@ -1,15 +1,11 @@
-var addOnlyOfficeButton = function(attachmentsDiskFilename) {
-    var extDocument = [".doc", ".docx", ".docm", ".dot", ".dotx", ".dotm", ".odt", ".fodt", ".ott", ".rtf",
-        ".txt", ".html", ".htm", ".mht", ".xml", ".pdf", ".djvu", ".fb2", ".epub", ".xps"];
-    var extCell = [".xls", ".xlsx", ".xlsm", ".xlt", ".xltx", ".xltm", ".ods", ".fods", ".ots", ".csv"];
-    var extPres = [".pps", ".ppsx", ".ppsm", ".ppt", ".pptx", ".pptm", ".pot", ".potx", ".potm", ".odp", ".fodp", ".otp"];
+var addOnlyOfficeButton = function(formats, attachmentsDiskFilename) {
     if (document.getElementsByClassName("attachments")[0] != null) {
         var attachmentsTable = document.getElementsByClassName("attachments")[0].children[1];
         var attachmentsList = attachmentsTable.children[0].children;
 
         for (var i = 0; i < attachmentsList.length; i++) {
             var ext = attachmentsDiskFilename[i].substring(attachmentsDiskFilename[i].lastIndexOf("."));
-            if (extDocument.includes(ext) || extCell.includes(ext) || extPres.includes(ext)) {
+            if (formats.includes(ext)) {
                 var editorButton = document.createElement("a");
 
                 editorButton.id = "onlyoffice-button-" + i;
