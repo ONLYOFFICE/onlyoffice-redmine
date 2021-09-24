@@ -7,40 +7,6 @@
   <%= content_tag(:label, l(:onlyoffice_settings_jwtsecret)) %>
   <%= text_field_tag 'settings[jwtsecret]', settings['jwtsecret'] %>
 </p>
-<p>
-  <%= content_tag(:label, l(:onlyoffice_settings_forcesave)) %>
-  <%= check_box_tag 'settings[forcesave]', settings['forcesave'], settings['forcesave'] %>
-</p>
-
-<fieldset>
-  <legend>
-    <span><%= l(:onlyoffice_settings_file_type) %></span>
-  </legend>
-  <label class="floating">
-    <%= check_box_tag 'settings[editor_format_odt]', settings['editor_format_odt'], settings['editor_format_odt'] %>
-    odt
-  </label>
-  <label class="floating">
-    <%= check_box_tag 'settings[editor_format_ods]', settings['editor_format_ods'], settings['editor_format_ods'] %>
-    ods
-  </label>
-  <label class="floating">
-    <%= check_box_tag 'settings[editor_format_odp]', settings['editor_format_odp'], settings['editor_format_odp'] %>
-    odp
-  </label>
-  <label class="floating">
-    <%= check_box_tag 'settings[editor_format_csv]', settings['editor_format_csv'], settings['editor_format_csv'] %>
-    csv
-  </label>
-  <label class="floating">
-    <%= check_box_tag 'settings[editor_format_txt]', settings['editor_format_txt'], settings['editor_format_txt'] %>
-    txt
-  </label>
-  <label class="floating">
-    <%= check_box_tag 'settings[editor_format_rtf]', settings['editor_format_rtf'], settings['editor_format_rtf'] %>
-    rtf
-  </label>
-</fieldset>
 
 <fieldset>
   <legend>

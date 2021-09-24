@@ -107,26 +107,6 @@ class DocumentHelper
 
     def is_editable(attachment)
       editable_mime_types = @@editable_types.split("|")
-      if Setting.plugin_onlyoffice_redmine["editor_format_odt"].eql?("on")
-        editable_mime_types = editable_mime_types + ["application/vnd.oasis.opendocument.text"]
-      end
-      if Setting.plugin_onlyoffice_redmine["editor_format_ods"].eql?("on")
-        editable_mime_types = editable_mime_types + ["application/vnd.oasis.opendocument.spreadsheet"]
-      end
-      if Setting.plugin_onlyoffice_redmine["editor_format_odp"].eql?("on")
-        editable_mime_types = editable_mime_types + ["application/vnd.oasis.opendocument.presentation"]
-      end
-      if Setting.plugin_onlyoffice_redmine["editor_format_csv"].eql?("on")
-        editable_mime_types = editable_mime_types + ["text/csv"]
-      end
-      if Setting.plugin_onlyoffice_redmine["editor_format_txt"].eql?("on")
-        editable_mime_types = editable_mime_types + ["text/plain"]
-      end
-      if Setting.plugin_onlyoffice_redmine["editor_format_rtf"].eql?("on")
-        editable_mime_types = editable_mime_types + ["text/richtext"]
-        editable_mime_types = editable_mime_types + ["application/rtf"]
-        editable_mime_types = editable_mime_types + ["application/x-rtf"]
-      end
       editable = editable_mime_types.include?(attachment.content_type)
       return editable
     end
@@ -155,7 +135,7 @@ class DocumentHelper
             :name => user.lastname + " " + user.firstname
           },
           :customization => {
-            :forcesave => Setting.plugin_onlyoffice_redmine["forcesave"].eql?("on") ? true : false,
+            :forcesave => false,
             :goback => {
               :url => go_back_url(attachment)
             },
