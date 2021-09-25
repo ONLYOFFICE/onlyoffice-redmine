@@ -27,7 +27,7 @@ class OnlyofficeController < AccountController
   def callback
     data = CallbackHelper.read_body(request)
     if data == nil || data.empty?
-      render plain: '{"error":1}'
+      render plain: '{"error":1, "message": "Callback data in null or empty"}'
       return
     end
 
@@ -45,13 +45,13 @@ class OnlyofficeController < AccountController
 
     if userid.eql?(nil)
       logger.error("Userid is null")
-      render plain: '{"error":1}'
+      render plain: '{"error":1, "message": "Userid is null"}'
       return
     end
 
     unless user_by_rss.eql?(User.find(userid))
       logger.error("Different users found.")
-      render plain: '{"error":1}'
+      render plain: '{"error":1, "message": "Different users found."}'
       return
     end
     self.logged_user = user_by_rss
@@ -61,21 +61,25 @@ class OnlyofficeController < AccountController
     case status
     when 0
       logger.error "ONLYOFFICE has reported that no doc with the specified key can be found"
-      render plain: '{"error":1}'
+      render plain: '{"error":1, "message": "ONLYOFFICE has reported that no doc with the specified key can be found"}'
       return
     when 1
       logger.info "User has entered/exited ONLYOFFICE"
       render plain: '{"error":0}'
       return
     when 2
-      logger.info "Document Updated, changing content"
-      @attachment = Attachment.find(params[:id])
-      saved = CallbackHelper.process_save(data, @attachment)
-      render plain: '{"error":' + saved.to_s + '}'
+      begin
+        logger.info "Document Updated, changing content"
+        @attachment = Attachment.find(params[:id])
+        saved = CallbackHelper.process_save(data, @attachment)
+        render plain: '{"error":' + saved.to_s + '}'
+      rescue => ex
+        render plain: '{"error":1, "message": "' + ex.message + '"}'
+      end
       return
     when 3
       logger.error "ONLYOFFICE has reported that saving the document has failed"
-      render plain: '{"error":1}'
+      render plain: '{"error":1, "message": "ONLYOFFICE has reported that saving the document has failed"}'
       return
     when 4
       logger.info "No document updates"
@@ -84,7 +88,7 @@ class OnlyofficeController < AccountController
     when 6
       unless Setting.plugin_onlyoffice_redmine["forcesave"].eql?("on")
         logger.info "Forcesave is disabled, ignoring forcesave request"
-        render plain: '{"error":1}'
+        render plain: '{"error":1, "message": "Forcesave is disabled, ignoring forcesave request"}'
         return nil
       end
       logger.info "Forcesave request "
