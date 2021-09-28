@@ -45,7 +45,7 @@ Community Edition vs Enterprise Edition comparison can be found here.
 
    `RAILS_ENV=production bundle exec rake db:migrate`
 
-   `RAILS_ENV=production bundle exec rake redmine:plugins:migrate NAME=redmine_dmsf`
+   `RAILS_ENV=production bundle exec rake redmine:plugins:migrate NAME=onlyoffice_redmine`
 
 7. You should configure the plugin via Redmine interface: **Administration -> Plugins -> Onlyoffice Redmine plugin -> Configure**.
 
