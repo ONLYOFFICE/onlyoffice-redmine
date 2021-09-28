@@ -2,11 +2,13 @@
 <!--http://www.onlyoffice.com-->
 
 <%= stylesheet_link_tag "editor", :plugin => "onlyoffice_redmine" %>
+<% editor_base_url = Setting.plugin_onlyoffice_redmine["oo_address"] %>
 
 <div id="onlyoffice-container">
   <div id="iframeEditor"></div>
 </div>
-<script src="<%= Setting.plugin_onlyoffice_redmine["oo_address"] %>OfficeWeb/apps/api/documents/api.js"></script>
+<script src="<%= editor_base_url[-1].eql?("/") ? editor_base_url : editor_base_url + "/" %>OfficeWeb/apps/api/documents/api.js"></script>
+
 <script type="text/javascript" language="javascript">
 
     var docEditor;
