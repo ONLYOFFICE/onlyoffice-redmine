@@ -1,19 +1,17 @@
 Redmine ONLYOFFICE integration plugin uses code from the following 3rd party projects.
 
-rails         - Rails is a web-application framework that includes everything needed to create database-backed web applications according to the Model-View-Controller (MVC) pattern. (https://github.com/rails/rails/blob/v6.0.3.2/MIT-LICENSE)
+i18n          - Ruby internationalization and localization (i18n) solution. (https://raw.githubusercontent.com/ruby-i18n/i18n/master/MIT-LICENSE)
+License:        MIT
+License File    i18n.license
+
+rails         - Rails is a web-application framework that includes everything needed to create database-backed web applications according to the Model-View-Controller (MVC) pattern. (https://github.com/rails/rails/blob/main/MIT-LICENSE)
 License:        MIT
 License File:   rails.license
-
-tzinfo-data   - TZInfo::Data contains data from the IANA Time Zone database packaged as Ruby modules for use with TZInfo. (https://github.com/tzinfo/tzinfo-data/blob/master/LICENSE)
-License:        MIT
-License File:   tzinfo-data.license
 
 render-parent - Helper, which renders template with the same name as current but higher on the view path. (https://github.com/anteo/render-parent/blob/master/LICENSE.txt)
 License:        MIT
 License File:   render-parent.license
 
-i18n          - Ruby internationalization and localization (i18n) solution. (https://github.com/ruby-i18n/i18n/)
+tzinfo-data   - TZInfo::Data contains data from the IANA Time Zone database packaged as Ruby modules for use with TZInfo. (https://github.com/tzinfo/tzinfo-data/blob/master/LICENSE)
 License:        MIT
-License File    i18n.license
-
-
+License File:   tzinfo-data.license
