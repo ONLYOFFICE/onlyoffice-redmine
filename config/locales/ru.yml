@@ -1,6 +1,6 @@
 ru:
-   open_in_onlyoffice: "Открыть в OnlyOffice"
-   edit_in_onlyoffice: "Редактировать в OnlyOffice"
+   open_in_onlyoffice: "Открыть в ONLYOFFICE"
+   edit_in_onlyoffice: "Редактировать в ONLYOFFICE"
    onlyoffice_settings_doc_url: "Адрес службы редактирования документов"
    onlyoffice_settings_jwtsecret: "Секретный ключ (оставьте пустым для отключения)"
    onlyoffice_settings_forcesave: "Включить Force Save"

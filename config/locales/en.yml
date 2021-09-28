@@ -1,6 +1,6 @@
 en:
-  open_in_onlyoffice: "Open in OnlyOffice"
-  edit_in_onlyoffice: "Edit in OnlyOffice"
+  open_in_onlyoffice: "Open in ONLYOFFICE"
+  edit_in_onlyoffice: "Edit in ONLYOFFICE"
   onlyoffice_settings_doc_url: "Document Editing Service address"
   onlyoffice_settings_jwtsecret: "Secret key (leave blank to disable)"
   onlyoffice_settings_forcesave: "Enable Force Save"
