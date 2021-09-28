@@ -1,7 +1,7 @@
 require 'redmine'
 
 Redmine::Plugin.register :onlyoffice_redmine do
-  name 'Onlyoffice Redmine plugin'
+  name 'ONLYOFFICE Redmine plugin'
   author 'ONLYOFFICE'
   description 'Redmine ONLYOFFICE integration plugin'
   version '0.0.1'
