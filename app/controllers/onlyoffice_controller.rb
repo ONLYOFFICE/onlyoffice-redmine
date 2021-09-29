@@ -7,15 +7,21 @@ require_dependency "user"
 class OnlyofficeController < AccountController
 
   skip_before_action :verify_authenticity_token, :only => [ :callback ]
-  before_action :find_attachment, :only => [ :download, :editor]
+  before_action :find_attachment, :only => [ :download, :editor, :callback]
   before_action :file_readable, :read_authorize, :only => [ :download, :editor ]
 
   def download
-    # check if request came from Docs
+    attachment_id = JSON.parse(JWTHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["attachment_id"]
 
-    send_file @attachment.diskfile, :filename => @attachment.filename,
-                                    :type => detect_content_type(@attachment),
-                                    :disposition => "attachment"
+    if @attachment.id.eql?(attachment_id)
+      send_file @attachment.diskfile, :filename => @attachment.filename,
+                :type => detect_content_type(@attachment),
+                :disposition => "attachment"
+    else
+      logger.error("Different attachments id from token and url.")
+      render_404
+    end
+
   end
 
   def editor
@@ -25,9 +31,16 @@ class OnlyofficeController < AccountController
   end
 
   def callback
+    attachment_id = JSON.parse(JWTHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["attachment_id"]
+    if !@attachment.id.eql?(attachment_id)
+      logger.error("Different attachments id from token and url.")
+      render plain: '{"error":1, "message": "Different attachments id from token and url."}'
+      return
+    end
+
     data = CallbackHelper.read_body(request)
     if data == nil || data.empty?
-      render plain: '{"error":1, "message": "Callback data in null or empty"}'
+      render plain: '{"error":1, "message": "Callback data is null or empty"}'
       return
     end
 

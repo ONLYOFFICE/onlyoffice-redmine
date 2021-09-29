@@ -50,11 +50,17 @@ class DocumentHelper
     end
 
     def get_download_url(id)
-      return @@base_url + "/onlyoffice/download/#{id}"
+      payload = {
+        :attachment_id => id
+      }
+      return @@base_url + "/onlyoffice/download/#{id}?key=#{JWTHelper.encode(payload, Setting.plugin_onlyoffice_redmine["onlyoffice_key"])}"
     end
 
     def get_callback_url(id, user)
-      url = @@base_url + "/onlyoffice/callback/#{id}/#{user.rss_key}"
+      payload = {
+        :attachment_id => id
+      }
+      url = @@base_url + "/onlyoffice/callback/#{id}/#{user.rss_key}?key=#{JWTHelper.encode(payload, Setting.plugin_onlyoffice_redmine["onlyoffice_key"])}"
     end
 
     def get_document_type(file_name)
@@ -112,6 +118,9 @@ class DocumentHelper
     end
 
     def get_attachment_config(user, attachment, lang, action_data)
+      if Setting.plugin_onlyoffice_redmine["onlyoffice_key"].eql?(nil)
+        Setting.plugin_onlyoffice_redmine["onlyoffice_key"] = Token.generate_token_value
+      end
       permission_to_edit = permission_to_edit_file(user.roles_for_project(attachment.project), attachment.container_type)
       config = {
         :type => "desktop",
