@@ -11,9 +11,23 @@ class OnlyofficeController < AccountController
   before_action :file_readable, :read_authorize, :only => [ :download, :editor ]
 
   def download
-    attachment_id = JSON.parse(JWTHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["attachment_id"]
+    if params[:key].eql?(nil)
+      logger.error("No key param in url")
+      render_403
+    end
 
-    if @attachment.id.eql?(attachment_id)
+    attachment_id = JSON.parse(JWTHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["attachment_id"]
+    type = JSON.parse(JWTHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["type"]
+    user_id = JSON.parse(JWTHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["userid"]
+
+    user = User.find(user_id)
+    perm_to_read = DocumentHelper.permission_to_read_file(user.roles_for_project(@attachment.project), @attachment.container_type)
+    if !perm_to_read
+      logger.error("No permission to download file")
+      render_403
+    end
+
+    if @attachment.id.eql?(attachment_id) && type.eql?("download")
       send_file @attachment.diskfile, :filename => @attachment.filename,
                 :type => detect_content_type(@attachment),
                 :disposition => "attachment"
@@ -31,7 +45,20 @@ class OnlyofficeController < AccountController
   end
 
   def callback
+    if params[:key].eql?(nil)
+      logger.error("No key param in url")
+      render_403
+    end
+
+    type = JSON.parse(JWTHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["type"]
     attachment_id = JSON.parse(JWTHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["attachment_id"]
+
+    if !type.eql?("callback")
+      logger.error("Not callback token type.")
+      render plain: '{"error":1, "message": "Not callback token type."}'
+      return
+    end
+
     if !@attachment.id.eql?(attachment_id)
       logger.error("Different attachments id from token and url.")
       render plain: '{"error":1, "message": "Different attachments id from token and url."}'
