@@ -19,7 +19,12 @@ var addOnlyOfficeButton = function(formats, attachmentsDiskFilename) {
                 editorButton.onclick = function () {
                     window.open(window.location.origin + "/onlyoffice/editor" + attachmentHref.substring(attachmentHref.lastIndexOf("/")));
                 }
-                attachmentsList[i].children[attachmentsList[i].children.length - 1].getElementsByClassName("delete icon-only icon-del")[0].before(editorButton);
+                var deleteButton = attachmentsList[i].children[attachmentsList[i].children.length - 1].getElementsByClassName("delete icon-only icon-del")[0];
+                if (!!deleteButton) {
+                    deleteButton.before(editorButton);
+                } else {
+                    attachmentsList[i].children[attachmentsList[i].children.length - 1].append(editorButton);
+                }
             }
         }
     }
