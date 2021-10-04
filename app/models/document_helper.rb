@@ -4,9 +4,7 @@
 class DocumentHelper
 
   @@base_url = nil
-  @@editable_types = "application/vnd.openxmlformats-officedocument.wordprocessingml.document|
-                        application/vnd.openxmlformats-officedocument.spreadsheetml.sheet|
-                        application/vnd.openxmlformats-officedocument.presentationml.presentation"
+  @@editable_types = %w[application/vnd.openxmlformats-officedocument.wordprocessingml.document application/vnd.openxmlformats-officedocument.spreadsheetml.sheet application/vnd.openxmlformats-officedocument.presentationml.presentation]
 
   class << self
 
@@ -134,8 +132,7 @@ class DocumentHelper
     end
 
     def is_editable(attachment)
-      editable_mime_types = @@editable_types.split("|")
-      editable = editable_mime_types.include?(attachment.content_type)
+      editable = @@editable_types.include?(attachment.content_type)
       return editable
     end
 
