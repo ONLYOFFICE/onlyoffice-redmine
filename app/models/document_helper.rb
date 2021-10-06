@@ -111,7 +111,7 @@ class DocumentHelper
     end
 
     def get_key(attachment)
-      return attachment.id.to_s + "_" + attachment.disk_filename + "_" + get_attachment_version(history_path(attachment.diskfile), "save").to_s
+      return attachment.id.to_s + "_" + attachment.created_on.to_s.gsub(/\W+/, "_")
     end
 
     def go_back_url(attachment)
