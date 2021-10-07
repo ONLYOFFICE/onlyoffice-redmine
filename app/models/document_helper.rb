@@ -12,41 +12,6 @@ class DocumentHelper
       @@base_url = url
     end
 
-    def storage_path(attachment, filename)
-      directory = attachment.diskfile.sub(attachment.disk_filename, "")
-      return directory + File.basename(filename)
-    end
-
-    def history_path(path)
-      directory = "#{path}-history"
-      unless File.directory?(directory)
-        FileUtils.mkdir_p(directory)
-      end
-      return directory
-    end
-
-    def version_path(history_path, version)
-      return File.join(history_path, version)
-    end
-
-    def get_attachment_version(history_path, save_type)
-      if !Dir.exist?(history_path)
-        return 1.0
-      end
-
-      version = 1.0
-      Dir.foreach(history_path) { |e|
-        next if e.eql?(".")
-        next if e.eql?("..")
-        if File.directory?(File.join(history_path, e))
-          if e.to_f >= version
-            version = save_type.eql?("force") ? e.to_f + 0.1 : e.to_i + 1.0
-          end
-        end
-      }
-      return version
-    end
-
     def get_download_url(id, user_id)
       payload = {
         :attachment_id => id,
