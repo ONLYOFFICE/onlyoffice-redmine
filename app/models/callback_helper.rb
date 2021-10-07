@@ -65,6 +65,13 @@ class CallbackHelper
       end
     end
 
+    def delete_diskfile_by_digest(digest, path)
+      attachments = Attachment.where(digest: digest)
+      if attachments.length.eql?(0)
+        File.delete(path) if File.exist?(path)
+      end
+    end
+
     def process_save(callback_json, attachment)
       download_uri = callback_json['url']
       if (download_uri.eql?(nil))
@@ -72,37 +79,33 @@ class CallbackHelper
         return saved
       end
 
-      new_file_name = attachment.disk_filename
-      cur_ext = File.extname(attachment.filename).downcase
-      download_ext = File.extname(download_uri).downcase
-
       saved = 1
       begin
-        storage_path = DocumentHelper.storage_path(attachment, new_file_name)
-        hist_dir = DocumentHelper.history_path(storage_path)
-        ver_dir = DocumentHelper.version_path(hist_dir, DocumentHelper.get_attachment_version(hist_dir, "save").to_s)
+        old_digest = attachment.digest
+        old_diskfile = attachment.diskfile
+        callback_created_data = callback_json['history']['changes'][0]['created']
+        new_year = callback_created_data.split("-")[0][2,4]
+        new_date = new_year + callback_created_data.split("-")[1] + callback_created_data.split("-")[1].split(" ")[0]
+        new_time = callback_created_data.split(" ")[1].split(":")[0] + callback_created_data.split(" ")[1].split(":")[1] + callback_created_data.split(" ")[1].split(":")[2]
+        new_disk_directory = callback_created_data.split("-")[0] + "/" + callback_created_data.split("-")[1]
+        new_absolute_directory = attachment.diskfile.split("files")[0] + "files/" + new_disk_directory
+        new_filename = new_date + new_time + "_" + attachment.disk_filename.split("_")[1]
 
-        FileUtils.mkdir_p(ver_dir)
-        FileUtils.move(DocumentHelper.storage_path(attachment, attachment.disk_filename), File.join(ver_dir, "prev#{cur_ext}"))
-        save_from_uri(attachment.diskfile, download_uri)
+        save_from_uri(File.join(new_absolute_directory, new_filename), download_uri)
 
-        if callback_json["changesurl"]
-          save_from_uri(File.join(ver_dir, "diff.zip"), callback_json["changesurl"])
-        end
-
-        history_data = callback_json["changeshistory"]
-        if !history_data
-          history_data = callback_json["history"].to_json
-        end
-        if history_data
-          File.open(File.join(ver_dir, "changes.json"), "wb") do |file|
-            file.write(history_data)
+        new_digest = Digest::SHA256.new
+        new_filesize = attachment.filesize
+        File.open(File.join(new_absolute_directory, new_filename), 'rb') do |file|
+          while buffer = file.read(8192)
+            new_digest.update(buffer)
+            new_filesize = file.size
           end
         end
 
-        File.open(File.join(ver_dir, "key.txt"), "wb") do |file|
-          file.write(data["key"])
-        end
+        Attachment.update(attachment.id, :filesize => new_filesize, :digest => new_digest, :disk_filename => new_filename,
+                          :disk_directory => new_disk_directory, :created_on => callback_created_data)
+
+        delete_diskfile_by_digest(old_digest, old_diskfile)
 
         saved = 0
       rescue StandardError => error
