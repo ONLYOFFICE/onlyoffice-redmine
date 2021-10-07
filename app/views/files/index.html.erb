@@ -36,6 +36,7 @@
                 editorButton.href = "#";
                 editorButton.onclick = function () {
                     window.open(window.location.origin + "/onlyoffice/editor" + attachmentHref.substring(attachmentHref.lastIndexOf("/")));
+                    window.location.reload();
                 }
                 buttonsContainer.children[0].before(editorButton);
             }

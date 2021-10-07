@@ -18,6 +18,7 @@ var addOnlyOfficeButton = function(formats, attachmentsDiskFilename) {
                 editorButton.href = "#";
                 editorButton.onclick = function () {
                     window.open(window.location.origin + "/onlyoffice/editor" + attachmentHref.substring(attachmentHref.lastIndexOf("/")));
+                    window.location.reload();
                 }
                 var deleteButton = attachmentsList[i].children[attachmentsList[i].children.length - 1].getElementsByClassName("delete icon-only icon-del")[0];
                 if (!!deleteButton) {

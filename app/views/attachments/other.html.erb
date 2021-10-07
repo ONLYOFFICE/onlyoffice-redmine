@@ -26,6 +26,7 @@
   let attachmentHref = window.location.href;
   editorButton.onclick = function () {
       window.open(window.location.origin + "/onlyoffice/editor" + attachmentHref.substring(attachmentHref.lastIndexOf("/")));
+      window.location.reload();
   }
   downloadButton.before(editorButton);
 </script>
