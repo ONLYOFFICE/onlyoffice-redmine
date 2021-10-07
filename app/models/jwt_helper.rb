@@ -2,14 +2,19 @@
 # http://www.onlyoffice.com
 
 class JWTHelper
-  @jwt_secret = Setting.plugin_onlyoffice_redmine["jwtsecret"]
+  @jwt_secret = nil
 
   class << self
+    def init
+      @jwt_secret = Setting.plugin_onlyoffice_redmine["jwtsecret"]
+    end
+
     def is_enabled
       return @jwt_secret && !@jwt_secret.empty? ? true : false
     end
 
-    def encode(payload, secret = @jwt_secret)
+    def encode(payload, secret = nil)
+      secret ||= @jwt_secret
       header = { :alg => "HS256", :typ => "JWT" }
       enc_header = Base64.urlsafe_encode64(header.to_json).remove("=")
       enc_payload = Base64.urlsafe_encode64(payload.to_json).remove("=")
@@ -18,7 +23,8 @@ class JWTHelper
       return "#{enc_header}.#{enc_payload}.#{hash}"
     end
 
-    def decode(token, secret = @jwt_secret)
+    def decode(token, secret = nil)
+      secret ||= @jwt_secret
       if !is_enabled && secret.eql?(@jwt_secret)
         return ""
       end
@@ -34,7 +40,8 @@ class JWTHelper
 
     private
 
-    def calc_hash(header, payload, secret = @jwt_secret)
+    def calc_hash(header, payload, secret = nil)
+      secret ||= @jwt_secret
       return OpenSSL::HMAC.digest("SHA256", secret, "#{header}.#{payload}")
     end
 

@@ -39,6 +39,7 @@ class OnlyofficeController < AccountController
   end
 
   def editor
+    JWTHelper.init
     DocumentHelper.init(request.base_url)
     @user = User.current
     @editor_config = DocumentHelper.get_attachment_config(@user, @attachment, I18n.locale,  params[:action_data])
