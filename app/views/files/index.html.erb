@@ -24,7 +24,7 @@
         var attachmentList = document.getElementsByClassName("file");
         for (var i = 0; i < attachmentList.length; i++) {
             if (<%= is_openable_array %>[i]) {
-                var buttonsContainer = attachmentList[i].getElementsByClassName("buttons")[0];
+                let buttonsContainer = attachmentList[i].getElementsByClassName("buttons")[0];
                 var editorButton = document.createElement("a");
 
                 editorButton.className = "onlyoffice-editor-button icon-only";
@@ -37,6 +37,22 @@
                 editorButton.onclick = function () {
                     window.open(window.location.origin + "/onlyoffice/editor" + attachmentHref.substring(attachmentHref.lastIndexOf("/")));
                     window.location.reload();
+                }
+                let tooltipTimeout = null;
+                editorButton.onmouseover = function () {
+                    if (tooltipTimeout != null) {
+                        clearTimeout(tooltipTimeout);
+                    }
+                    tooltipTimeout = setTimeout(function () {
+                        if (!(!!buttonsContainer.getElementsByClassName("icon-only icon-del")[0])) {
+                            document.getElementsByClassName("ui-tooltip")[0].style.marginTop = "-14px";
+                        }
+                    }, 400);
+                }
+                editorButton.onmouseout = function () {
+                    if (tooltipTimeout != null) {
+                        clearTimeout(tooltipTimeout);
+                    }
                 }
                 buttonsContainer.children[0].before(editorButton);
             }
