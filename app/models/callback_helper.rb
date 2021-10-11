@@ -83,11 +83,12 @@ class CallbackHelper
       begin
         old_digest = attachment.digest
         old_diskfile = attachment.diskfile
-        callback_created_data = callback_json['history']['changes'][0]['created']
-        new_year = callback_created_data.split("-")[0][2,4]
-        new_date = new_year + callback_created_data.split("-")[1] + callback_created_data.split("-")[1].split(" ")[0]
-        new_time = callback_created_data.split(" ")[1].split(":")[0] + callback_created_data.split(" ")[1].split(":")[1] + callback_created_data.split(" ")[1].split(":")[2]
-        new_disk_directory = callback_created_data.split("-")[0] + "/" + callback_created_data.split("-")[1]
+        callback_date = DateTime.parse(callback_json['history']['changes'][0]['created'])
+
+        new_date = callback_date.year.to_s[2,4] + callback_date.month.to_s + callback_date.day.to_s
+        new_time = callback_date.hour.to_s + callback_date.minute.to_s + callback_date.second.to_s
+
+        new_disk_directory = callback_date.year.to_s + "/" + callback_date.month.to_s
         new_absolute_directory = attachment.diskfile.split("files")[0] + "files/" + new_disk_directory
         new_filename = new_date + new_time + "_" + attachment.disk_filename.split("_")[1]
 
@@ -103,7 +104,7 @@ class CallbackHelper
         end
 
         Attachment.update(attachment.id, :filesize => new_filesize, :digest => new_digest, :disk_filename => new_filename,
-                          :disk_directory => new_disk_directory, :created_on => callback_created_data)
+                          :disk_directory => new_disk_directory, :created_on => callback_date)
 
         delete_diskfile_by_digest(old_digest, old_diskfile)
 
