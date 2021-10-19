@@ -8,9 +8,10 @@ class OnlyofficeController < AccountController
 
   skip_before_action :verify_authenticity_token, :only => [ :callback ]
   before_action :find_attachment, :only => [ :download, :editor, :callback]
-  before_action :file_readable, :read_authorize, :only => [ :download, :editor ]
+  before_action :file_readable, :read_authorize, :only => [ :editor ]
 
   def download
+    file_readable
     if params[:key].eql?(nil)
       logger.error("No key param in url")
       render_403
@@ -21,6 +22,7 @@ class OnlyofficeController < AccountController
     user_id = JSON.parse(JWTHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["userid"]
 
     user = User.find(user_id)
+    read_authorize(user)
     perm_to_read = DocumentHelper.permission_to_read_file(user.roles_for_project(@attachment.project), @attachment.container_type)
     if !perm_to_read
       logger.error("No permission to download file")
@@ -163,12 +165,8 @@ class OnlyofficeController < AccountController
     end
   end
 
-  def read_authorize
-    @attachment.visible? ? true : deny_access
-  end
-
-  def update_authorize
-    @attachment.editable? ? true : deny_access
+  def read_authorize(user=User.current)
+    @attachment.visible?(user) ? true : deny_access
   end
 
   def detect_content_type(attachment)
