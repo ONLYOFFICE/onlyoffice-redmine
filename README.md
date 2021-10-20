@@ -28,6 +28,8 @@ Community Edition vs Enterprise Edition comparison can be found [here](#onlyoffi
 
 ## Installing Redmine ONLYOFFICE integration plugin
 
+#### Minimum version of Redmine for ONLYOFFICE integration plugin is 4.0.0 .
+
 1. If you're new to Redmine, install it following [these instructions](https://www.redmine.org/projects/redmine/wiki/RedmineInstall). 
 
 2. Download Redmine ONLYOFFICE integration plugin.
