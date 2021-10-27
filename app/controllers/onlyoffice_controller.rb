@@ -132,7 +132,7 @@ class OnlyofficeController < AccountController
       unless Setting.plugin_onlyoffice_redmine["forcesave"].eql?("on")
         logger.info "Forcesave is disabled, ignoring forcesave request"
         render plain: '{"error":1, "message": "Forcesave is disabled, ignoring forcesave request"}'
-        return nil
+        return
       end
       logger.info "Forcesave request "
       logger.info "Forcesave complete"

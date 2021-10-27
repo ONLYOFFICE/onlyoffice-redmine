@@ -47,10 +47,10 @@ class CallbackHelper
       uri = URI.parse(download_url)
       http = Net::HTTP.new(uri.host, uri.port)
 
-      if download_url.start_with?('https')
-        http.use_ssl = true
-        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      end
+      # if download_url.start_with?('https')
+      #   http.use_ssl = true
+      #   http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      # end
 
       req = Net::HTTP::Get.new(uri)
       res = http.request(req)
