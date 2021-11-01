@@ -11,3 +11,4 @@ en:
   onlyoffice_settings_editor_view_header: "Display the header more compact"
   onlyoffice_settings_editor_view_feedback: "Display Feedback & Support menu button"
   onlyoffice_settings_editor_view_toolbar: "Display monochrome toolbar header"
+  onlyoffice_editor_cannot_be_reached: "ONLYOFFICE cannot be reached. Please contact admin"

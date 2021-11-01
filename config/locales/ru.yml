@@ -11,5 +11,6 @@ ru:
    onlyoffice_settings_editor_view_header: "Отображать заголовок компактным"
    onlyoffice_settings_editor_view_feedback: "Отображать кнопку Обратной связи и поддержки"
    onlyoffice_settings_editor_view_toolbar: "Отображать монохромный заголовок панели инструментов"
+   onlyoffice_editor_cannot_be_reached: "Приложение ONLYOFFICE недоступно. Пожалуйста, свяжитесь с администратором"
 
 

@@ -11,3 +11,4 @@ fr:
   onlyoffice_settings_editor_view_header: "Afficher l'en-tête plus compact"
   onlyoffice_settings_editor_view_feedback: "Afficher le bouton du menu 'Feedback & Support'"
   onlyoffice_settings_editor_view_toolbar: "Afficher un en-tête monochrome de la barre d'outils"
+  onlyoffice_editor_cannot_be_reached: "ONLYOFFICE est indisponible. Veuillez contacter votre administrateur"
