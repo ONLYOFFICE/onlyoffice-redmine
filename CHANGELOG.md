@@ -1,6 +1,6 @@
 # Change Log
 
-#
+## 1.0.0
 ## Added
 - configuration page of plugin
 - coediting docx, xlsx, pptx
