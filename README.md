@@ -28,27 +28,33 @@ Community Edition vs Enterprise Edition comparison can be found [here](#onlyoffi
 
 ## Installing Redmine ONLYOFFICE integration plugin
 
-#### Minimum version of Redmine for ONLYOFFICE integration plugin is 4.0.0 .
+#### Minimum version of Redmine for ONLYOFFICE integration plugin is 4.0.0.
 
 1. If you're new to Redmine, install it following [these instructions](https://www.redmine.org/projects/redmine/wiki/RedmineInstall). 
 
 2. Download Redmine ONLYOFFICE integration plugin.
    You can either clone the master branch or download the latest zipped version. Before installing, make sure that the Redmine instance is stopped.
-    ````
+    ```
     git clone https://github.com/ONLYOFFICE/onlyoffice-redmine
-    ````
+    ```
 
 3. Put **onlyoffice_redmine** plugin directory into plugins. The plugins sub-directory must be named as **onlyoffice_redmine**. If necessary, rename **onlyoffice_redmine-x.y.z** to **onlyoffice_redmine**.
 
-4. Go to the Redmine directory: `cd redmine`.
+4. Go to the Redmine directory:
+    ```
+    cd redmine
+    ```
 
-5. Install dependencies: `bundle install`.
+5. Install dependencies:
+    ```
+    bundle install
+    ```
 
 6. Initialize/Update database:
-
-   `RAILS_ENV=production bundle exec rake db:migrate`
-
-   `RAILS_ENV=production bundle exec rake redmine:plugins:migrate NAME=onlyoffice_redmine`
+   ```
+   RAILS_ENV=production bundle exec rake db:migrate
+   RAILS_ENV=production bundle exec rake redmine:plugins:migrate NAME=onlyoffice_redmine
+   ```
 
 ## Configuring Redmine ONLYOFFICE integration plugin
 
@@ -66,11 +72,11 @@ You can also configure the **Editor customization settings**:
 
 - Display the header more compact
 
-- Display or hide Feedback & Support menu button 
+- Display or hide Feedback & Support menu button
 
-- Display or hide Help menu button 
+- Display or hide Help menu button
 
-- Display monochrome toolbar header 
+- Display monochrome toolbar header
 
 ## How it works
 
