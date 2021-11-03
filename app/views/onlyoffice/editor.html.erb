@@ -1,0 +1,59 @@
+<!--Copyright (c) Ascensio System SIA 2021. All rights reserved.-->
+<!--http://www.onlyoffice.com-->
+
+<%= stylesheet_link_tag "editor", :plugin => "onlyoffice_redmine" %>
+<% editor_base_url = Setting.plugin_onlyoffice_redmine["oo_address"] %>
+
+<div id="onlyoffice-container">
+  <div class="flash error" style="display: none"><%= l(:onlyoffice_editor_cannot_be_reached) %></div>
+  <div id="iframeEditor"></div>
+</div>
+<script src="<%= editor_base_url[-1].eql?("/") ? editor_base_url : editor_base_url + "/" %>OfficeWeb/apps/api/documents/api.js"></script>
+
+<script type="text/javascript" language="javascript">
+
+    var docEditor;
+
+    var innerAlert = function (message) {
+        if (console && console.log) console.log(message);
+    };
+    var onAppReady = function () {
+        innerAlert("Document editor ready");
+    };
+    var onError = function (event) {
+        if (event) innerAlert(event.data);
+    };
+
+    var connectEditor = function () {
+        if (typeof DocsAPI === "undefined") {
+            document.getElementById("onlyoffice-container").children[0].style.display = "block";
+            return;
+        }
+
+        document.title = "<%= @attachment.filename %>" + " - ONLYOFFICE";
+        var config = <%= raw @editor_config.to_json %>;
+        document.head.innerHTML += '<%= favicon_link_tag "/plugin_assets/onlyoffice_redmine/images/#{@editor_config[:documentType]}.ico" %>';
+
+        config.width = "100%";
+        config.height = "100%";
+
+        config.events = {
+            'onAppReady': onAppReady,
+            'onError': onError
+        };
+        if (/android|avantgo|playbook|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od|ad)|iris|kindle|lge |maemo|midp|mmp|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\\|plucker|pocket|psp|symbian|treo|up\\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i
+          .test(navigator.userAgent)) {
+            config.type='mobile';
+
+        }
+        docEditor = new DocsAPI.DocEditor("iframeEditor", config);
+    };
+
+
+    if (window.addEventListener) {
+        window.addEventListener("load", connectEditor);
+    } else if (window.attachEvent) {
+        window.attachEvent("load", connectEditor);
+    }
+
+</script>

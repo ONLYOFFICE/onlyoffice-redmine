@@ -1,0 +1,32 @@
+<!-- Copyright (c) Ascensio System SIA 2021. All rights reserved.-->
+<!-- http://www.onlyoffice.com-->
+
+<%= render :parent %>
+
+<%
+  attachment_id = request.original_url[request.original_url.rindex("/") + 1, request.original_url.length]
+  attachment = Attachment.find(attachment_id)
+  user = User.current
+  edit_permission = DocumentHelper.is_editable(attachment) &&
+    DocumentHelper.permission_to_edit_file(user.roles_for_project(attachment.project), attachment.container_type)
+%>
+
+<script type="text/javascript" language="javascript">
+  var downloadButton = document.getElementsByClassName("contextual")[0].getElementsByClassName("icon icon-download")[0];
+
+  var editorButton = document.createElement("a");
+
+  editorButton.innerText = "<%= edit_permission ? l(:edit_in_onlyoffice) : l(:open_in_onlyoffice) %>";
+  editorButton.className = "onlyoffice-editor-button icon";
+  editorButton.style.backgroundImage = 'url(/plugin_assets/onlyoffice_redmine/images/onlyoffice.ico)';
+  editorButton.style.backgroundSize = "16px";
+  editorButton.style.margin = "0 6px";
+  editorButton.style.cursor = "pointer";
+
+  let attachmentHref = window.location.href;
+  editorButton.onclick = function () {
+      window.open(window.location.origin + "/onlyoffice/editor" + attachmentHref.substring(attachmentHref.lastIndexOf("/")));
+      window.location.reload();
+  }
+  downloadButton.before(editorButton);
+</script>
