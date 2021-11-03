@@ -1,9 +1,9 @@
 require 'redmine'
 
 Redmine::Plugin.register :onlyoffice_redmine do
-  name 'ONLYOFFICE Redmine plugin'
+  name 'Redmine ONLYOFFICE integration plugin'
   author 'ONLYOFFICE'
-  description 'Redmine ONLYOFFICE integration plugin'
+  description 'Redmine ONLYOFFICE integration plugin allows opening files uploaded to the Issues, Files, Documents, Wiki, or News modules for viewing and co-editing.'
   version '0.0.1'
   url 'https://github.com/ONLYOFFICE/onlyoffice-redmine'
   author_url 'https://www.onlyoffice.com'
