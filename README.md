@@ -36,7 +36,6 @@ Community Edition vs Enterprise Edition comparison can be found [here](#onlyoffi
    You can either clone the master branch or download the latest zipped version. Before installing, make sure that the Redmine instance is stopped.
     ````
     git clone https://github.com/ONLYOFFICE/onlyoffice-redmine
-    wget https://github.com/ONLYOFFICE/onlyoffice-redmine
     ````
 
 3. Put **onlyoffice_redmine** plugin directory into plugins. The plugins sub-directory must be named as **onlyoffice_redmine**. If necessary, rename **onlyoffice_redmine-x.y.z** to **onlyoffice_redmine**.
