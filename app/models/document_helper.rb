@@ -51,39 +51,35 @@ class DocumentHelper
       ext = File.extname(file_name).downcase
     end
 
-    def permission_to_edit_file(user_roles, container_type)
-      user_roles.each do |role|
+    def permission_to_edit_file(user, project, container_type)
         case container_type
         when "Project"
         then return false
         when "Issue"
-        then return (role.permissions.include? :edit_issues)
+        then return user.allowed_to?(:edit_issues, project)
         when "News"
-        then return (role.permissions.include? :manage_news)
+        then return user.allowed_to?(:manage_news, project)
         when "Document"
-        then return (role.permissions.include? :edit_documents)
+        then return user.allowed_to?(:edit_documents, project)
         when "WikiPage"
-        then return (role.permissions.include? :edit_wiki_pages)
-        else
+        then return user.allowed_to?(:edit_wiki_pages, project)
+      end
           return false
         end
-      end
-    end
 
-    def permission_to_read_file(user_roles, container_type)
-      user_roles.each do |role|
+    def permission_to_read_file(user, project, container_type)
         case container_type
         when "Project"
-        then return (role.permissions.include? :view_files)
+          then return user.allowed_to?(:view_files, project)
         when "Issue"
-        then return (role.permissions.include? :view_issues)
+          then return user.allowed_to?(:view_issues, project)
         when "News"
-        then return (role.permissions.include? :view_news)
+          then return user.allowed_to?(:view_news, project)
         when "Document"
-        then return (role.permissions.include? :view_documents)
+          then return user.allowed_to?(:view_documents, project)
         when "WikiPage"
-        then return (role.permissions.include? :view_wiki_pages)
-        else
+          then return user.allowed_to?(:view_wiki_pages, project)
+      end
           return false
         end
       end
@@ -119,7 +115,7 @@ class DocumentHelper
       if Setting.plugin_onlyoffice_redmine["onlyoffice_key"].eql?(nil)
         Setting.plugin_onlyoffice_redmine["onlyoffice_key"] = Token.generate_token_value
       end
-      permission_to_edit = permission_to_edit_file(user.roles_for_project(attachment.project), attachment.container_type)
+      permission_to_edit = permission_to_edit_file(user, attachment.project, attachment.container_type)
       config = {
         :type => "desktop",
         :documentType => get_document_type(attachment.disk_filename),

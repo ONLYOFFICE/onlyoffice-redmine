@@ -37,7 +37,7 @@ class OnlyofficeController < AccountController
 
     user = User.find(user_id)
     read_authorize(user)
-    perm_to_read = DocumentHelper.permission_to_read_file(user.roles_for_project(@attachment.project), @attachment.container_type)
+    perm_to_read = DocumentHelper.permission_to_read_file(user, @attachment.project, @attachment.container_type)
     if !perm_to_read
       logger.error("No permission to download file")
       render_403

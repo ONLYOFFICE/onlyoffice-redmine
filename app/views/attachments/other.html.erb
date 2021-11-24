@@ -22,7 +22,7 @@
   attachment = Attachment.find(attachment_id)
   user = User.current
   edit_permission = DocumentHelper.is_editable(attachment) &&
-    DocumentHelper.permission_to_edit_file(user.roles_for_project(attachment.project), attachment.container_type)
+    DocumentHelper.permission_to_edit_file(user, attachment.project, attachment.container_type)
 %>
 
 <script type="text/javascript" language="javascript">
