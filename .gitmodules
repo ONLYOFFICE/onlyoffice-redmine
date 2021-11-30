@@ -1,0 +1,4 @@
+[submodule "assets/document-templates"]
+	path = assets/document-templates
+	url = git@github.com:ONLYOFFICE/document-templates.git
+	branch = main/new
