@@ -20,6 +20,8 @@ class FileUtility
   @@exts_spreadsheet = %w(.xls .xlsx .xlsm .xlt .xltx .xltm .ods .fods .ots .csv)
   @@exts_presentation = %w(.pps .ppsx .ppsm .ppt .pptx .pptm .pot .potx .potm .odp .fodp .otp)
 
+  @@exts_new_docs = %w(.docx .xlsx .pptx)
+
   class << self
 
     def get_all_available_formats
@@ -43,6 +45,13 @@ class FileUtility
     def is_openable(attachment)
       ext = File.extname(attachment.disk_filename).downcase
       if (@@exts_document.include? ext) || (@@exts_spreadsheet.include? ext) || (@@exts_presentation.include? ext)
+        return true
+      end
+      return false
+    end
+
+    def can_create(ext)
+      if (@@exts_new_docs.include? '.' + ext.downcase)
         return true
       end
       return false

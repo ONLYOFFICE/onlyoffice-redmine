@@ -52,23 +52,23 @@ class DocumentHelper
     end
 
     def permission_to_edit_file(user, project, container_type)
-        case container_type
-        when "Project"
+      case container_type
+      when "Project"
         then return false
-        when "Issue"
+      when "Issue"
         then return user.allowed_to?(:edit_issues, project)
-        when "News"
+      when "News"
         then return user.allowed_to?(:manage_news, project)
-        when "Document"
+      when "Document"
         then return user.allowed_to?(:edit_documents, project)
-        when "WikiPage"
+      when "WikiPage"
         then return user.allowed_to?(:edit_wiki_pages, project)
       end
-          return false
-        end
+      return false
+    end
 
     def permission_to_read_file(user, project, container_type)
-        case container_type
+      case container_type
         when "Project"
           then return user.allowed_to?(:view_files, project)
         when "Issue"
@@ -80,9 +80,15 @@ class DocumentHelper
         when "WikiPage"
           then return user.allowed_to?(:view_wiki_pages, project)
       end
-          return false
-        end
+      return false
+    end
+
+    def permission_to_add_file(user, project, container_type)
+      case container_type
+        when "Document"
+          then return user.allowed_to?(:add_documents, project)
       end
+      return false
     end
 
     def get_key(attachment)
