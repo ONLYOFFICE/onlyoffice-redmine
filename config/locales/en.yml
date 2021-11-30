@@ -12,3 +12,7 @@ en:
   onlyoffice_settings_editor_view_feedback: "Display Feedback & Support menu button"
   onlyoffice_settings_editor_view_toolbar: "Display monochrome toolbar header"
   onlyoffice_editor_cannot_be_reached: "ONLYOFFICE cannot be reached. Please contact admin"
+  onlyoffice_create_dropdown: "Create in ONLYOFFICE"
+  onlyoffice_create_docx: "Document"
+  onlyoffice_create_xlsx: "Spreadsheet"
+  onlyoffice_create_pptx: "Presentation"

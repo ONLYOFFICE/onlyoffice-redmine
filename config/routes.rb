@@ -21,3 +21,8 @@ get 'onlyoffice/editor/:id', :to => 'onlyoffice#editor', :id => /\d+/
 get 'onlyoffice/editor/:id/:action_data', :to => 'onlyoffice#editor', :id => /\d+/, :action_data => /.*/
 
 post 'onlyoffice/callback/:id/:rss', :to => 'onlyoffice#callback', :id => /\d+/, :rss => /.*/
+
+
+get 'onlyoffice_create/new/:ext/:project_id', :to => 'onlyoffice_create#new', :as => 'onlyoffice_create_new'
+
+post 'onlyoffice_create/new/:ext/:project_id', :to => 'onlyoffice_create#create', :as => 'onlyoffice_create'

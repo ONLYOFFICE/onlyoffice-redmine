@@ -22,6 +22,12 @@ class FileUtility
 
   @@exts_new_docs = %w(.docx .xlsx .pptx)
 
+  @@exts_mimetypes = {
+    :docx => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    :xlsx => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    :pptx => "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+  }
+
   class << self
 
     def get_all_available_formats
@@ -55,6 +61,14 @@ class FileUtility
         return true
       end
       return false
+    end
+
+    def get_mimetype(ext)
+      if (@@exts_mimetypes.key?(ext))
+        return @@exts_mimetypes[ext.to_sym]
+      else
+        return @@exts_mimetypes[:docx]
+      end
     end
 
   end
