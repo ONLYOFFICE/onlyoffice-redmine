@@ -38,6 +38,20 @@
         if (event) innerAlert(event.data);
     };
 
+    var onRequestSaveAs = function(event) {
+        var data = {
+            url: event.data.url,
+            title: event.data.title
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '<%=onlyoffice_save_as_path(@attachment.id)%>',
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(data)
+        });
+    };
+
     var connectEditor = function () {
         if (typeof DocsAPI === "undefined") {
             document.getElementById("onlyoffice-container").children[0].style.display = "block";
@@ -53,7 +67,8 @@
 
         config.events = {
             'onAppReady': onAppReady,
-            'onError': onError
+            'onError': onError,
+            'onRequestSaveAs': onRequestSaveAs
         };
         if (/android|avantgo|playbook|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od|ad)|iris|kindle|lge |maemo|midp|mmp|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\\|plucker|pocket|psp|symbian|treo|up\\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i
           .test(navigator.userAgent)) {

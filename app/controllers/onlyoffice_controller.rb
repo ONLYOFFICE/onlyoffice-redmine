@@ -21,7 +21,7 @@ require_dependency "user"
 class OnlyofficeController < AccountController
 
   skip_before_action :verify_authenticity_token, :only => [ :callback ]
-  before_action :find_attachment, :only => [ :download, :editor, :callback]
+  before_action :find_attachment, :only => [ :download, :editor, :callback, :save_as ]
   before_action :file_readable, :read_authorize, :only => [ :editor ]
 
   def download
@@ -155,6 +155,29 @@ class OnlyofficeController < AccountController
       render plain: '{"error":0}'
       return
     end
+  end
+
+  def save_as
+    if DocumentHelper.permission_to_edit_file(User.current, @attachment.project, @attachment.container_type)
+      true
+    else
+      deny_access
+      return
+    end
+
+    res = CallbackHelper.do_request(params[:url])
+
+    new_attachment = Attachment.new(:file => res.body)
+    new_attachment.author = User.current
+    new_attachment.filename = params[:title]
+    new_attachment.content_type = res.content_type
+
+    new_attachment.container_id = @attachment.container_id
+    new_attachment.container_type = @attachment.container_type
+    
+    saved = new_attachment.save
+    render plain: saved
+    return
   end
 
   private
