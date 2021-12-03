@@ -59,6 +59,12 @@ class OnlyofficeController < AccountController
     DocumentHelper.init(request.base_url)
     @user = User.current
     @editor_config = DocumentHelper.get_attachment_config(@user, @attachment, I18n.locale,  params[:action_data])
+    case @editor_config[:document][:fileType]
+    when 'docxf', 'oform'
+      @favicon = @editor_config[:document][:fileType]
+    else
+      @favicon = @editor_config[:documentType]
+    end
   end
 
   def callback

@@ -16,3 +16,4 @@ en:
   onlyoffice_create_docx: "Document"
   onlyoffice_create_xlsx: "Spreadsheet"
   onlyoffice_create_pptx: "Presentation"
+  onlyoffice_create_docxf: "Master Form"

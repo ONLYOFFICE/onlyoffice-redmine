@@ -60,7 +60,8 @@
 
         document.title = "<%= @attachment.filename %>" + " - ONLYOFFICE";
         var config = <%= raw @editor_config.to_json %>;
-        document.head.innerHTML += '<%= favicon_link_tag "/plugin_assets/onlyoffice_redmine/images/#{@editor_config[:documentType]}.ico" %>';
+        
+        document.head.innerHTML += '<%= favicon_link_tag "/plugin_assets/onlyoffice_redmine/images/#{@favicon}.ico" %>';
 
         config.width = "100%";
         config.height = "100%";

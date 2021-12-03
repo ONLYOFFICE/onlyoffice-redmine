@@ -16,16 +16,17 @@
 #
 
 class FileUtility
-  @@exts_document = %w(.doc .docx .docm .dot .dotx .dotm .odt .fodt .ott .rtf .txt .html .htm .mht .xml .pdf .djvu .fb2 .epub .xps)
+  @@exts_document = %w(.doc .docx .docm .dot .dotx .dotm .docxf .oform .odt .fodt .ott .rtf .txt .html .htm .mht .xml .pdf .djvu .fb2 .epub .xps)
   @@exts_spreadsheet = %w(.xls .xlsx .xlsm .xlt .xltx .xltm .ods .fods .ots .csv)
   @@exts_presentation = %w(.pps .ppsx .ppsm .ppt .pptx .pptm .pot .potx .potm .odp .fodp .otp)
 
-  @@exts_new_docs = %w(.docx .xlsx .pptx)
+  @@exts_new_docs = %w(.docx .xlsx .pptx .docxf)
 
   @@exts_mimetypes = {
     :docx => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     :xlsx => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    :pptx => "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+    :pptx => "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    :docxf => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
   }
 
   class << self

@@ -17,7 +17,7 @@
  *
  */
  
- .icon.onlyoffice-create.docx {
+.icon.onlyoffice-create.docx {
     background-image: url("/plugin_assets/onlyoffice_redmine/images/create-docx-16.png");
 }
 
@@ -27,4 +27,8 @@
 
 .icon.onlyoffice-create.xlsx {
     background-image: url("/plugin_assets/onlyoffice_redmine/images/create-xlsx-16.png");
+}
+
+.icon.onlyoffice-create.docxf {
+    background-image: url("/plugin_assets/onlyoffice_redmine/images/create-docxf-16.png");
 }
