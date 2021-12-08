@@ -12,6 +12,7 @@ en:
   onlyoffice_settings_editor_view_feedback: "Display Feedback & Support menu button"
   onlyoffice_settings_editor_view_toolbar: "Display monochrome toolbar header"
   onlyoffice_editor_cannot_be_reached: "ONLYOFFICE cannot be reached. Please contact admin"
+  onlyoffice_editor_forms_error_version: "Please update ONLYOFFICE Docs to version 7.0 to work on fillable forms online."
   onlyoffice_create_dropdown: "Create in ONLYOFFICE"
   onlyoffice_create_docx: "Document"
   onlyoffice_create_xlsx: "Spreadsheet"

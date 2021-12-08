@@ -76,6 +76,13 @@
             config.type='mobile';
 
         }
+
+        if ((config.document.fileType === "docxf" || config.document.fileType === "oform")
+            && DocsAPI.DocEditor.version().split(".")[0] < 7) {
+            alert("<%=l(:onlyoffice_editor_forms_error_version)%>");
+            return;
+        }
+
         docEditor = new DocsAPI.DocEditor("iframeEditor", config);
     };
 
