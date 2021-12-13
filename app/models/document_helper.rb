@@ -81,8 +81,6 @@ class DocumentHelper
           then return user.allowed_to?(:view_wiki_pages, project)
       end
           return false
-        end
-      end
     end
 
     def get_key(attachment)

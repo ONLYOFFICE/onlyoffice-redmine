@@ -42,5 +42,5 @@
       window.open(window.location.origin + "/onlyoffice/editor" + attachmentHref.substring(attachmentHref.lastIndexOf("/")));
       window.location.reload();
   }
-  downloadButton.before(editorButton);
+  downloadButton.parentElement.insertBefore(editorButton, downloadButton);
 </script>
