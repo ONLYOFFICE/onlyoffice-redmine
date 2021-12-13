@@ -24,7 +24,7 @@ var addOnlyOfficeButton = function(formats, attachmentsDiskFilename) {
 
         for (var i = 0; i < attachmentsList.length; i++) {
             var ext = attachmentsDiskFilename[i].substring(attachmentsDiskFilename[i].lastIndexOf("."));
-            if (formats.includes(ext)) {
+            if (formats.indexOf(ext) !== -1) {
                 var editorButton = document.createElement("a");
 
                 editorButton.id = "onlyoffice-button-" + i;
@@ -41,9 +41,9 @@ var addOnlyOfficeButton = function(formats, attachmentsDiskFilename) {
                 }
                 var deleteButton = attachmentsList[i].children[attachmentsList[i].children.length - 1].getElementsByClassName("delete icon-only icon-del")[0];
                 if (!!deleteButton) {
-                    deleteButton.before(editorButton);
+                    attachmentsList[i].children[attachmentsList[i].children.length - 1].insertBefore(editorButton, deleteButton);
                 } else {
-                    attachmentsList[i].children[attachmentsList[i].children.length - 1].append(editorButton);
+                    attachmentsList[i].children[attachmentsList[i].children.length - 1].appendChild(editorButton);
                 }
             }
         }
@@ -54,7 +54,7 @@ var addOnlyOfficeCreateButton = function() {
     var contextual = document.getElementsByClassName("contextual")[0];
     var dropdown = document.getElementById("onlyoffice-create-dropdown");
     if (contextual != null && dropdown != null) {
-        contextual.append(dropdown);
+        contextual.appendChild(dropdown);
         dropdown.classList.remove("hidden");
     }
 }
