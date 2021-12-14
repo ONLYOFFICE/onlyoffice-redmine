@@ -158,7 +158,9 @@ class OnlyofficeController < AccountController
   end
 
   def save_as
-    if DocumentHelper.permission_to_edit_file(User.current, @attachment.project, @attachment.container_type)
+    edit_permission = DocumentHelper.permission_to_edit_file(User.current, @attachment.project, @attachment.container_type)
+    permission_for_files_container = @attachment.container_type.eql?("Project") && User.current.allowed_to?(:manage_files, @attachment.project)
+    if edit_permission || permission_for_files_container
       true
     else
       deny_access
