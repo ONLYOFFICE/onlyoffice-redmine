@@ -1,8 +1,9 @@
 class OnlyofficeCreateController < ApplicationController
 
-  before_action :find_project_by_project_id, :only => [ :new, :create ]
-  before_action :valid_ext
+  before_action :find_project_by_project_id, :only => [ :new, :create, :new_doc_attachment ]
+  before_action :valid_ext, :only => [ :new, :create]
   before_action :check_add_permissions
+  before_action :valid_doc_type, :only => [:new_doc_attachment]
 
   def new
     @document = @project.documents.build
@@ -21,6 +22,19 @@ class OnlyofficeCreateController < ApplicationController
     else
       render :action => 'new'
     end
+  end
+
+  def new_doc_attachment
+    @document = Document.find(params[:document_id])
+
+    attachment = create_attachment_from_template_file()
+    @document.attachments << attachment
+    if @document.save
+      flash[:notice] = l(:notice_successful_create)
+    else
+      flash[:error] = l(:onlyoffice_attachment_create_error)
+    end
+    redirect_to document_path(@document)
   end
 
   private
@@ -47,12 +61,26 @@ class OnlyofficeCreateController < ApplicationController
     end
   end
 
-  def valid_ext
-    @ext = params[:ext]
+  def valid_ext(ext = nil)
+    @ext = ext.eql?(nil) ? params[:ext] : ext
     if FileUtility.can_create(@ext)
       true
     else
       render_error({:status => 400})
     end
+  end
+
+  def valid_doc_type
+    docType = params[:docType]
+    ext = "docx"
+    case docType
+    when l(:onlyoffice_create_docx)
+      then ext = "docx"
+    when l(:onlyoffice_create_xlsx)
+      then ext = "xlsx"
+    when l(:onlyoffice_create_pptx)
+      then ext = "pptx"
+    end
+    valid_ext(ext)
   end
 end
