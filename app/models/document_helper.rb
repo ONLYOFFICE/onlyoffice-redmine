@@ -116,6 +116,9 @@ class DocumentHelper
       project_is_not_readonly = attachment.project.status != 5
       permission_to_edit = (permission_to_edit_file(user, attachment.project, attachment.container_type) || user.admin) && !attachment.container_type.eql?("Project")
       permission_to_edit = permission_to_edit && project_is_not_readonly
+      if attachment.container_type.eql?("Issue")
+        permission_to_edit = permission_to_edit && (Issue.find(attachment.container_id).status_id != 5)
+      end
       config = {
         :type => "desktop",
         :documentType => get_document_type(attachment.disk_filename),
