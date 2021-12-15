@@ -50,11 +50,10 @@ var addOnlyOfficeButton = function(formats, attachmentsDiskFilename) {
     }
 }
 
-var addOnlyOfficeCreateButton = function() {
-    var contextual = document.getElementsByClassName("contextual")[0];
+var addOnlyOfficeCreateButton = function(containerElement) {
     var dropdown = document.getElementById("onlyoffice-create-dropdown");
-    if (contextual != null && dropdown != null) {
-        contextual.appendChild(dropdown);
+    if (containerElement != null && dropdown != null) {
+        containerElement.appendChild(dropdown);
         dropdown.classList.remove("hidden");
     }
 }

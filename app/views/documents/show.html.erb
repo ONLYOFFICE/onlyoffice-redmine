@@ -39,6 +39,52 @@
   end
 %>
 
+<% if User.current.allowed_to?(:add_documents, @project) %>
+
+  <% content_for :header_tags do %>
+    <%= stylesheet_link_tag 'onlyoffice-icons', plugin: 'onlyoffice_redmine' %>
+  <% end %>
+
+  <span id="onlyoffice-create-dropdown" class="drdn hidden">
+    <span class="drdn-trigger">
+        <span><%= l(:onlyoffice_create_dropdown) %> <span class="icon-only icon-actions" title="<%= l(:onlyoffice_create_dropdown)%>"><%= l(:onlyoffice_create_dropdown)%></span></span>
+    </span>
+    <div class="drdn-content">
+      <%= form_tag(onlyoffice_create_new_doc_attachment_path(@document, @project), :multipart => true, :class => "drdn-items") do %>
+        <%= submit_tag(l(:onlyoffice_create_docx),:class => 'icon onlyoffice-create docx', :name => 'docType') %>
+        <%= submit_tag(l(:onlyoffice_create_xlsx),:class => 'icon onlyoffice-create xlsx', :name => 'docType') %>
+        <%= submit_tag(l(:onlyoffice_create_pptx),:class => 'icon onlyoffice-create pptx', :name => 'docType') %>
+        <%= submit_tag(l(:onlyoffice_create_docxf),:class => 'icon onlyoffice-create docxf', :name => 'docType') %>
+      <% end %>
+    </div>
+  </span>
+
+  <% @document.custom_field_values.each do |value| %>
+    <p><%= custom_field_tag_with_label :document, value %></p>
+  <% end %>
+
+  <script type="text/javascript" language="javascript">
+      var container = document.getElementById("attach_files_link").parentElement;
+      addOnlyOfficeCreateButton(container);
+  </script>
+
+  <style>
+    #onlyoffice-create-dropdown {
+        margin-left: 10px;
+    }
+    #onlyoffice-create-dropdown .drdn-content {
+        top: auto;
+    }
+    #onlyoffice-create-dropdown .drdn-items input.icon {
+        text-align: left;
+        width: 100%;
+        padding-left: 24px;
+        background-position-x: 4px;
+    }
+  </style>
+
+<% end %>
+
 <script type="text/javascript" language="javascript">
     if (<%= view_permission || edit_permission%>) {
         addOnlyOfficeButton(<%= raw FileUtility.get_all_available_formats %>, <%= raw attachments_disk_filenames %>);
