@@ -62,7 +62,7 @@
         var config = <%= raw @editor_config.to_json %>;
 
         var redmineFavicon = document.querySelector('link[rel="icon"], link[rel="shortcut icon"]');
-        redmineFavicon.remove();
+        document.head.removeChild(redmineFavicon);
         document.head.innerHTML += '<%= favicon_link_tag "/plugin_assets/onlyoffice_redmine/images/#{@favicon}.ico" %>';
 
         config.width = "100%";
