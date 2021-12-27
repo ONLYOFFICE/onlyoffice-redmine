@@ -1,5 +1,11 @@
 # Change Log
 
+## Added
+- ability to create documents
+- support docxf and oform formats
+- create blank docxf from creation menu
+- "save as" in editor
+
 ## 1.0.0
 ## Added
 - configuration page of plugin

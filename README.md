@@ -11,7 +11,7 @@ The app allows to:
 
 Supported formats:
 
-* For editing: DOCX, XLSX, PPTX.
+* For editing: DOCX, XLSX, PPTX, DOCXF, OFORM.
 * For viewing: DOC, DOCX, DOCM, DOT, DOTX, DOTM, ODT, FODT, OTT, RTF, TXT, HTML, HTM, MHT, XML, PDF, DJVU, FB2, EPUB, XPS, XLS, XLSX, XLSM, XLT, XLTX, XLTM, ODS, FODS, OTS, CSV, PPS, PPSX, PPSM, PPT, PPTX, PPTM, POT, POTX, POTM, ODP, FODP, OTP.
 
 ## Installing ONLYOFFICE Docs
