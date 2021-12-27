@@ -38,6 +38,20 @@
         if (event) innerAlert(event.data);
     };
 
+    var onRequestSaveAs = function(event) {
+        var data = {
+            url: event.data.url,
+            title: event.data.title
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '<%=onlyoffice_save_as_path(@attachment.id)%>',
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(data)
+        });
+    };
+
     var connectEditor = function () {
         if (typeof DocsAPI === "undefined") {
             document.getElementById("onlyoffice-container").children[0].style.display = "block";
@@ -46,20 +60,31 @@
 
         document.title = "<%= @attachment.filename %>" + " - ONLYOFFICE";
         var config = <%= raw @editor_config.to_json %>;
-        document.head.innerHTML += '<%= favicon_link_tag "/plugin_assets/onlyoffice_redmine/images/#{@editor_config[:documentType]}.ico" %>';
+
+        var redmineFavicon = document.querySelector('link[rel="icon"], link[rel="shortcut icon"]');
+        document.head.removeChild(redmineFavicon);
+        document.head.innerHTML += '<%= favicon_link_tag "/plugin_assets/onlyoffice_redmine/images/#{@favicon}.ico" %>';
 
         config.width = "100%";
         config.height = "100%";
 
         config.events = {
             'onAppReady': onAppReady,
-            'onError': onError
+            'onError': onError,
+            'onRequestSaveAs': onRequestSaveAs
         };
         if (/android|avantgo|playbook|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od|ad)|iris|kindle|lge |maemo|midp|mmp|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\\|plucker|pocket|psp|symbian|treo|up\\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i
           .test(navigator.userAgent)) {
             config.type='mobile';
 
         }
+
+        if ((config.document.fileType === "docxf" || config.document.fileType === "oform")
+            && DocsAPI.DocEditor.version().split(".")[0] < 7) {
+            alert("<%=l(:onlyoffice_editor_forms_error_version)%>");
+            return;
+        }
+
         docEditor = new DocsAPI.DocEditor("iframeEditor", config);
     };
 
