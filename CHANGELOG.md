@@ -1,5 +1,6 @@
 # Change Log
 
+## 1.1.0
 ## Added
 - ability to create documents
 - support docxf and oform formats
