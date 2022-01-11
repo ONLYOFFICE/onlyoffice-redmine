@@ -38,6 +38,12 @@ Community Edition vs Enterprise Edition comparison can be found [here](#onlyoffi
     git clone https://github.com/ONLYOFFICE/onlyoffice-redmine
     ```
 
+   Go the Redmine ONLYOFFICE integration plugin folder and get a submodule:
+    ```
+    cd onlyoffice-redmine
+    git submodule update --init --recursive
+    ```
+
 3. Put **onlyoffice_redmine** plugin directory into plugins. The plugins sub-directory must be named as **onlyoffice_redmine**. If necessary, rename **onlyoffice_redmine-x.y.z** to **onlyoffice_redmine**.
 
 4. Go to the Redmine directory:
