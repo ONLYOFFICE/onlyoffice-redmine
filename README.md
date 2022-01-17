@@ -145,24 +145,23 @@ The table below will help you make the right choice.
 | ------------- | ------------- | ------------- |
 | | [Get it now](https://www.onlyoffice.com/download-docs.aspx#docs-community)  | [Start Free Trial](https://www.onlyoffice.com/download-docs.aspx#docs-enterprise)  |
 | Cost  | FREE  | [Go to the pricing page](https://www.onlyoffice.com/docs-enterprise-prices.aspx)  |
-| Simultaneous connections | Up to 20 maximum  | As in the chosen pricing plan |
-| Number of users | Up to 20 recommended | As in the chosen pricing plan |
+| Simultaneous connections | up to 20 maximum  | As in chosen pricing plan |
+| Number of users | up to 20 recommended | As in chosen pricing plan |
 | License | GNU AGPL v.3 | Proprietary |
 | **Support** | **Community Edition** | **Enterprise Edition** |
 | Documentation | [Help Center](https://helpcenter.onlyoffice.com/installation/docs-community-index.aspx) | [Help Center](https://helpcenter.onlyoffice.com/installation/docs-enterprise-index.aspx) |
 | Standard support | [GitHub](https://github.com/ONLYOFFICE/DocumentServer/issues) or paid | One year support included |
-| Premium support | [Send a request](mailto:sales@onlyoffice.com) | [Send a request](mailto:sales@onlyoffice.com) |
+| Premium support | [Contact us](mailto:sales@onlyoffice.com) | [Contact us](mailto:sales@onlyoffice.com) |
 | **Services** | **Community Edition** | **Enterprise Edition** |
 | Conversion Service                | + | + |
 | Document Builder Service          | + | + |
 | **Interface** | **Community Edition** | **Enterprise Edition** |
 | Tabbed interface                       | + | + |
 | Dark theme                             | + | + |
-| Scaling options                        | + | + |
+| 125%, 150%, 175%, 200% scaling         | + | + |
 | White Label                            | - | - |
 | Integrated test example (node.js)      | + | + |
-| Mobile web editors | - | + |
-| Access to pro features via desktop     | - | + |
+| Mobile web editors                     | - | +* |
 | **Plugins & Macros** | **Community Edition** | **Enterprise Edition** |
 | Plugins                           | + | + |
 | Macros                            | + | + |
@@ -176,26 +175,33 @@ The table below will help you make the right choice.
 | **Document Editor features** | **Community Edition** | **Enterprise Edition** |
 | Font and paragraph formatting   | + | + |
 | Object insertion                | + | + |
-| Adding Content controls         | - | + | 
-| Editing Content controls        | + | + | 
+| Adding Content control          | + | + | 
+| Editing Content control         | + | + | 
 | Layout tools                    | + | + |
 | Table of contents               | + | + |
 | Navigation panel                | + | + |
 | Mail Merge                      | + | + |
-| Comparing Documents             | - | + |
+| Comparing Documents             | + | + |
 | **Spreadsheet Editor features** | **Community Edition** | **Enterprise Edition** |
 | Font and paragraph formatting   | + | + |
 | Object insertion                | + | + |
 | Functions, formulas, equations  | + | + |
 | Table templates                 | + | + |
 | Pivot tables                    | + | + |
-| Data validation                 | + | + |
-| Conditional formatting | + | + |
-| Sheet Views                     | - | + |
+| Data validation           | + | + |
+| Conditional formatting          | + | + |
+| Sparklines                   | + | + |
+| Sheet Views                     | + | + |
 | **Presentation Editor features** | **Community Edition** | **Enterprise Edition** |
 | Font and paragraph formatting   | + | + |
 | Object insertion                | + | + |
 | Transitions                     | + | + |
 | Presenter mode                  | + | + |
 | Notes                           | + | + |
+| **Form creator features** | **Community Edition** | **Enterprise Edition** |
+| Adding form fields           | + | + |
+| Form preview                    | + | + |
+| Saving as PDF                   | + | + |
 | | [Get it now](https://www.onlyoffice.com/download-docs.aspx#docs-community)  | [Start Free Trial](https://www.onlyoffice.com/download-docs.aspx#docs-enterprise)  |
+
+\* If supported by DMS.
