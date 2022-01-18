@@ -11,7 +11,7 @@ The app allows to:
 
 Supported formats:
 
-* For editing: DOCX, XLSX, PPTX.
+* For editing: DOCX, XLSX, PPTX, DOCXF, OFORM.
 * For viewing: DOC, DOCX, DOCM, DOT, DOTX, DOTM, ODT, FODT, OTT, RTF, TXT, HTML, HTM, MHT, XML, PDF, DJVU, FB2, EPUB, XPS, XLS, XLSX, XLSM, XLT, XLTX, XLTM, ODS, FODS, OTS, CSV, PPS, PPSX, PPSM, PPT, PPTX, PPTM, POT, POTX, POTM, ODP, FODP, OTP.
 
 ## Installing ONLYOFFICE Docs
@@ -28,28 +28,39 @@ Community Edition vs Enterprise Edition comparison can be found [here](#onlyoffi
 
 ## Installing Redmine ONLYOFFICE integration plugin
 
-#### Minimum version of Redmine for ONLYOFFICE integration plugin is 4.0.0 .
+#### Minimum version of Redmine for ONLYOFFICE integration plugin is 4.0.0.
 
 1. If you're new to Redmine, install it following [these instructions](https://www.redmine.org/projects/redmine/wiki/RedmineInstall). 
 
 2. Download Redmine ONLYOFFICE integration plugin.
    You can either clone the master branch or download the latest zipped version. Before installing, make sure that the Redmine instance is stopped.
-    ````
+    ```
     git clone https://github.com/ONLYOFFICE/onlyoffice-redmine
-    wget https://github.com/ONLYOFFICE/onlyoffice-redmine
-    ````
+    ```
+
+   Go the Redmine ONLYOFFICE integration plugin folder and get a submodule:
+    ```
+    cd onlyoffice-redmine
+    git submodule update --init --recursive
+    ```
 
 3. Put **onlyoffice_redmine** plugin directory into plugins. The plugins sub-directory must be named as **onlyoffice_redmine**. If necessary, rename **onlyoffice_redmine-x.y.z** to **onlyoffice_redmine**.
 
-4. Go to the Redmine directory: `cd redmine`.
+4. Go to the Redmine directory:
+    ```
+    cd redmine
+    ```
 
-5. Install dependencies: `bundle install`.
+5. Install dependencies:
+    ```
+    bundle install
+    ```
 
 6. Initialize/Update database:
-
-   `RAILS_ENV=production bundle exec rake db:migrate`
-
-   `RAILS_ENV=production bundle exec rake redmine:plugins:migrate NAME=onlyoffice_redmine`
+   ```
+   RAILS_ENV=production bundle exec rake db:migrate
+   RAILS_ENV=production bundle exec rake redmine:plugins:migrate NAME=onlyoffice_redmine
+   ```
 
 ## Configuring Redmine ONLYOFFICE integration plugin
 
@@ -67,11 +78,11 @@ You can also configure the **Editor customization settings**:
 
 - Display the header more compact
 
-- Display or hide Feedback & Support menu button 
+- Display or hide Feedback & Support menu button
 
-- Display or hide Help menu button 
+- Display or hide Help menu button
 
-- Display monochrome toolbar header 
+- Display monochrome toolbar header
 
 ## How it works
 
@@ -134,24 +145,23 @@ The table below will help you make the right choice.
 | ------------- | ------------- | ------------- |
 | | [Get it now](https://www.onlyoffice.com/download-docs.aspx#docs-community)  | [Start Free Trial](https://www.onlyoffice.com/download-docs.aspx#docs-enterprise)  |
 | Cost  | FREE  | [Go to the pricing page](https://www.onlyoffice.com/docs-enterprise-prices.aspx)  |
-| Simultaneous connections | Up to 20 maximum  | As in the chosen pricing plan |
-| Number of users | Up to 20 recommended | As in the chosen pricing plan |
+| Simultaneous connections | up to 20 maximum  | As in chosen pricing plan |
+| Number of users | up to 20 recommended | As in chosen pricing plan |
 | License | GNU AGPL v.3 | Proprietary |
 | **Support** | **Community Edition** | **Enterprise Edition** |
 | Documentation | [Help Center](https://helpcenter.onlyoffice.com/installation/docs-community-index.aspx) | [Help Center](https://helpcenter.onlyoffice.com/installation/docs-enterprise-index.aspx) |
 | Standard support | [GitHub](https://github.com/ONLYOFFICE/DocumentServer/issues) or paid | One year support included |
-| Premium support | [Send a request](mailto:sales@onlyoffice.com) | [Send a request](mailto:sales@onlyoffice.com) |
+| Premium support | [Contact us](mailto:sales@onlyoffice.com) | [Contact us](mailto:sales@onlyoffice.com) |
 | **Services** | **Community Edition** | **Enterprise Edition** |
 | Conversion Service                | + | + |
 | Document Builder Service          | + | + |
 | **Interface** | **Community Edition** | **Enterprise Edition** |
 | Tabbed interface                       | + | + |
 | Dark theme                             | + | + |
-| Scaling options                        | + | + |
+| 125%, 150%, 175%, 200% scaling         | + | + |
 | White Label                            | - | - |
 | Integrated test example (node.js)      | + | + |
-| Mobile web editors | - | + |
-| Access to pro features via desktop     | - | + |
+| Mobile web editors                     | - | +* |
 | **Plugins & Macros** | **Community Edition** | **Enterprise Edition** |
 | Plugins                           | + | + |
 | Macros                            | + | + |
@@ -165,26 +175,33 @@ The table below will help you make the right choice.
 | **Document Editor features** | **Community Edition** | **Enterprise Edition** |
 | Font and paragraph formatting   | + | + |
 | Object insertion                | + | + |
-| Adding Content controls         | - | + | 
-| Editing Content controls        | + | + | 
+| Adding Content control          | + | + | 
+| Editing Content control         | + | + | 
 | Layout tools                    | + | + |
 | Table of contents               | + | + |
 | Navigation panel                | + | + |
 | Mail Merge                      | + | + |
-| Comparing Documents             | - | + |
+| Comparing Documents             | + | + |
 | **Spreadsheet Editor features** | **Community Edition** | **Enterprise Edition** |
 | Font and paragraph formatting   | + | + |
 | Object insertion                | + | + |
 | Functions, formulas, equations  | + | + |
 | Table templates                 | + | + |
 | Pivot tables                    | + | + |
-| Data validation                 | + | + |
-| Conditional formatting | + | + |
-| Sheet Views                     | - | + |
+| Data validation           | + | + |
+| Conditional formatting          | + | + |
+| Sparklines                   | + | + |
+| Sheet Views                     | + | + |
 | **Presentation Editor features** | **Community Edition** | **Enterprise Edition** |
 | Font and paragraph formatting   | + | + |
 | Object insertion                | + | + |
 | Transitions                     | + | + |
 | Presenter mode                  | + | + |
 | Notes                           | + | + |
+| **Form creator features** | **Community Edition** | **Enterprise Edition** |
+| Adding form fields           | + | + |
+| Form preview                    | + | + |
+| Saving as PDF                   | + | + |
 | | [Get it now](https://www.onlyoffice.com/download-docs.aspx#docs-community)  | [Start Free Trial](https://www.onlyoffice.com/download-docs.aspx#docs-enterprise)  |
+
+\* If supported by DMS.

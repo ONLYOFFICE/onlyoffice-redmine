@@ -1,5 +1,19 @@
-# Copyright (c) Ascensio System SIA 2021. All rights reserved.
+#
+# (c) Copyright Ascensio System SIA 2021
 # http://www.onlyoffice.com
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
 
 class CallbackHelper
 
@@ -44,16 +58,7 @@ class CallbackHelper
     end
 
     def save_from_uri(path, download_url)
-      uri = URI.parse(download_url)
-      http = Net::HTTP.new(uri.host, uri.port)
-
-      # if download_url.start_with?('https')
-      #   http.use_ssl = true
-      #   http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      # end
-
-      req = Net::HTTP::Get.new(uri)
-      res = http.request(req)
+      res = do_request(download_url)
       data = res.body
 
       if data == nil
@@ -63,6 +68,20 @@ class CallbackHelper
       File.open(path, 'wb') do |file|
         file.write(data)
       end
+    end
+
+    def do_request(url)
+      uri = URI.parse(url)
+      http = Net::HTTP.new(uri.host, uri.port)
+
+      # if download_url.start_with?('https')
+      #   http.use_ssl = true
+      #   http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      # end
+
+      req = Net::HTTP::Get.new(uri)
+      res = http.request(req)
+      return res
     end
 
     def delete_diskfile_by_digest(digest, path)

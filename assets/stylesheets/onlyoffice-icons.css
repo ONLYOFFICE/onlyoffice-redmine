@@ -16,13 +16,19 @@
  * limitations under the License.
  *
  */
-
-#content {
-    padding: 0;
+ 
+.icon.onlyoffice-create.docx {
+    background-image: url("/plugin_assets/onlyoffice_redmine/images/create-docx-16.png");
 }
 
-#onlyoffice-container {
-    height: 100%;
-    width: 100%;
-    position: absolute;
+.icon.onlyoffice-create.pptx {
+    background-image: url("/plugin_assets/onlyoffice_redmine/images/create-pptx-16.png");
+}
+
+.icon.onlyoffice-create.xlsx {
+    background-image: url("/plugin_assets/onlyoffice_redmine/images/create-xlsx-16.png");
+}
+
+.icon.onlyoffice-create.docxf {
+    background-image: url("/plugin_assets/onlyoffice_redmine/images/create-docxf-16.png");
 }

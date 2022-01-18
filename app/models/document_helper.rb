@@ -1,10 +1,24 @@
-# Copyright (c) Ascensio System SIA 2021. All rights reserved.
+#
+# (c) Copyright Ascensio System SIA 2021
 # http://www.onlyoffice.com
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
 
 class DocumentHelper
 
   @@base_url = nil
-  @@editable_types = %w[application/vnd.openxmlformats-officedocument.wordprocessingml.document application/vnd.openxmlformats-officedocument.spreadsheetml.sheet application/vnd.openxmlformats-officedocument.presentationml.presentation]
+  @@editable_types = %w[.docx .docxf .oform .xlsx .pptx]
 
   class << self
 
@@ -37,42 +51,44 @@ class DocumentHelper
       ext = File.extname(file_name).downcase
     end
 
-    def permission_to_edit_file(user_roles, container_type)
-      user_roles.each do |role|
-        case container_type
-        when "Project"
+    def permission_to_edit_file(user, project, container_type)
+      case container_type
+      when "Project"
         then return false
-        when "Issue"
-        then return (role.permissions.include? :edit_issues)
-        when "News"
-        then return (role.permissions.include? :manage_news)
-        when "Document"
-        then return (role.permissions.include? :edit_documents)
-        when "WikiPage"
-        then return (role.permissions.include? :edit_wiki_pages)
-        else
-          return false
-        end
+      when "Issue"
+        then return user.allowed_to?(:edit_issues, project)
+      when "News"
+        then return user.allowed_to?(:manage_news, project)
+      when "Document"
+        then return user.allowed_to?(:edit_documents, project)
+      when "WikiPage"
+        then return user.allowed_to?(:edit_wiki_pages, project)
       end
+      return false
     end
 
-    def permission_to_read_file(user_roles, container_type)
-      user_roles.each do |role|
-        case container_type
+    def permission_to_read_file(user, project, container_type)
+      case container_type
         when "Project"
-        then return (role.permissions.include? :view_files)
+          then return user.allowed_to?(:view_files, project)
         when "Issue"
-        then return (role.permissions.include? :view_issues)
+          then return user.allowed_to?(:view_issues, project)
         when "News"
-        then return (role.permissions.include? :view_news)
+          then return user.allowed_to?(:view_news, project)
         when "Document"
-        then return (role.permissions.include? :view_documents)
+          then return user.allowed_to?(:view_documents, project)
         when "WikiPage"
-        then return (role.permissions.include? :view_wiki_pages)
-        else
-          return false
-        end
+          then return user.allowed_to?(:view_wiki_pages, project)
       end
+      return false
+    end
+
+    def permission_to_add_file(user, project, container_type)
+      case container_type
+        when "Document"
+          then return user.allowed_to?(:add_documents, project)
+      end
+      return false
     end
 
     def get_key(attachment)
@@ -97,7 +113,7 @@ class DocumentHelper
     end
 
     def is_editable(attachment)
-      editable = @@editable_types.include?(attachment.content_type)
+      editable = @@editable_types.include?(file_ext(attachment.disk_filename))
       return editable
     end
 
@@ -105,17 +121,19 @@ class DocumentHelper
       if Setting.plugin_onlyoffice_redmine["onlyoffice_key"].eql?(nil)
         Setting.plugin_onlyoffice_redmine["onlyoffice_key"] = Token.generate_token_value
       end
-      permission_to_edit = permission_to_edit_file(user.roles_for_project(attachment.project), attachment.container_type)
+      ext = file_ext(attachment.disk_filename).delete(".")
+      permission_to_edit = permission_to_edit_file(user, attachment.project, attachment.container_type)
       config = {
         :type => "desktop",
         :documentType => get_document_type(attachment.disk_filename),
         :document => {
           :title => attachment.filename,
           :url => get_download_url(attachment.id, user.id),
-          :fileType => file_ext(attachment.disk_filename).delete("."),
+          :fileType => ext,
           :key => get_key(attachment),
           :permissions => {
-            :edit => permission_to_edit && is_editable(attachment) ? true : false
+            :edit => permission_to_edit && is_editable(attachment) ? true : false,
+            :fillForms => permission_to_edit && is_editable(attachment) && ext.eql?("oform") ? true : false
           }
         },
         :editorConfig => {
