@@ -1,5 +1,8 @@
 # Change Log
 
+## Fixed
+- issue with permissions
+
 ## 1.1.0
 ## Added
 - ability to create documents
