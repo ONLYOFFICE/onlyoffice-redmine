@@ -69,7 +69,7 @@
                         clearTimeout(tooltipTimeout);
                     }
                 }
-                buttonsContainer.children[0].before(editorButton);
+                buttonsContainer.insertBefore(editorButton, buttonsContainer.children[0]);
             }
         }
     }
