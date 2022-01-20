@@ -58,16 +58,7 @@ class CallbackHelper
     end
 
     def save_from_uri(path, download_url)
-      uri = URI.parse(download_url)
-      http = Net::HTTP.new(uri.host, uri.port)
-
-      # if download_url.start_with?('https')
-      #   http.use_ssl = true
-      #   http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      # end
-
-      req = Net::HTTP::Get.new(uri)
-      res = http.request(req)
+      res = do_request(download_url)
       data = res.body
 
       if data == nil
@@ -77,6 +68,20 @@ class CallbackHelper
       File.open(path, 'wb') do |file|
         file.write(data)
       end
+    end
+
+    def do_request(url)
+      uri = URI.parse(url)
+      http = Net::HTTP.new(uri.host, uri.port)
+
+      # if download_url.start_with?('https')
+      #   http.use_ssl = true
+      #   http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      # end
+
+      req = Net::HTTP::Get.new(uri)
+      res = http.request(req)
+      return res
     end
 
     def delete_diskfile_by_digest(digest, path)

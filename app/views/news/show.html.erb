@@ -30,7 +30,9 @@
       edit_permission = true
     end
   end
+  project_is_not_readonly = @project.status != 5
 
+  edit_permission = (edit_permission || User.current.admin) && project_is_not_readonly
   is_editable_array = []
   attachments_disk_filenames = []
   @news.attachments.each do |attachment|

@@ -49,3 +49,11 @@ var addOnlyOfficeButton = function(formats, attachmentsDiskFilename) {
         }
     }
 }
+
+var addOnlyOfficeCreateButton = function(containerElement) {
+    var dropdown = document.getElementById("onlyoffice-create-dropdown");
+    if (containerElement != null && dropdown != null) {
+        containerElement.appendChild(dropdown);
+        dropdown.classList.remove("hidden");
+    }
+}
