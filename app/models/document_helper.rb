@@ -79,7 +79,7 @@ class DocumentHelper
           then return user.allowed_to?(:view_documents, project)
         when "WikiPage"
           then return user.allowed_to?(:view_wiki_pages, project)
-      end
+        end
       return false
     end
 
@@ -122,7 +122,12 @@ class DocumentHelper
         Setting.plugin_onlyoffice_redmine["onlyoffice_key"] = Token.generate_token_value
       end
       ext = file_ext(attachment.disk_filename).delete(".")
-      permission_to_edit = permission_to_edit_file(user, attachment.project, attachment.container_type)
+      project_is_not_readonly = attachment.project.status != 5
+      permission_to_edit = (permission_to_edit_file(user, attachment.project, attachment.container_type) || user.admin) && !attachment.container_type.eql?("Project")
+      permission_to_edit = permission_to_edit && project_is_not_readonly
+      if attachment.container_type.eql?("Issue")
+        permission_to_edit = permission_to_edit && (Issue.find(attachment.container_id).status_id != 5)
+      end
       config = {
         :type => "desktop",
         :documentType => get_document_type(attachment.disk_filename),

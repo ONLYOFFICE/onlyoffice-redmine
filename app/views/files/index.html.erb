@@ -25,6 +25,7 @@
      end
    end
 
+   view_or_manage_permission = view_or_manage_permission || User.current.admin
    is_openable_array = []
    @containers.each do |container|
      container.attachments.each do |attachment|
