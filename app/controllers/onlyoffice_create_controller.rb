@@ -2,8 +2,8 @@ class OnlyofficeCreateController < ApplicationController
 
   before_action :find_project_by_project_id, :only => [ :new, :create, :new_doc_attachment ]
   before_action :valid_ext, :only => [ :new, :create]
-  before_action :check_add_permissions
-  before_action :valid_doc_type, :only => [:new_doc_attachment]
+  before_action :check_add_permissions, :only => [:new_doc_attachment]
+  before_action :valid_doc_type, :only => [:new_doc_attachment, :new_wiki_attachment]
 
   def new
     @document = @project.documents.build
@@ -35,6 +35,19 @@ class OnlyofficeCreateController < ApplicationController
       flash[:error] = l(:onlyoffice_attachment_create_error)
     end
     redirect_to document_path(@document)
+  end
+
+  def new_wiki_attachment
+    @wiki = WikiPage.find(params[:page_id])
+
+    attachment = create_attachment_from_template_file()
+    @wiki.attachments << attachment
+    if @wiki.save
+      flash[:notice] = l(:notice_successful_create)
+    else
+      flash[:error] = l(:onlyoffice_attachment_create_error)
+    end
+    redirect_to params[:back_page]
   end
 
   private

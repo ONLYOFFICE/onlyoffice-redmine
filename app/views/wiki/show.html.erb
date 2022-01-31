@@ -18,6 +18,28 @@
 <%= render :parent %>
 <%= javascript_include_tag "onlyofficeMenu", :plugin => "onlyoffice_redmine" %>
 
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'onlyoffice-icons', plugin: 'onlyoffice_redmine' %>
+<% end %>
+
+<span id="onlyoffice-create-dropdown" class="drdn hidden">
+  <span class="drdn-trigger">
+      <span><%= l(:onlyoffice_create_dropdown) %> <span class="icon-only icon-actions" title="<%= l(:onlyoffice_create_dropdown)%>"><%= l(:onlyoffice_create_dropdown)%></span></span>
+  </span>
+  <div class="drdn-content">
+  <%= form_tag(onlyoffice_create_new_wiki_attachment_path(@page.id, @project, request.path), :multipart => true, :class => "drdn-items") do %>
+    <%= submit_tag(l(:onlyoffice_create_docx),:class => 'icon onlyoffice-create docx', :name => 'docType') %>
+      <%= submit_tag(l(:onlyoffice_create_xlsx),:class => 'icon onlyoffice-create xlsx', :name => 'docType') %>
+      <%= submit_tag(l(:onlyoffice_create_pptx),:class => 'icon onlyoffice-create pptx', :name => 'docType') %>
+      <%= submit_tag(l(:onlyoffice_create_docxf),:class => 'icon onlyoffice-create docxf', :name => 'docType') %>
+  <% end %>
+  </div>
+</span>
+
+<script type="text/javascript" language="javascript">
+    addOnlyOfficeCreateButton(document.getElementById("wiki_add_attachment"));
+</script>
+
 <%
   view_permission = false
   edit_permission = false
