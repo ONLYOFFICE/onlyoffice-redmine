@@ -53,3 +53,52 @@
 <script type="text/javascript" language="javascript">
     document.getElementsByClassName("box tabular settings")[0].classList.remove("settings")
 </script>
+
+<div id="error-notification">
+  <div class="flash error" style="display: none"><%= l(:onlyoffice_editor_cannot_be_reached) %></div>
+  <div id="iframeEditor"></div>
+</div>
+
+
+<div style="display: none">
+  <%= stylesheet_link_tag "editor", :plugin => "onlyoffice_redmine" %>
+
+  <%= 
+    editor_base_url = Setting.plugin_onlyoffice_redmine["oo_address"]
+    editor_base_jwtsecret = Setting.plugin_onlyoffice_redmine["jwtsecret"]
+    is_connection = true
+    is_command = ""
+    begin
+      res_health = CallbackHelper.do_request(editor_base_url + "healthcheck")
+      res_command = CallbackHelper.command_request("version")
+      is_command += res_command["version"]
+    rescue
+      is_connection = false
+    end
+  %>
+
+  <script src="<%= editor_base_url[-1].eql?("/") ? editor_base_url : editor_base_url + "/" %>web-apps/apps/api/documents/api.js"></script>
+
+  <script type="text/javascript" language="javascript">
+    document.getElementById("content").prepend(document.getElementById("error-notification"));
+
+    var connectEditor = function () {
+        if (typeof DocsAPI === "undefined" || !<%= is_connection %> || <%= is_command.empty? %>) {
+          document.getElementById("error-notification").children[0].style.display = "block";
+          return;
+        }else {
+          document.getElementById("error-notification").children[0].style.display = "none";
+        }
+    };
+    
+    if (window.addEventListener) {
+        window.addEventListener("load", connectEditor);
+    } else if (window.attachEvent) {
+        window.attachEvent("load", connectEditor);
+    }
+  </script>
+</div>
+
+
+
+
