@@ -53,3 +53,58 @@
 <script type="text/javascript" language="javascript">
     document.getElementsByClassName("box tabular settings")[0].classList.remove("settings")
 </script>
+
+<div id="error-notification">
+  <div class="flash error" style="display: none"><%= l(:onlyoffice_editor_cannot_be_reached) %></div>
+  <div id="iframeEditor"></div>
+</div>
+
+<div id="onlyoffice" style="display: none">
+  <%= stylesheet_link_tag "editor", :plugin => "onlyoffice_redmine" %>
+
+  <%= 
+    editor_base_url = Setting.plugin_onlyoffice_redmine["oo_address"]
+
+    attachment = OnlyofficeCreateController.creteCheakFile
+    
+    url = send("download_named_attachment_url", attachment, attachment.filename)
+
+    path = url.to_s
+    key = ServiceConverter.generate_revision_id(path)
+
+    is_convert = 0
+
+    begin
+      res_convert = ServiceConverter.get_converted_uri(path, "docx", "pdf", key, false, nil)
+      is_convert = res_convert[0]
+    end
+  %>
+
+  <script src="<%= editor_base_url[-1].eql?("/") ? editor_base_url : editor_base_url + "/" %>web-apps/apps/api/documents/api.js"></script>
+
+  <script type="text/javascript" language="javascript">
+    document.getElementById("content").prepend(document.getElementById("error-notification"));
+
+    console.log("<%= url %>")
+    console.log("<%= res_convert[1] %>")
+
+    var connectEditor = function () {
+        if (typeof DocsAPI === "undefined" || !<%= OnlyofficeController.isValidSetings || is_convert == 100 %>) {
+          document.getElementById("error-notification").children[0].style.display = "block";
+          return;
+        }else {
+          document.getElementById("error-notification").children[0].style.display = "none";
+        }
+    };
+    
+    if (window.addEventListener) {
+        window.addEventListener("load", connectEditor);
+    } else if (window.attachEvent) {
+        window.attachEvent("load", connectEditor);
+    }
+  </script>
+</div>
+
+
+
+

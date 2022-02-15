@@ -225,4 +225,37 @@ class OnlyofficeController < AccountController
     content_type
   end
 
+  def self.isValidSetings()
+    editor_base_url = Setting.plugin_onlyoffice_redmine["oo_address"]
+    editor_base_jwtsecret = Setting.plugin_onlyoffice_redmine["jwtsecret"]
+
+    #attachment = OnlyofficeCreateController.creteCheakFile
+    #route_method = :download_named_attachment_url
+    #url = send("download_named_attachment_url", attachment, attachment.filename)
+
+    #path = url.to_s
+    #key = ServiceConverter.generate_revision_id(path)
+
+    is_command = ""
+    #is_convert = 0
+
+    begin
+      res_health = CallbackHelper.do_request(editor_base_url + "healthcheck")
+
+      res_command = CallbackHelper.command_request("version")
+      is_command += res_command["version"]
+
+      #res_convert = ServiceConverter.get_converted_uri(path, "docx", "pdf", key, false, nil)
+      #is_convert = res_convert[0]
+    rescue
+      return false
+    end
+
+    if is_command.empty? #|| is_convert != 100
+      return false
+    end
+
+    return true
+  end
+
 end

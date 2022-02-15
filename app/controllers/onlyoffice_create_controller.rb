@@ -37,6 +37,21 @@ class OnlyofficeCreateController < ApplicationController
     redirect_to document_path(@document)
   end
 
+  class << self
+
+    def creteCheakFile
+      path = Rails.root.join('plugins', 'onlyoffice_redmine', 'assets', 'document-templates', 'en-US', 'new.docx')
+      file = File.read(path)
+
+      attachment = Attachment.create(:file => file, :author => User.current)
+      attachment.filename = "OnlyOfficeCheakConvertService.docx"
+      attachment.content_type = FileUtility.get_mimetype("docx")
+      attachment.save
+      return attachment
+    end
+
+  end
+
   private
 
   def create_attachment_from_template_file(author=User.current)
