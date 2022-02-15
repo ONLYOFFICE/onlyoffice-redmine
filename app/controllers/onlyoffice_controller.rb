@@ -225,4 +225,26 @@ class OnlyofficeController < AccountController
     content_type
   end
 
+  def self.isValidSetings()
+    editor_base_url = Setting.plugin_onlyoffice_redmine["oo_address"]
+    editor_base_jwtsecret = Setting.plugin_onlyoffice_redmine["jwtsecret"]
+
+    is_command = ""
+
+    begin
+      res_health = CallbackHelper.do_request(editor_base_url + "healthcheck")
+
+      res_command = CallbackHelper.command_request("version")
+      is_command += res_command["version"]
+    rescue
+      return false
+    end
+
+    if is_command.empty?
+      return false
+    end
+
+    return true
+  end
+
 end
