@@ -74,10 +74,7 @@ class CallbackHelper
       uri = URI.parse(url)
       http = Net::HTTP.new(uri.host, uri.port)
 
-      # if download_url.start_with?('https')
-      #   http.use_ssl = true
-      #   http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      # end
+      checkCert(uri)
 
       req = Net::HTTP::Get.new(uri)
       res = http.request(req)
@@ -135,6 +132,13 @@ class CallbackHelper
       return saved
     end
 
+  end
+
+  def checkCert(url)
+    if Setting.plugin_onlyoffice_redmine["check_cert"].eql?("on") ? true : false || url.start_with?('https')
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    end
   end
 
 end
