@@ -48,6 +48,10 @@
     <%= check_box_tag 'settings[editor_toolbar_no_tabs]', settings['editor_toolbar_no_tabs'], settings['editor_toolbar_no_tabs'].eql?('on') %>
     <%= l(:onlyoffice_settings_editor_view_toolbar) %>
   </label>
+  <label class="floating">
+    <%= check_box_tag 'settings[check_cert]', settings['check_cert'], settings['check_cert'].eql?('on') %>
+    <%= l(:onlyoffice_settings_check_cert) %>
+  </label>
 </fieldset>
 
 <script type="text/javascript" language="javascript">
