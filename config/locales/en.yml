@@ -7,6 +7,7 @@ en:
   onlyoffice_settings_file_type: "Open the file for editing (due to format restrictions, the data might be lost when saving to the formats from the list below)"
   onlyoffice_settings_editor_view: "Editor customization settings"
   onlyoffice_settings_editor_view_chat: "Display Chat menu button"
+  onlyoffice_settings_check_cert: ""
   onlyoffice_settings_editor_view_help: "Display Help menu button"
   onlyoffice_settings_editor_view_header: "Display the header more compact"
   onlyoffice_settings_editor_view_feedback: "Display Feedback & Support menu button"

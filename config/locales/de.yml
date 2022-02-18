@@ -7,6 +7,7 @@ de:
   onlyoffice_settings_file_type: "Öffne die Datei zum Bearbeiten (aufgrund von Formateinschränkungen können die Daten beim Speichern in den Formaten aus der folgenden Liste verloren gehen)"
   onlyoffice_settings_editor_view: "Editor-Einstellungen"
   onlyoffice_settings_editor_view_chat: "Chat-Taste anzeigen"
+  onlyoffice_settings_check_cert: ""
   onlyoffice_settings_editor_view_help: "Hilfetaste anzeigen"
   onlyoffice_settings_editor_view_header: "Kompakten Header anzeigen"
   onlyoffice_settings_editor_view_feedback: "Feedback-& Support-Taste anzeigen"

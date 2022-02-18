@@ -7,6 +7,7 @@ it:
   onlyoffice_settings_file_type: "Apri il file per la modifica (a causa di restrizioni di formato, i dati potrebbero andare persi durante il salvataggio nei formati della lista sottostante)"
   onlyoffice_settings_editor_view: "Impostazioni di personalizzazione dell'editor"
   onlyoffice_settings_editor_view_chat: "Pulsante del menu Mostra chat"
+  onlyoffice_settings_check_cert: ""
   onlyoffice_settings_editor_view_help: "Pulsante del menu Mostra guida"
   onlyoffice_settings_editor_view_header: "Mostra l'intestazione più compatta"
   onlyoffice_settings_editor_view_feedback: "Pulsante del menu Mostra feedback e supporto"
