@@ -23,7 +23,19 @@
   <%= content_tag(:label, l(:onlyoffice_settings_jwtsecret)) %>
   <%= text_field_tag 'settings[jwtsecret]', settings['jwtsecret'] %>
 </p>
-
+<fieldset>
+  <legend>
+    <span><%= l(:onlyoffice_additional_settings) %></span>
+  </legend>
+  <p>
+    <%= content_tag(:label, l(:onlyoffice_additional_settings_editor)) %>
+    <%= text_field_tag 'settings[inner_editor]', settings['inner_editor'], :placeholder => "http://docserver/" %>
+  </p>
+  <p>
+    <%= content_tag(:label, l(:onlyoffice_additional_settings_server)) %>
+    <%= text_field_tag 'settings[inner_server]', settings['inner_server'], :placeholder => "http://redmine/" %>
+  </p>
+</fieldset>
 <fieldset>
   <legend>
     <span><%= l(:onlyoffice_settings_editor_view) %></span>
