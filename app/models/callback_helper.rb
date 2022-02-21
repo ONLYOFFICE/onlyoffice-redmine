@@ -58,7 +58,7 @@ class CallbackHelper
     end
 
     def save_from_uri(path, download_url)
-      res = do_request(download_url)
+      res = do_request(FileUtility.replaceDocEditorUrlToInternal(download_url))
       data = res.body
 
       if data == nil
@@ -71,7 +71,7 @@ class CallbackHelper
     end
 
     def do_request(url)
-      uri = URI.parse(url)
+      uri = URI.parse(FileUtility.replaceDocEditorUrlToInternal(url))
       http = Net::HTTP.new(uri.host, uri.port)
 
       # if download_url.start_with?('https')
@@ -92,7 +92,7 @@ class CallbackHelper
     end
 
     def process_save(callback_json, attachment)
-      download_uri = callback_json['url']
+      download_uri = FileUtility.replaceDocEditorUrlToInternal(callback_json['url'])
       if (download_uri.eql?(nil))
         saved = 1
         return saved
