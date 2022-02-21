@@ -72,5 +72,30 @@ class FileUtility
       end
     end
 
+    def getEditorInternalUrl
+      url = Setting.plugin_onlyoffice_redmine["inner_editor"]
+      if url.empty?
+        url = Setting.plugin_onlyoffice_redmine["oo_address"]
+      end
+      return url[-1].eql?("/") ? url : url + "/"
+    end
+
+    def getRedmineInternalUrl
+      url = Setting.plugin_onlyoffice_redmine["inner_server"]
+      if url.empty?
+        url = Setting.protocol + "://" + Setting.host_name + "/"
+      end
+      return url[-1].eql?("/") ? url : url + "/"
+    end
+
+    def replaceDocEditorUrlToInternal(url)
+      innerUrl = getEditorInternalUrl
+      publicUrl = Setting.plugin_onlyoffice_redmine["oo_address"]
+      if innerUrl != publicUrl
+        url = url.sub(publicUrl, innerUrl)
+      end
+      return url
+    end
+
   end
 end
