@@ -30,7 +30,7 @@ class CallbackHelper
       if JWTHelper.is_enabled
         inHeader = false
         token = nil
-        jwtHeader = "Authorization"
+        jwtHeader = Config.get_config("jwtHeader")
         if data["token"]
           token = JWTHelper.decode(data["token"])
         elsif request.headers[jwtHeader]
@@ -71,7 +71,7 @@ class CallbackHelper
     end
 
     def do_request(url)
-      uri = URI.parse(url)
+      uri = URI.parse(update_url(url))
       http = Net::HTTP.new(uri.host, uri.port)
 
       # if download_url.start_with?('https')
@@ -92,7 +92,7 @@ class CallbackHelper
     end
 
     def process_save(callback_json, attachment)
-      download_uri = callback_json['url']
+      download_uri = update_url(callback_json['url'])
       if (download_uri.eql?(nil))
         saved = 1
         return saved
