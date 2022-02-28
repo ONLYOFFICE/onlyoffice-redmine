@@ -5,6 +5,8 @@ zh:
   onlyoffice_settings_jwtsecret: "秘钥(留空为关闭)"
   onlyoffice_settings_forcesave: "启用强制保存"
   onlyoffice_settings_file_type: "默认的文件编辑器 (由于文件格式限制，保存为下列格式时，数据可能会缺失)"
+  onlyoffice_settings_editor_demo: ""
+  onlyoffice_editor_trial_period_ended: ""
   onlyoffice_settings_editor_view: "编辑器自定义设置"
   onlyoffice_settings_editor_view_chat: "显示交流菜单按钮"
   onlyoffice_settings_editor_view_help: "显示帮助菜单按钮"
