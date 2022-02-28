@@ -15,6 +15,11 @@
 # limitations under the License.
 %>
 
+<div id="error-notification-trial-period">
+  <div class="flash error" style="display: none"><%= l(:onlyoffice_editor_trial_period_ended) %></div>
+  <div id="iframeEditor"></div>
+</div>
+
 <p>
   <%= content_tag(:label, l(:onlyoffice_settings_doc_url)) %>
   <%= text_field_tag 'settings[oo_address]', settings['oo_address'] %>
@@ -28,6 +33,10 @@
   <legend>
     <span><%= l(:onlyoffice_settings_editor_view) %></span>
   </legend>
+  <label class="floating">
+    <%= check_box_tag 'settings[editor_demo]', settings['editor_demo'], settings['editor_demo'].eql?('on') %>
+    <%= l(:onlyoffice_settings_editor_demo) %>
+  </label>
   <label class="floating">
     <%= check_box_tag 'settings[editor_chat]', settings['editor_chat'], settings['editor_chat'].eql?('on') %>
     <%= l(:onlyoffice_settings_editor_view_chat) %>
@@ -52,4 +61,22 @@
 
 <script type="text/javascript" language="javascript">
     document.getElementsByClassName("box tabular settings")[0].classList.remove("settings")
+    document.getElementById("content").prepend(document.getElementById("error-notification-trial-period"));
+
+    if (<%= Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") ? true : false %>) {
+      if (<%= Config.istrial %>){
+        document.getElementById("error-notification-trial-period").children[0].style.display = "none";
+        document.getElementById("settings_oo_address").disabled = true
+        document.getElementById("settings_jwtsecret").disabled = true
+      }else {
+        document.getElementById("error-notification-trial-period").children[0].style.display = "block";
+        document.getElementById("settings_oo_address").disabled = false
+        document.getElementById("settings_jwtsecret").disabled = false
+      }
+    }else {
+      if (document.getElementById("settings_editor_demo").checked == true && !<%= Config.istrial %>){
+        document.getElementById("error-notification-trial-period").children[0].style.display = "block";
+        document.getElementById("settings_editor_demo").checked = false;
+      }
+    }
 </script>
