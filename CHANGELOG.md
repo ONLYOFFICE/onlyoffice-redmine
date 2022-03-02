@@ -1,5 +1,9 @@
 # Change Log
 
+
+## Added
+- Added connection to a demo document server
+
 ## Fixed
 - issue with permissions
 
