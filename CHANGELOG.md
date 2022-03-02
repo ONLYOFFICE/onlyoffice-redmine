@@ -1,5 +1,9 @@
 # Change Log
 
+
+## Added
+- ignoring self signed certificate 
+
 ## Fixed
 - issue with permissions
 
