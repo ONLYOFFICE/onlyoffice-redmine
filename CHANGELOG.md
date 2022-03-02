@@ -1,5 +1,9 @@
 # Change Log
 
+
+## Added
+- Document Editing Service address is now splitted in two settings: inner address (address that confluence will use to access service) and public address (address that user will use to access editors)
+
 ## Fixed
 - issue with permissions
 
