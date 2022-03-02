@@ -57,3 +57,12 @@ var addOnlyOfficeCreateButton = function(containerElement) {
         dropdown.classList.remove("hidden");
     }
 }
+
+var addOnlyOfficeNextNeighboring = function(place,neighboringElement,contentID) {
+    var content = document.getElementById(contentID);
+    if (neighboringElement != null && content != null) {
+        neighboringElement.insertAdjacentElement(place, content);
+        content.classList.remove("hidden");
+    }
+}
+
