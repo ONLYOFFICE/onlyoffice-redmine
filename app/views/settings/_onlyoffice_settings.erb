@@ -78,7 +78,7 @@
       document.getElementById("settings_jwtsecret").disabled = bool
     };
 
-    if (<%= Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") ? true : false %>) {
+    if (<%= Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") %>) {
       if (<%= Config.istrial %>){
         document.getElementById("onlyoffice-error-notification").children[0].style.display = "none";
         сhangingАctivityFields(true)
