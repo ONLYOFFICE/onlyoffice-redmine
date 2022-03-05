@@ -63,7 +63,9 @@
 
 <script type="text/javascript" language="javascript">
     var showError = function (errorMes) {
-        let notice = $("#onlyoffice-error-notification")[0];
+        let notice = $("#flash_notice")[0];
+        notice.style.display = "none";
+        notice = $("#onlyoffice-error-notification")[0];
         notice.style.display = "block";
         notice.children[0].innerText = errorMes;
         $('#settings form input[type=submit]')[0].disabled = false;
@@ -91,6 +93,7 @@
         $("#onlyoffice-error-notification")[0].style.display = "none";
 
         var editor_url = $("#settings_oo_address")[0].value;
+        editor_url += editor_url.endsWith('/') ? '' : '/';
         var secret = $("#settings_jwtsecret")[0].value;
         var data = {
             url: editor_url,
@@ -106,7 +109,7 @@
         scriptAddress = document.getElementById("scriptDocServiceAddress");
         scriptAddress.onload = scriptCallback;
         scriptAddress.onerror = scriptCallback;
-        scriptAddress.src = editor_url + (editor_url.endsWith('/') ? '' : '/') + "web-apps/apps/api/documents/api.js";
+        scriptAddress.src = editor_url + "web-apps/apps/api/documents/api.js";
     };
 
     var ele = $('#settings form')[0];
