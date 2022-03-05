@@ -7,7 +7,7 @@ fr:
   onlyoffice_settings_file_type: "Ouvrir le fichier pour édition (en raison de restrictions de format, des données peuvent être perdues lors de l'enregistrement dans les formats de la liste ci-dessous)"
   onlyoffice_settings_editor_view: "Paramètres de personnalisation de l'éditeur"
   onlyoffice_settings_editor_view_chat: "Afficher le bouton du menu du chat"
-  onlyoffice_settings_check_cert: ""
+  onlyoffice_settings_check_cert: "Désactiver la vérification du certificat (non sur)"
   onlyoffice_settings_editor_view_help: "Afficher le bouton du menu 'Aide'"
   onlyoffice_settings_editor_view_header: "Afficher l'en-tête plus compact"
   onlyoffice_settings_editor_view_feedback: "Afficher le bouton du menu 'Feedback & Support'"

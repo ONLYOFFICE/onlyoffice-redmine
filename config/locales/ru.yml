@@ -7,7 +7,7 @@ ru:
   onlyoffice_settings_file_type: "Открыть файл на редактирование (из-за ограничений формата данные могут быть утеряны при сохранении в форматы из списка ниже)"
   onlyoffice_settings_editor_view: "Настройка редактора"
   onlyoffice_settings_editor_view_chat: "Отображать кнопку чата"
-  onlyoffice_settings_check_cert: "Игнорировать самоподписанный сертификат"
+  onlyoffice_settings_check_cert: "Отключить проверку сертификата (небезопасно)"
   onlyoffice_settings_editor_view_help: "Отображать кнопку справки"
   onlyoffice_settings_editor_view_header: "Отображать заголовок компактным"
   onlyoffice_settings_editor_view_feedback: "Отображать кнопку Обратной связи и поддержки"

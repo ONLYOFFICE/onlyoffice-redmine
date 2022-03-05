@@ -7,6 +7,7 @@ zh:
   onlyoffice_settings_file_type: "默认的文件编辑器 (由于文件格式限制，保存为下列格式时，数据可能会缺失)"
   onlyoffice_settings_editor_view: "编辑器自定义设置"
   onlyoffice_settings_editor_view_chat: "显示交流菜单按钮"
+  onlyoffice_settings_check_cert: "关闭证书校验(不安全)"
   onlyoffice_settings_editor_view_help: "显示帮助菜单按钮"
   onlyoffice_settings_editor_view_header: "更紧致的显示菜单栏"
   onlyoffice_settings_editor_view_feedback: "显示反馈&支持菜单按钮"
