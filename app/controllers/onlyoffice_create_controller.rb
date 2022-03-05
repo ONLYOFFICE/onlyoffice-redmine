@@ -41,7 +41,7 @@ class OnlyofficeCreateController < ApplicationController
 
   def create_attachment_from_template_file(author=User.current)
     path = Rails.root.join('plugins', 'onlyoffice_redmine', 'assets', 'document-templates', 'en-US', 'new.'+@ext)
-    file = File.read(path)
+    file = File.open(path, "rb") { |file| file.read }
 
     attachment = Attachment.create(:file => file, :author => author)
     attachment.filename = l("onlyoffice_create_#{@ext}")+".#{@ext}"
