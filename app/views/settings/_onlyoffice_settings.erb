@@ -50,42 +50,74 @@
   </label>
 </fieldset>
 
+<div id="onlyoffice-error-notification" style="display: none">
+  <div class="flash error"></div>
+</div>
+
 <script type="text/javascript" language="javascript">
-    document.getElementsByClassName("box tabular settings")[0].classList.remove("settings")
+    document.getElementsByClassName("box tabular settings")[0].classList.remove("settings");
+
+    var contentDiv = document.getElementById("content");
+    contentDiv.insertBefore($("#onlyoffice-error-notification")[0], document.getElementsByTagName("h2")[0]);
 </script>
 
-<div id="error-notification">
-  <div class="flash error" style="display: none"><%= l(:onlyoffice_editor_cannot_be_reached) %></div>
-  <div id="iframeEditor"></div>
-</div>
-
-<div id="onlyoffice" style="display: none">
-  <%= stylesheet_link_tag "editor", :plugin => "onlyoffice_redmine" %>
-
-  <%= editor_base_url = Setting.plugin_onlyoffice_redmine["oo_address"] %>
-
-  <script src="<%= editor_base_url[-1].eql?("/") ? editor_base_url : editor_base_url + "/" %>web-apps/apps/api/documents/api.js"></script>
-
-  <script type="text/javascript" language="javascript">
-    document.getElementById("content").prepend(document.getElementById("error-notification"));
-
-    var connectEditor = function () {
-        if (typeof DocsAPI === "undefined" || !<%= OnlyofficeController.isValidSetings %>) {
-          document.getElementById("error-notification").children[0].style.display = "block";
-          return;
-        }else {
-          document.getElementById("error-notification").children[0].style.display = "none";
-        }
+<script type="text/javascript" language="javascript">
+    var showError = function (errorMes) {
+        let notice = $("#onlyoffice-error-notification")[0];
+        notice.style.display = "block";
+        notice.children[0].innerText = errorMes;
+        $('#settings form input[type=submit]')[0].disabled = false;
     };
-    
-    if (window.addEventListener) {
-        window.addEventListener("load", connectEditor);
-    } else if (window.attachEvent) {
-        window.attachEvent("load", connectEditor);
+
+    var checkSettings = function () {
+        var scriptCallback = function () {
+            var resultScript = typeof DocsAPI !== "undefined";
+            if (!resultScript) {
+                showError("<%= l(:onlyoffice_editor_cannot_be_reached) %>");
+            } else {
+                $.ajax({
+                    type: 'POST',
+                    url: '<%= onlyoffice_check_settings_path %>',
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(data)
+                }).always(function (result, textStatus, jqXHR) {
+                    let ok = result !== 'false';
+                    if (ok) {
+                        $('#settings form')[0].submit();
+                    } else showError("<%= l(:onlyoffice_editor_cannot_be_reached) %>");
+                });
+            }
+        };
+        $("#onlyoffice-error-notification")[0].style.display = "none";
+
+        var editor_url = $("#settings_oo_address")[0].value;
+        var secret = $("#settings_jwtsecret")[0].value;
+        var data = {
+            url: editor_url,
+            secret: secret
+        };
+        delete DocsAPI;
+        var scriptAddress = document.getElementById("scriptDocServiceAddress");
+        if (scriptAddress) scriptAddress.parentNode.removeChild(scriptAddress);
+        var script = document.createElement('script');
+        script.id = "scriptDocServiceAddress";
+        script.type = 'text/javascript';
+        document.head.appendChild(script);
+        scriptAddress = document.getElementById("scriptDocServiceAddress");
+        scriptAddress.onload = scriptCallback;
+        scriptAddress.onerror = scriptCallback;
+        scriptAddress.src = editor_url + (editor_url.endsWith('/') ? '' : '/') + "web-apps/apps/api/documents/api.js";
+    };
+
+    var ele = $('#settings form')[0];
+    var settingsCallback = function (e) {
+        e.preventDefault();
+        checkSettings();
+    };
+
+    if(ele.addEventListener){
+        ele.addEventListener("submit", settingsCallback, false);
+    } else if(ele.attachEvent){
+        ele.attachEvent('onsubmit', settingsCallback);
     }
-  </script>
-</div>
-
-
-
-
+</script>
