@@ -1,0 +1,55 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Get Info 
+        run: |
+          echo "::set-output name=version::$(awk '/version /' init.rb | awk -F"'" '$0=$2')"
+        id: info
+      - name: Generate Changelog
+        run: |
+          awk '/## [0-9]/{p++} p; /## [0-9]/{if (p > 1) exit}' CHANGELOG.md | awk 'NR>2 {print last} {last=$0}' > RELEASE.md
+      - name: Install Zip
+        run: sudo apt-get install zip
+      - name: Build Plugin
+        run: |
+          cd ${{ github.workspace }}
+          git submodule update --init --recursive
+          mkdir -p ./onlyoffice-redmine
+          rsync -av --exclude='onlyoffice-redmine' ./ ./onlyoffice-redmine
+          cd ./onlyoffice-redmine
+          rm -rf ./.github/
+          rm -rf ./.git/
+          rm ./.gitmodules
+          cd ./assets/document-templates
+          rm .git
+      - name: Build Artifact
+        run: zip -r onlyoffice-redmine.zip onlyoffice-redmine/
+      - name: Create Release
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          draft: false
+          prerelease: false
+          release_name: v${{ steps.info.outputs.version }}
+          tag_name: v${{ steps.info.outputs.version }}
+          body_path: ./RELEASE.md
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Upload Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: onlyoffice-redmine.zip
+          asset_name: onlyoffice-redmine.zip
+          asset_content_type: application/zip
