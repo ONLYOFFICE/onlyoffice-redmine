@@ -24,6 +24,10 @@ class OnlyofficeController < AccountController
   before_action :find_attachment, :only => [ :download, :editor, :callback, :save_as ]
   before_action :file_readable, :read_authorize, :only => [ :editor ]
 
+  def check_settings
+    render plain: is_valid_setings(params[:url], params[:secret])
+  end
+
   def download
     file_readable
     if params[:key].eql?(nil)
@@ -225,16 +229,14 @@ class OnlyofficeController < AccountController
     content_type
   end
 
-  def self.isValidSetings()
-    editor_base_url = Setting.plugin_onlyoffice_redmine["oo_address"]
-    editor_base_jwtsecret = Setting.plugin_onlyoffice_redmine["jwtsecret"]
-
+  def is_valid_setings(url, secret = nil)
+    editor_base_url = url
     is_command = ""
 
     begin
       res_health = CallbackHelper.do_request(editor_base_url + "healthcheck")
 
-      res_command = CallbackHelper.command_request("version")
+      res_command = CallbackHelper.command_request("version",  nil, editor_base_url, secret)
       is_command += res_command["version"]
     rescue
       return false
