@@ -64,7 +64,7 @@
 <script type="text/javascript" language="javascript">
     var showError = function (errorMes) {
         if ($("#flash_notice")[0]) $("#flash_notice")[0].remove();
-        notice = $("#onlyoffice-error-notification")[0];
+        let notice = $("#onlyoffice-error-notification")[0];
         notice.style.display = "block";
         notice.children[0].innerText = errorMes;
         $('#settings form input[type=submit]')[0].disabled = false;
@@ -92,7 +92,7 @@
         $("#onlyoffice-error-notification")[0].style.display = "none";
 
         var editor_url = $("#settings_oo_address")[0].value;
-        editor_url += editor_url.endsWith('/') ? '' : '/';
+        editor_url += editor_url.charAt(editor_url.length - 1) === '/' ? '' : '/';
         var secret = $("#settings_jwtsecret")[0].value;
         var data = {
             url: editor_url,
