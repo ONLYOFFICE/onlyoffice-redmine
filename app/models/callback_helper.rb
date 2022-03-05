@@ -71,7 +71,7 @@ class CallbackHelper
     end
 
     def do_request(url)
-      uri = URI.parse(update_url(url))
+      uri = URI.parse(replace_editor_url(url))
       http = Net::HTTP.new(uri.host, uri.port)
 
       # if download_url.start_with?('https')
@@ -92,7 +92,7 @@ class CallbackHelper
     end
 
     def process_save(callback_json, attachment)
-      download_uri = update_url(callback_json['url'])
+      download_uri = replace_editor_url(callback_json['url'])
       if (download_uri.eql?(nil))
         saved = 1
         return saved
