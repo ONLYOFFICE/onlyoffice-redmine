@@ -1,5 +1,9 @@
 class Config
-    @trialData = nil
+    @trial_data = { 
+                "oo_address" => "https://onlinedocs.onlyoffice.com/", 
+                "jwtHeader" => "AuthorizationJWT",
+                "jwtsecret" => "sn2puSUF7muF5Jas", 
+            }
     @config = nil
     class << self
         def init
@@ -7,18 +11,12 @@ class Config
                 path = Rails.root.join('plugins', 'onlyoffice_redmine', 'config', 'config.yaml')
                 if File.exists?(path) && 
                     @config = JSON.parse(File.open(path, 'r'){ |file| file.read })
-                    if @config["data"] = "none"
+                    if @config["data"] == "none"
                         create_trial_data
                         @config = JSON.parse(File.open(path, 'r'){ |file| file.read })
                     end
                 end
             end
-
-            @trialData = { 
-                "oo_address" => "https://onlinedocs.onlyoffice.com/", 
-                "jwtHeader" => "AuthorizationJWT",
-                "jwtsecret" => "sn2puSUF7muF5Jas", 
-            }
         end
 
         def get_config(key)
@@ -30,7 +28,7 @@ class Config
             
             if Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") ? true : false && istrial
                 init
-                get = @trialData[key]
+                get = @trial_data[key]
             end
             return get
         end
