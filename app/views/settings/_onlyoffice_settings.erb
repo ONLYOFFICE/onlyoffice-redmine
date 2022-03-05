@@ -63,8 +63,7 @@
 
 <script type="text/javascript" language="javascript">
     var showError = function (errorMes) {
-        let notice = $("#flash_notice")[0];
-        notice.style.display = "none";
+        if ($("#flash_notice")[0]) $("#flash_notice")[0].remove();
         notice = $("#onlyoffice-error-notification")[0];
         notice.style.display = "block";
         notice.children[0].innerText = errorMes;
