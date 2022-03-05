@@ -61,6 +61,8 @@ class CallbackHelper
       res = do_request(download_url)
       data = res.body
 
+      checkCert(download_url)
+
       if data == nil
         raise 'stream is null'
       end
