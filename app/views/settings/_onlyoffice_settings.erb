@@ -15,9 +15,8 @@
 # limitations under the License.
 %>
 
-<div id="error-notification-trial-period">
-  <div class="flash error" style="display: none"><%= l(:onlyoffice_editor_trial_period_ended) %></div>
-  <div id="iframeEditor"></div>
+<div id="onlyoffice-error-notification" style="display: none">
+  <div class="flash error"></div>
 </div>
 
 <p>
@@ -61,21 +60,35 @@
 
 <script type="text/javascript" language="javascript">
     document.getElementsByClassName("box tabular settings")[0].classList.remove("settings")
-    document.getElementById("content").prepend(document.getElementById("error-notification-trial-period"));
+
+    var contentDiv = document.getElementById("content");
+    contentDiv.insertBefore($("#onlyoffice-error-notification")[0], document.getElementsByTagName("h2")[0]);
+</script>
+
+<script type="text/javascript" language="javascript">
+    var showError = function (errorMes) {
+        let notice = $("#onlyoffice-error-notification")[0];
+        notice.style.display = "block";
+        notice.children[0].innerText = errorMes;
+        $('#settings form input[type=submit]')[0].disabled = false;
+    };
+
+    var сhangingАctivityFields  = function (bool) {
+      document.getElementById("settings_oo_address").disabled = bool
+      document.getElementById("settings_jwtsecret").disabled = bool
+    };
 
     if (<%= Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") ? true : false %>) {
       if (<%= Config.istrial %>){
-        document.getElementById("error-notification-trial-period").children[0].style.display = "none";
-        document.getElementById("settings_oo_address").disabled = true
-        document.getElementById("settings_jwtsecret").disabled = true
+        document.getElementById("onlyoffice-error-notification").children[0].style.display = "none";
+        сhangingАctivityFields(true)
       }else {
-        document.getElementById("error-notification-trial-period").children[0].style.display = "block";
-        document.getElementById("settings_oo_address").disabled = false
-        document.getElementById("settings_jwtsecret").disabled = false
+        showError("<%= l(:onlyoffice_editor_trial_period_ended) %>")
+        сhangingАctivityFields(false)
       }
     }else {
       if (document.getElementById("settings_editor_demo").checked == true && !<%= Config.istrial %>){
-        document.getElementById("error-notification-trial-period").children[0].style.display = "block";
+        showError("<%= l(:onlyoffice_editor_trial_period_ended) %>")
         document.getElementById("settings_editor_demo").checked = false;
       }
     }
