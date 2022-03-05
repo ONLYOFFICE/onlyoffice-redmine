@@ -7,7 +7,7 @@ class Config
     @config = nil
     class << self
         def init
-            if Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") ? true : false
+            if Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on")
                 path = Rails.root.join('plugins', 'onlyoffice_redmine', 'config', 'config.yaml')
                 if File.exists?(path) && 
                     @config = JSON.parse(File.open(path, 'r'){ |file| file.read })
@@ -26,7 +26,7 @@ class Config
                 get = Setting.plugin_onlyoffice_redmine[key]
             end
             
-            if Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") ? true : false && istrial
+            if Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") && istrial
                 init
                 get = @trial_data[key]
             end
