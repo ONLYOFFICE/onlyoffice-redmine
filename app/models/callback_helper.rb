@@ -116,7 +116,7 @@ class CallbackHelper
         req = Net::HTTP::Post.new(uri.request_uri)  # create the post request
         req.add_field("Content-Type", "application/json")  # set headers
         JWTHelper.init
-        if JWTHelper.is_enabled
+        if !secret.nil? || JWTHelper.is_enabled
           payload["token"] = JWTHelper.encode(payload, secret)  # get token and save it to the payload
           jwtHeader = "Authorization"  # get signature authorization header
           req.add_field(jwtHeader, "Bearer #{JWTHelper.encode({ :payload => payload }, secret)}")  # set it to the request with the Bearer prefix
