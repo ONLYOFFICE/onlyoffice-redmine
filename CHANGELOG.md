@@ -2,6 +2,7 @@
 
 
 ## Added
+- validation of server settings on the settings page
 - ignoring self signed certificate 
 
 ## Fixed
