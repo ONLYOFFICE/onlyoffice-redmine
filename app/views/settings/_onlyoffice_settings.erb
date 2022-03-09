@@ -66,30 +66,27 @@
 </script>
 
 <script type="text/javascript" language="javascript">
-    var showError = function (errorMes) {
+    var show_error = function (error_mes) {
         let notice = $("#onlyoffice-error-notification")[0];
         notice.style.display = "block";
-        notice.children[0].innerText = errorMes;
+        notice.children[0].innerText = error_mes;
         $('#settings form input[type=submit]')[0].disabled = false;
     };
 
-    var сhangingАctivityFields  = function (bool) {
+    var changing_activity_fields  = function (bool) {
       document.getElementById("settings_oo_address").disabled = bool
       document.getElementById("settings_jwtsecret").disabled = bool
     };
 
-    if (<%= Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") %>) {
-      if (<%= Config.istrial %>){
-        document.getElementById("onlyoffice-error-notification").children[0].style.display = "none";
-        сhangingАctivityFields(true)
-      }else {
-        showError("<%= l(:onlyoffice_editor_trial_period_ended) %>")
-        сhangingАctivityFields(false)
+    $(document).ready(function () {
+      if (<%= Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") %>) {
+        if (<%= Config.istrial %>){
+          document.getElementById("onlyoffice-error-notification").children[0].style.display = "none";
+          changing_activity_fields(true);
+        } else {
+          show_error("<%= l(:onlyoffice_editor_trial_period_ended) %>");
+          document.getElementById("settings_editor_demo").checked = false;
+        }
       }
-    }else {
-      if (document.getElementById("settings_editor_demo").checked == true && !<%= Config.istrial %>){
-        showError("<%= l(:onlyoffice_editor_trial_period_ended) %>")
-        document.getElementById("settings_editor_demo").checked = false;
-      }
-    }
+    });
 </script>
