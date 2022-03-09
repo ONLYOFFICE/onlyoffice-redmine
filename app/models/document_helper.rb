@@ -23,7 +23,7 @@ class DocumentHelper
   class << self
 
     def init (url)
-      @@base_url = url
+      @@base_url = FileUtility.get_redmine_internal_url
     end
 
     def get_download_url(id, user_id)

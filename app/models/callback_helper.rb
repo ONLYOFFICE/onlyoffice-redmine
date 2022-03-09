@@ -17,6 +17,8 @@
 
 class CallbackHelper
 
+  @@commandUrl = "coauthoring/CommandService.ashx"
+
   class << self
 
     def read_body(request)
@@ -58,8 +60,10 @@ class CallbackHelper
     end
 
     def save_from_uri(path, download_url)
-      res = do_request(download_url)
+      res = do_request(FileUtility.replace_doc_edito_url_to_internal(download_url))
       data = res.body
+
+      check_cert(download_url)
 
       if data == nil
         raise 'stream is null'
@@ -71,17 +75,59 @@ class CallbackHelper
     end
 
     def do_request(url)
-      uri = URI.parse(Config.replace_editor_url(url))
+      uri = URI.parse(FileUtility.replace_doc_edito_url_to_internal(url))
       http = Net::HTTP.new(uri.host, uri.port)
 
-      # if download_url.start_with?('https')
-      #   http.use_ssl = true
-      #   http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      # end
+      check_cert(uri)
 
       req = Net::HTTP::Get.new(uri)
       res = http.request(req)
       return res
+    end
+
+    # send the command request
+    def command_request(method, key = nil, url = nil, secret = nil)
+      editor_base_url = url.nil? ? Config.get_config("oo_address") : url
+      document_command_url = editor_base_url + @@commandUrl
+      # create a payload object with the method and key
+      if method == "version"
+        payload = {
+            :c => method,
+          }
+      else
+        payload = {
+            :c => method,
+            :key => key
+          }
+      end
+
+      data = nil
+      begin
+        uri = URI.parse(document_command_url)  # parse the document command url
+        http = Net::HTTP.new(uri.host, uri.port)  # create a connection to the http server
+
+        if document_command_url.start_with?('https')  # check if the documnent command url starts with https
+          http.use_ssl = true
+          http.verify_mode = OpenSSL::SSL::VERIFY_NONE  # set the flags for the server certificate verification at the beginning of SSL session
+        end
+
+        req = Net::HTTP::Post.new(uri.request_uri)  # create the post request
+        req.add_field("Content-Type", "application/json")  # set headers
+        JWTHelper.init
+        if !secret.nil? || JWTHelper.is_enabled
+          payload["token"] = JWTHelper.encode(payload, secret)  # get token and save it to the payload
+          jwtHeader = "Authorization"  # get signature authorization header
+          req.add_field(jwtHeader, "Bearer #{JWTHelper.encode({ :payload => payload }, secret)}")  # set it to the request with the Bearer prefix
+        end
+        req.body = payload.to_json   # convert the payload object into the json format
+        res = http.request(req)  # get the response
+        data = res.body  # and take its body
+      rescue => ex
+          raise ex.message
+      end
+
+      json_data = JSON.parse(data)  # convert the response body into the json format
+      return json_data
     end
 
     def delete_diskfile_by_digest(digest, path)
@@ -92,7 +138,7 @@ class CallbackHelper
     end
 
     def process_save(callback_json, attachment)
-      download_uri = Config.replace_editor_url(callback_json['url'])
+      download_uri = FileUtility.replace_doc_edito_url_to_internal(callback_json['url'])
       if (download_uri.eql?(nil))
         saved = 1
         return saved
@@ -135,6 +181,13 @@ class CallbackHelper
       return saved
     end
 
+  end
+
+  def check_cert(url)
+    if Setting.plugin_onlyoffice_redmine["check_cert"].eql?("on")
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    end
   end
 
 end
