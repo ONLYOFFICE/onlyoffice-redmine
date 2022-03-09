@@ -61,7 +61,7 @@ class CallbackHelper
       res = do_request(download_url)
       data = res.body
 
-      checkCert(download_url)
+      check_cert(download_url)
 
       if data == nil
         raise 'stream is null'
@@ -76,7 +76,7 @@ class CallbackHelper
       uri = URI.parse(url)
       http = Net::HTTP.new(uri.host, uri.port)
 
-      checkCert(uri)
+      check_cert(uri)
 
       req = Net::HTTP::Get.new(uri)
       res = http.request(req)
@@ -136,8 +136,8 @@ class CallbackHelper
 
   end
 
-  def checkCert(url)
-    if Setting.plugin_onlyoffice_redmine["check_cert"].eql?("on") ? true : false || url.start_with?('https')
+  def check_cert(url)
+    if Setting.plugin_onlyoffice_redmine["check_cert"].eql?("on")
       http.use_ssl = true
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     end
