@@ -10,6 +10,7 @@ zh:
   onlyoffice_additional_settings_server: "用于ONLYOFFICE Docs内部请求的服务器的地址"
   onlyoffice_settings_editor_view: "编辑器自定义设置"
   onlyoffice_settings_editor_view_chat: "显示交流菜单按钮"
+  onlyoffice_settings_check_cert: "关闭证书校验(不安全)"
   onlyoffice_settings_editor_view_help: "显示帮助菜单按钮"
   onlyoffice_settings_editor_view_header: "更紧致的显示菜单栏"
   onlyoffice_settings_editor_view_feedback: "显示反馈&支持菜单按钮"

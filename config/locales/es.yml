@@ -10,6 +10,7 @@ es:
   onlyoffice_additional_settings_server: "Dirección de servidor para solicitudes internas del ONLYOFFICE Docs"
   onlyoffice_settings_editor_view: "Ajustes del editor"
   onlyoffice_settings_editor_view_chat: "Mostrar el botón de Chat"
+  onlyoffice_settings_check_cert: "Desactivar la verificación de certificados (inseguro)"
   onlyoffice_settings_editor_view_help: "Mostrar el botón de Ayuda"
   onlyoffice_settings_editor_view_header: "Mostrar el encabezado más compacto"
   onlyoffice_settings_editor_view_feedback: "Mostrar el botón de Feedback y Soporte"

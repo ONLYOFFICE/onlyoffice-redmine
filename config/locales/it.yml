@@ -10,6 +10,7 @@ it:
   onlyoffice_additional_settings_server: "Indirizzo del server per le richieste interne da ONLYOFFICE Docs"
   onlyoffice_settings_editor_view: "Impostazioni di personalizzazione dell'editor"
   onlyoffice_settings_editor_view_chat: "Pulsante del menu Mostra chat"
+  onlyoffice_settings_check_cert: "Disattiva la verifica del certificato (non sicuro)"
   onlyoffice_settings_editor_view_help: "Pulsante del menu Mostra guida"
   onlyoffice_settings_editor_view_header: "Mostra l'intestazione più compatta"
   onlyoffice_settings_editor_view_feedback: "Pulsante del menu Mostra feedback e supporto"

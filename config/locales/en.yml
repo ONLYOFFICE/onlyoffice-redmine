@@ -10,6 +10,7 @@ en:
   onlyoffice_additional_settings_server: "Server address for internal requests from ONLYOFFICE Docs"
   onlyoffice_settings_editor_view: "Editor customization settings"
   onlyoffice_settings_editor_view_chat: "Display Chat menu button"
+  onlyoffice_settings_check_cert: "Disable certificate verification (insecure)"
   onlyoffice_settings_editor_view_help: "Display Help menu button"
   onlyoffice_settings_editor_view_header: "Display the header more compact"
   onlyoffice_settings_editor_view_feedback: "Display Feedback & Support menu button"

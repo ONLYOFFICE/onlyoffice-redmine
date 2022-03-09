@@ -10,6 +10,7 @@ de:
   onlyoffice_additional_settings_server: "Serveradresse für interne Anforderungen vom ONLYOFFICE Docs"
   onlyoffice_settings_editor_view: "Editor-Einstellungen"
   onlyoffice_settings_editor_view_chat: "Chat-Taste anzeigen"
+  onlyoffice_settings_check_cert: "Zertifikatsüberprüfung deaktivieren (unsicher)"
   onlyoffice_settings_editor_view_help: "Hilfetaste anzeigen"
   onlyoffice_settings_editor_view_header: "Kompakten Header anzeigen"
   onlyoffice_settings_editor_view_feedback: "Feedback-& Support-Taste anzeigen"
