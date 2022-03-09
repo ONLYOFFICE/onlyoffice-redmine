@@ -20,16 +20,8 @@ class Config
         end
 
         def get_config(key)
-            if key == "jwtHeader"
-                get = "Authorization"
-            else
-                get = Setting.plugin_onlyoffice_redmine[key]
-            end
-            
-            if Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") && istrial
-                init
-                get = @trial_data[key]
-            end
+            init
+            get = Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") && istrial ? @trial_data[key] : Setting.plugin_onlyoffice_redmine[key]
             return get
         end
 
