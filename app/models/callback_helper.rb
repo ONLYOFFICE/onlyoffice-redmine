@@ -60,7 +60,7 @@ class CallbackHelper
     end
 
     def save_from_uri(path, download_url)
-      res = do_request(download_url)
+      res = do_request(FileUtility.replace_doc_edito_url_to_internal(download_url))
       data = res.body
 
       check_cert(download_url)
@@ -75,7 +75,7 @@ class CallbackHelper
     end
 
     def do_request(url)
-      uri = URI.parse(url)
+      uri = URI.parse(FileUtility.replace_doc_edito_url_to_internal(url))
       http = Net::HTTP.new(uri.host, uri.port)
 
       check_cert(uri)
@@ -139,7 +139,7 @@ class CallbackHelper
     end
 
     def process_save(callback_json, attachment)
-      download_uri = callback_json['url']
+      download_uri = FileUtility.replace_doc_edito_url_to_internal(callback_json['url'])
       if (download_uri.eql?(nil))
         saved = 1
         return saved
