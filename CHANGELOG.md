@@ -1,5 +1,9 @@
 # Change Log
 
+
+## Added
+- validation of server settings on the settings page
+
 ## Fixed
 - issue with permissions
 
