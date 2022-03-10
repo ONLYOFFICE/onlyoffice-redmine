@@ -94,7 +94,9 @@ class FileUtility
       innerUrl = get_editor_internal_url
       publicUrl = Config.get_config("oo_address")
       if !innerUrl.eql?(publicUrl) && !Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on")
-        url = url.sub(publicUrl, innerUrl)
+        if !innerUrl.eql?("/") && publicUrl.present?
+          url = url.sub(publicUrl, innerUrl)
+        end
       end
       return url
     end
