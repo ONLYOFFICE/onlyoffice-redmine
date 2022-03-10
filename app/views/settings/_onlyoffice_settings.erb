@@ -70,11 +70,16 @@
   <div class="flash error"></div>
 </div>
 
+<div id="onlyoffice-notification" style="display: none">
+  <div class="nodata"></div>
+</div>
+
 <script type="text/javascript" language="javascript">
     document.getElementsByClassName("box tabular settings")[0].classList.remove("settings");
 
     var contentDiv = document.getElementById("content");
     contentDiv.insertBefore($("#onlyoffice-error-notification")[0], document.getElementsByTagName("h2")[0]);
+    contentDiv.insertBefore($("#onlyoffice-notification")[0], document.getElementsByTagName("h2")[0]);
 </script>
 
 <script type="text/javascript" language="javascript">
@@ -84,6 +89,12 @@
         notice.style.display = "block";
         notice.children[0].innerText = errorMes;
         $('#settings form input[type=submit]')[0].disabled = false;
+    };
+
+    var showNotification = function (message) {
+        let notice = $("#onlyoffice-notification")[0];
+        notice.style.display = "block";
+        notice.children[0].innerText = message;
     };
 
     var checkSettings = function () {
@@ -108,6 +119,10 @@
         $("#onlyoffice-error-notification")[0].style.display = "none";
 
         var editor_url = $("#settings_oo_address")[0].value;
+        if (editor_url.replace(/\s/g, '').length == 0) {
+          $('#settings form')[0].submit();
+          return
+        }
         editor_url += editor_url.charAt(editor_url.length - 1) === '/' ? '' : '/';
         var secret = $("#settings_jwtsecret")[0].value;
         var data = {
@@ -132,6 +147,10 @@
         e.preventDefault();
         checkSettings();
     };
+    
+    if (<%= OnlyofficeController.checking_activity_onlyoffice %>){
+      showNotification("OnlyOffice отключён");
+    }
 
     if(ele.addEventListener){
         ele.addEventListener("submit", settingsCallback, false);
