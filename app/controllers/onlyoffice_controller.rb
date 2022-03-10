@@ -24,6 +24,14 @@ class OnlyofficeController < AccountController
   before_action :find_attachment, :only => [ :download, :editor, :callback, :save_as ]
   before_action :file_readable, :read_authorize, :only => [ :editor ]
 
+  class << self
+
+    def checking_activity_onlyoffice
+      return !Setting.plugin_onlyoffice_redmine["oo_address"].present?
+    end
+
+  end
+
   def check_settings
     render plain: is_valid_setings(params[:url], params[:secret])
   end
