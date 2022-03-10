@@ -106,10 +106,7 @@ class CallbackHelper
         uri = URI.parse(document_command_url)  # parse the document command url
         http = Net::HTTP.new(uri.host, uri.port)  # create a connection to the http server
 
-        if document_command_url.start_with?('https')  # check if the documnent command url starts with https
-          http.use_ssl = true
-          http.verify_mode = OpenSSL::SSL::VERIFY_NONE  # set the flags for the server certificate verification at the beginning of SSL session
-        end
+        check_cert(uri)
 
         req = Net::HTTP::Post.new(uri.request_uri)  # create the post request
         req.add_field("Content-Type", "application/json")  # set headers
@@ -181,13 +178,13 @@ class CallbackHelper
       return saved
     end
 
-  end
-
-  def check_cert(url)
-    if Setting.plugin_onlyoffice_redmine["check_cert"].eql?("on")
-      http.use_ssl = true
-      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    def check_cert(url)
+      if Setting.plugin_onlyoffice_redmine["check_cert"].eql?("on")
+        http.use_ssl = true
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      end
     end
+  
   end
 
 end
