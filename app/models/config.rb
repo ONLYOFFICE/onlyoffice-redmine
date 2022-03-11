@@ -36,7 +36,6 @@ class Config
         end
 
         def check_valid_url(url)
-            check_url = url.nil? ? "" : url
             check_url = url.present? ? url : ""
             check_url = url[-1].eql?("/") ? url : url + "/"
             check_url = check_url.eql?("/") ? "" : check_url
