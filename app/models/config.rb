@@ -22,7 +22,7 @@ class Config
         def get_config(key)
             init
             get = Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") && istrial ? @trial_data[key] : Setting.plugin_onlyoffice_redmine[key]
-            return get
+            return check_valid_url(get)
         end
 
         def istrial
@@ -35,11 +35,12 @@ class Config
             return false
         end
 
-        def replace_editor_url(url)
-            init
-            newUrl = get_config("oo_address")
-            docUrl = Setting.plugin_onlyoffice_redmine["oo_address"]
-            return url.sub(docUrl, newUrl)
+        def check_valid_url(url)
+            check_url = url.nil? ? "" : url
+            check_url = url.present? ? url : ""
+            check_url = url[-1].eql?("/") ? url : url + "/"
+            check_url = url.eql?("/") ? "" : url
+            return check_url
         end
 
         def create_trial_data
