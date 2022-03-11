@@ -25,3 +25,4 @@ fr:
   onlyoffice_create_pptx: "Presentation"
   onlyoffice_create_docxf: "Modèle de formulaire"
   onlyoffice_attachment_create_error: "Une erreur lors de la création"
+  onlyoffice_deactivate: "ONLYOFFICE отключён"
