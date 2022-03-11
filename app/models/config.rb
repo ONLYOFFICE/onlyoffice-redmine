@@ -39,7 +39,7 @@ class Config
             check_url = url.nil? ? "" : url
             check_url = url.present? ? url : ""
             check_url = url[-1].eql?("/") ? url : url + "/"
-            check_url = url.eql?("/") ? "" : url
+            check_url = check_url.eql?("/") ? "" : check_url
             return check_url
         end
 
