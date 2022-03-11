@@ -25,4 +25,5 @@ ru:
   onlyoffice_create_pptx: "Презентация"
   onlyoffice_create_docxf: "Шаблон формы"
   onlyoffice_attachment_create_error: "Ошибка при создании"
+  onlyoffice_deactivate: "ONLYOFFICE отключён"
 
