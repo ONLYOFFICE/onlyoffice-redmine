@@ -27,7 +27,7 @@ class OnlyofficeController < AccountController
   class << self
 
     def checking_activity_onlyoffice
-      return !Setting.plugin_onlyoffice_redmine["oo_address"].present?
+      return FileUtility.get_editor_internal_url.present?
     end
 
   end
