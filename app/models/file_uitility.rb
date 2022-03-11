@@ -77,7 +77,7 @@ class FileUtility
       if !url.present?
         url = Config.get_config("oo_address")
       end
-      return url[-1].eql?("/") ? url : url + "/"
+      return Config.check_valid_url(url)
     end
 
     def get_redmine_internal_url
@@ -86,7 +86,7 @@ class FileUtility
         port = Setting.host_name[Setting.host_name.rindex(':'), Setting.host_name.length]
         host = Socket.ip_address_list.find { |ai| ai.ipv4? && !ai.ipv4_loopback? }.ip_address
         url = Setting.protocol + "://" + host + port
-        return url[-1].eql?("/") ? url : url + "/"
+        return Config.check_valid_url(url)
       end
     end
 
@@ -94,7 +94,7 @@ class FileUtility
       innerUrl = get_editor_internal_url
       publicUrl = Config.get_config("oo_address")
       if !innerUrl.eql?(publicUrl) && !Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on")
-        if !innerUrl.eql?("/") && publicUrl.present?
+        if innerUrl.present? && publicUrl.present?
           url = url.sub(publicUrl, innerUrl)
         end
       end
