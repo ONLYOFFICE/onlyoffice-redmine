@@ -8,6 +8,8 @@ de:
   onlyoffice_additional_settings: "Erweiterte Servereinstellungen"
   onlyoffice_additional_settings_editor: "Die Adresse von ONLYOFFICE Docs für interne Anforderungen vom Server"
   onlyoffice_additional_settings_server: "Serveradresse für interne Anforderungen vom ONLYOFFICE Docs"
+  onlyoffice_settings_editor_demo: "Verbindung zu Demo ONLYOFFICE Docs Server herstellen"
+  onlyoffice_editor_trial_period_ended: "Der 30-tägige Testzeitraum ist abgelaufen. Du kannst keine Verbindung mehr zu Demo ONLYOFFICE Docs Server herstellen."  
   onlyoffice_settings_editor_view: "Editor-Einstellungen"
   onlyoffice_settings_editor_view_chat: "Chat-Taste anzeigen"
   onlyoffice_settings_check_cert: "Zertifikatsüberprüfung deaktivieren (unsicher)"

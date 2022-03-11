@@ -16,7 +16,7 @@
 %>
 
 <%= stylesheet_link_tag "editor", :plugin => "onlyoffice_redmine" %>
-<% editor_base_url = Setting.plugin_onlyoffice_redmine["oo_address"] %>
+<% editor_base_url = Config.get_config("oo_address") %>
 
 <div id="onlyoffice-container">
   <div class="flash error" style="display: none"><%= l(:onlyoffice_editor_cannot_be_reached) %></div>

@@ -8,6 +8,8 @@ en:
   onlyoffice_additional_settings: "Advanced server settings"
   onlyoffice_additional_settings_editor: "ONLYOFFICE Docs address for internal requests from the server"
   onlyoffice_additional_settings_server: "Server address for internal requests from ONLYOFFICE Docs"
+  onlyoffice_settings_editor_demo: "Connect to the demo ONLYOFFICE Docs server"
+  onlyoffice_editor_trial_period_ended: "The 30-day test period is over, you can no longer connect the demo ONLYOFFICE Docs server"  
   onlyoffice_settings_editor_view: "Editor customization settings"
   onlyoffice_settings_editor_view_chat: "Display Chat menu button"
   onlyoffice_settings_check_cert: "Disable certificate verification (insecure)"

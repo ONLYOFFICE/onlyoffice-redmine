@@ -74,15 +74,15 @@ class FileUtility
 
     def get_editor_internal_url
       url = Setting.plugin_onlyoffice_redmine["inner_editor"]
-      if url.empty?
-        url = Setting.plugin_onlyoffice_redmine["oo_address"]
+      if !url.present?
+        url = Config.get_config("oo_address")
       end
       return url[-1].eql?("/") ? url : url + "/"
     end
 
     def get_redmine_internal_url
       url = Setting.plugin_onlyoffice_redmine["inner_server"]
-      if url.empty?
+      if !url.present?
         port = Setting.host_name[Setting.host_name.rindex(':'), Setting.host_name.length]
         host = Socket.ip_address_list.find { |ai| ai.ipv4? && !ai.ipv4_loopback? }.ip_address
         url = Setting.protocol + "://" + host + port
@@ -92,9 +92,11 @@ class FileUtility
 
     def replace_doc_edito_url_to_internal(url)
       innerUrl = get_editor_internal_url
-      publicUrl = Setting.plugin_onlyoffice_redmine["oo_address"]
-      if innerUrl != publicUrl
-        url = url.sub(publicUrl, innerUrl)
+      publicUrl = Config.get_config("oo_address")
+      if !innerUrl.eql?(publicUrl) && !Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on")
+        if !innerUrl.eql?("/") && publicUrl.present?
+          url = url.sub(publicUrl, innerUrl)
+        end
       end
       return url
     end

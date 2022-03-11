@@ -20,7 +20,7 @@ class JWTHelper
 
   class << self
     def init
-      @jwt_secret = Setting.plugin_onlyoffice_redmine["jwtsecret"]
+        @jwt_secret = Config.get_config("jwtsecret")
     end
 
     def is_enabled

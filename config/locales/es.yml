@@ -7,6 +7,8 @@ es:
   onlyoffice_settings_file_type: "Abrir archivo para editar (debido a las restricciones de formato los datos podrían perderse al guardar en los formatos de la siguiente lista)"
   onlyoffice_additional_settings: "Ajustes de servidor avanzados"
   onlyoffice_additional_settings_editor: "Dirección de ONLYOFFICE Docs para solicitudes internas del servidor"
+  onlyoffice_settings_editor_demo: "Conectarse al servidor de ONLYOFFICE Docs de demostración"
+  onlyoffice_editor_trial_period_ended: "El período de prueba de 30 días ha terminado, ya no puedes conectarte al servidor de ONLYOFFICE Docs de demostración"
   onlyoffice_additional_settings_server: "Dirección de servidor para solicitudes internas del ONLYOFFICE Docs"
   onlyoffice_settings_editor_view: "Ajustes del editor"
   onlyoffice_settings_editor_view_chat: "Mostrar el botón de Chat"
