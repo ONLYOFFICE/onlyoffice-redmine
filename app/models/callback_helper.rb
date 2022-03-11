@@ -60,8 +60,10 @@ class CallbackHelper
     end
 
     def save_from_uri(path, download_url)
-      res = do_request(download_url)
+      res = do_request(FileUtility.replace_doc_edito_url_to_internal(download_url))
       data = res.body
+
+      check_cert(download_url)
 
       if data == nil
         raise 'stream is null'
@@ -73,13 +75,10 @@ class CallbackHelper
     end
 
     def do_request(url)
-      uri = URI.parse(url)
+      uri = URI.parse(FileUtility.replace_doc_edito_url_to_internal(url))
       http = Net::HTTP.new(uri.host, uri.port)
 
-      if url.start_with?('https')
-        http.use_ssl = true
-        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      end
+      check_cert(uri)
 
       req = Net::HTTP::Get.new(uri)
       res = http.request(req)
@@ -87,8 +86,11 @@ class CallbackHelper
     end
 
     # send the command request
-    def command_request(method, key = nil)
-      document_command_url = Setting.plugin_onlyoffice_redmine["oo_address"] + @@commandUrl
+
+    def command_request(method, key = nil, url = nil, secret = nil)
+      # TODO Setting replace with config
+      editor_base_url = url.nil? ? Setting.plugin_onlyoffice_redmine["oo_address"] : url
+      document_command_url = editor_base_url + @@commandUrl
 
       # create a payload object with the method and key
       if method == "version"
@@ -115,9 +117,11 @@ class CallbackHelper
         req = Net::HTTP::Post.new(uri.request_uri)  # create the post request
         req.add_field("Content-Type", "application/json")  # set headers
         JWTHelper.init
-        payload["token"] = JWTHelper.encode(payload)  # get token and save it to the payload
-        jwtHeader = "Authorization"  # get signature authorization header
-        req.add_field(jwtHeader, "Bearer #{JWTHelper.encode({ :payload => payload })}")  # set it to the request with the Bearer prefix
+        if !secret.nil? || JWTHelper.is_enabled
+          payload["token"] = JWTHelper.encode(payload, secret)  # get token and save it to the payload
+          jwtHeader = "Authorization"  # get signature authorization header
+          req.add_field(jwtHeader, "Bearer #{JWTHelper.encode({ :payload => payload }, secret)}")  # set it to the request with the Bearer prefix
+        end
 
         req.body = payload.to_json   # convert the payload object into the json format
         res = http.request(req)  # get the response
@@ -138,7 +142,7 @@ class CallbackHelper
     end
 
     def process_save(callback_json, attachment)
-      download_uri = callback_json['url']
+      download_uri = FileUtility.replace_doc_edito_url_to_internal(callback_json['url'])
       if (download_uri.eql?(nil))
         saved = 1
         return saved
@@ -179,6 +183,13 @@ class CallbackHelper
       end
 
       return saved
+    end
+
+    def check_cert(url)
+      if Setting.plugin_onlyoffice_redmine["check_cert"].eql?("on")
+        http.use_ssl = true
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      end
     end
 
   end

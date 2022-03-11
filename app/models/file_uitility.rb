@@ -46,7 +46,6 @@ class FileUtility
       if @@exts_presentation.include? ext
         return 'slide'
       end
-      'word'
     end
 
     def is_openable(attachment)
@@ -70,6 +69,33 @@ class FileUtility
       else
         return @@exts_mimetypes[:docx]
       end
+    end
+
+    def get_editor_internal_url
+      url = Setting.plugin_onlyoffice_redmine["inner_editor"]
+      if url.empty?
+        url = Setting.plugin_onlyoffice_redmine["oo_address"]
+      end
+      return url[-1].eql?("/") ? url : url + "/"
+    end
+
+    def get_redmine_internal_url
+      url = Setting.plugin_onlyoffice_redmine["inner_server"]
+      if url.empty?
+        port = Setting.host_name[Setting.host_name.rindex(':'), Setting.host_name.length]
+        host = Socket.ip_address_list.find { |ai| ai.ipv4? && !ai.ipv4_loopback? }.ip_address
+        url = Setting.protocol + "://" + host + port
+        return url[-1].eql?("/") ? url : url + "/"
+      end
+    end
+
+    def replace_doc_edito_url_to_internal(url)
+      innerUrl = get_editor_internal_url
+      publicUrl = Setting.plugin_onlyoffice_redmine["oo_address"]
+      if innerUrl != publicUrl
+        url = url.sub(publicUrl, innerUrl)
+      end
+      return url
     end
 
   end
