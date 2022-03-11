@@ -152,8 +152,8 @@
         checkSettings();
     };
     
-    if (<%= OnlyofficeController.checking_activity_onlyoffice %>){
-      showNotification("OnlyOffice отключён");
+    if (!<%= OnlyofficeController.checking_activity_onlyoffice %>){
+      showNotification("<%= l(:onlyoffice_deactivate) %>");
     }
 
     var changing_activity_fields  = function (bool) {
