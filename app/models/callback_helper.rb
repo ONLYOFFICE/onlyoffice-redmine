@@ -32,7 +32,7 @@ class CallbackHelper
       if JWTHelper.is_enabled
         inHeader = false
         token = nil
-        jwtHeader = "Authorization"
+        jwtHeader = Config.get_config("jwtHeader")
         if data["token"]
           token = JWTHelper.decode(data["token"])
         elsif request.headers[jwtHeader]
@@ -88,8 +88,7 @@ class CallbackHelper
     # send the command request
 
     def command_request(method, key = nil, url = nil, secret = nil)
-      # TODO Setting replace with config
-      editor_base_url = url.nil? ? Setting.plugin_onlyoffice_redmine["oo_address"] : url
+      editor_base_url = url.nil? ? Config.get_config("oo_address") : url
       document_command_url = editor_base_url + @@commandUrl
 
       # create a payload object with the method and key
@@ -109,10 +108,7 @@ class CallbackHelper
         uri = URI.parse(document_command_url)  # parse the document command url
         http = Net::HTTP.new(uri.host, uri.port)  # create a connection to the http server
 
-        if document_command_url.start_with?('https')  # check if the documnent command url starts with https
-          http.use_ssl = true
-          http.verify_mode = OpenSSL::SSL::VERIFY_NONE  # set the flags for the server certificate verification at the beginning of SSL session
-        end
+        check_cert(uri)
 
         req = Net::HTTP::Post.new(uri.request_uri)  # create the post request
         req.add_field("Content-Type", "application/json")  # set headers
@@ -191,7 +187,7 @@ class CallbackHelper
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       end
     end
-
+  
   end
 
 end

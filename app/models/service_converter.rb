@@ -18,7 +18,7 @@
 class ServiceConverter
 
     @@convert_timeout = 120  # get the convertion timeout from the config
-    @@document_converter_url = Setting.plugin_onlyoffice_redmine["oo_address"] + "ConvertService.ashx"  # get the converter url from the config
+    @@document_converter_url = "http://192.168.0.102/ConvertService.ashx"  # get the converter url from the config
   
     class << self
         # get the url of the converted file
@@ -74,7 +74,7 @@ class ServiceConverter
         end
   
         json_data = JSON.parse(data)  # parse response body
-        return get_response_uri(json_data)  # get response url
+        return json_data #get_response_uri(json_data)  # get response url
       end
   
       # generate the document key value

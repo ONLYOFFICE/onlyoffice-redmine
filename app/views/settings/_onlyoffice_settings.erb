@@ -41,6 +41,10 @@
     <span><%= l(:onlyoffice_settings_editor_view) %></span>
   </legend>
   <label class="floating">
+    <%= check_box_tag 'settings[editor_demo]', settings['editor_demo'], settings['editor_demo'].eql?('on') %>
+    <%= l(:onlyoffice_settings_editor_demo) %>
+  </label>
+  <label class="floating">
     <%= check_box_tag 'settings[editor_chat]', settings['editor_chat'], settings['editor_chat'].eql?('on') %>
     <%= l(:onlyoffice_settings_editor_view_chat) %>
   </label>
@@ -132,6 +136,23 @@
         e.preventDefault();
         checkSettings();
     };
+
+    var changing_activity_fields  = function (bool) {
+      document.getElementById("settings_oo_address").disabled = bool
+      document.getElementById("settings_jwtsecret").disabled = bool
+    };
+
+    $(document).ready(function () {
+      if (<%= Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") %>) {
+        if (<%= Config.istrial %>){
+          document.getElementById("onlyoffice-error-notification").children[0].style.display = "none";
+          changing_activity_fields(true);
+        } else {
+          showError("<%= l(:onlyoffice_editor_trial_period_ended) %>");
+          document.getElementById("settings_editor_demo").checked = false;
+        }
+      }
+    });
 
     if(ele.addEventListener){
         ele.addEventListener("submit", settingsCallback, false);
