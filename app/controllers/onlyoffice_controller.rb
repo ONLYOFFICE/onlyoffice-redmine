@@ -234,7 +234,7 @@ class OnlyofficeController < AccountController
     is_command = ""
 
     begin
-      res_health = CallbackHelper.do_request(editor_base_url + "healthcheck")
+      res_health = CallbackHelper.do_request(editor_base_url + "healthcheck", true)
 
       res_command = CallbackHelper.command_request("version",  nil, editor_base_url, secret)
       is_command += res_command["version"]
