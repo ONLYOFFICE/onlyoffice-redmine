@@ -22,17 +22,24 @@ class Config
         def get_config(key)
             init
             get = Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") && istrial ? @trial_data[key] : Setting.plugin_onlyoffice_redmine[key]
-            return check_valid_url(get)
+            return key.eql?("oo_address") ? check_valid_url(get) : get
         end
 
         def istrial
             init
-            unless @config.nil?
+            if !@config.nil? && istrial_at_settings
                 if Time.now < Time.parse(@config["data"]) + (@config['trial']*24*60*60)
                     return true
+                else
+                    Setting.plugin_onlyoffice_redmine["is_trial_over"] = "on"
+                    return false
                 end
             end
             return false
+        end
+
+        def istrial_at_settings
+            return Setting.plugin_onlyoffice_redmine["is_trial_over"].eql?("on")
         end
 
         def check_valid_url(url)
