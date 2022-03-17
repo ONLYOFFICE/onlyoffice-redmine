@@ -152,6 +152,20 @@
           document.getElementById("settings_editor_demo").checked = false;
         }
       }
+
+      if (<%= Config.istrial_at_settings %>) document.getElementById("settings_editor_demo").disabled = true;
+
+      $('#settings_editor_demo')[0].parentNode.onclick = function () {
+        if (document.getElementById("settings_editor_demo").disabled == false) {
+          if ($('#settings_editor_demo')[0].checked) {
+            changing_activity_fields(true);
+          } else {
+            changing_activity_fields(false);
+          }
+        } else {
+          showError("<%= l(:onlyoffice_editor_trial_period_ended) %>");
+        }
+      }
     });
 
     if(ele.addEventListener){
