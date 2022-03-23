@@ -18,18 +18,19 @@
 class ServiceConverter
 
     @@convert_timeout = 120  # get the convertion timeout from the config
-    @@document_converter_url = "http://192.168.0.102/ConvertService.ashx"  # get the converter url from the config
+    @@document_converter_url = "ConvertService.ashx"  # get the converter url from the config
   
     class << self
         # get the url of the converted file
-    def get_converted_uri(document_uri, from_ext, to_ext, document_revision_id, is_async, file_pass, lang = nil)
+    def get_converted_uri(doc_server_url, title, document_uri, from_ext, to_ext, document_revision_id, is_async, file_pass, lang = nil, secret = nil)
 
         from_ext = from_ext == nil ? File.extname(document_uri).downcase : from_ext  # get the current document extension
   
         # get the current document name or uuid
-        title = File.basename(URI.parse(document_uri).path)
-        title = title == nil ? UUID.generate.to_s : title
-  
+        if title.nil?
+          title = File.basename(URI.parse(document_uri).path)
+          title = title.nil? ? UUID.generate.to_s : title
+        end
         # get the document key
         document_revision_id = document_revision_id.empty? ? document_uri : document_revision_id
         document_revision_id = generate_revision_id(document_revision_id)
@@ -47,8 +48,7 @@ class ServiceConverter
   
         data = nil
         begin
-  
-          uri = URI.parse(@@document_converter_url)  # create the request url
+          uri = URI.parse(doc_server_url + @@document_converter_url)  # create the request url
           http = Net::HTTP.new(uri.host, uri.port)  # create a connection to the http server
   
           CallbackHelper.check_cert(@@document_converter_url)
@@ -58,10 +58,10 @@ class ServiceConverter
           req.add_field("Accept", "application/json")  # set headers
           req.add_field("Content-Type", "application/json")
           JWTHelper.init
-          if JWTHelper.is_enabled  # if the signature is enabled
-            payload["token"] = JWTHelper.encode(payload)  # get token and save it to the payload
-            jwtHeader = "Authorization" # get signature authorization header
-            req.add_field(jwtHeader, "Bearer #{JWTHelper.encode({ :payload => payload })}")  # set it to the request with the Bearer prefix
+          if !secret.nil? || JWTHelper.is_enabled
+            payload["token"] = JWTHelper.encode(payload, secret)  # get token and save it to the payload
+            jwtHeader = "Authorization"  # get signature authorization header
+            req.add_field(jwtHeader, "Bearer #{JWTHelper.encode({ :payload => payload }, secret)}")  # set it to the request with the Bearer prefix
           end
   
           req.body = payload.to_json
@@ -74,9 +74,9 @@ class ServiceConverter
         end
   
         json_data = JSON.parse(data)  # parse response body
-        return json_data #get_response_uri(json_data)  # get response url
+        return get_response_uri(json_data)  # get response url
       end
-  
+
       # generate the document key value
       def generate_revision_id(expected_key)
   
@@ -88,7 +88,7 @@ class ServiceConverter
   
         key = expected_key.gsub(/[^0-9a-zA-Z.=]/, '_')
         key[(key.length - [key.length, 20].min)..key.length]  # the resulting key is of the length 20 or less
-  
+
       end
   
       # create an error message for the error code
@@ -119,8 +119,8 @@ class ServiceConverter
           else
             error_message = 'ErrorCode = ' + error_code.to_s  # default value for the error message
         end
-  
-        raise error_message
+        puts error_message
+        # raise error_message
   
       end
   
