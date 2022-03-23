@@ -17,11 +17,12 @@
 
 class FormatUtility
     @@supported_formats = nil
+    @@download_as_exts = ["docx", "xlsx", "pptx"]
 
     class << self
 
-        def is_format_supported(ext, convert_to)
-            
+        def format_supported(ext)
+
             case ext
                 when "djvu"
                     @@supported_formats = ["bmp", "gif", "jpg","png"]
@@ -119,8 +120,16 @@ class FormatUtility
                 @@supported_formats = []
             end
       
-            return @@supported_formats.include? convert_to
+            return @@supported_formats
       
-          end
+        end
+
+        def is_download_as (ext)
+            if @@download_as_exts.include? ext
+                return true
+            else
+                return false
+            end
+        end
     end
 end
