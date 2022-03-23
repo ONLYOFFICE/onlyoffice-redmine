@@ -53,5 +53,7 @@
                 onlyofficeButtons[i].title = "<%= l(:edit_in_onlyoffice) %>";
             }
         }
+        addOnlyOfficeConvert(<%= raw FileUtility.get_all_available_formats %>, <%= raw attachments_disk_filenames %>, <%= @news.id %>, "News");
+        var onlyofficeButtonsConvert = document.getElementsByClassName("onlyoffice-editor-button");
     }
 </script>
