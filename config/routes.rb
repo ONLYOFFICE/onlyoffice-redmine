@@ -30,3 +30,8 @@ get 'onlyoffice_create/new/:ext/:project_id', :to => 'onlyoffice_create#new', :a
 post 'onlyoffice_create/new/:ext/:project_id', :to => 'onlyoffice_create#create', :as => 'onlyoffice_create'
 
 post 'onlyoffice_create/attachment/:document_id/:project_id', :to => 'onlyoffice_create#new_doc_attachment', :as => 'onlyoffice_create_new_doc_attachment'
+
+#   convert file
+get 'onlyoffice/conversion/:page_id/:page_type/:file_id', :to => 'onlyoffice_convert#convert_page', :file_id => /\d+/, :page_id => /\d+/
+
+post 'onlyoffice/conversion/:page_id/:page_type', :to => 'onlyoffice_convert#convert', :as => 'onlyoffice_convert', :page_id => /\d+/
