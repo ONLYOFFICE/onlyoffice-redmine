@@ -16,6 +16,7 @@
 %>
 
 <%= render :parent %>
+<%= javascript_include_tag "onlyofficeMenu", :plugin => "onlyoffice_redmine" %>
 
 <% view_or_manage_permission = false
    user_roles = User.current.roles_for_project(@project)
@@ -32,6 +33,27 @@
        is_openable_array = is_openable_array + [FileUtility.is_openable(attachment)]
      end
    end
+
+    view_permission = false
+    edit_permission = false
+    user_roles = User.current.roles_for_project(@project)
+    user_roles.each do |role|
+        if role.permissions.include? :view_issues
+        view_permission = true
+        end
+        if role.permissions.include? :edit_issues
+        edit_permission = true
+        end
+    end
+    project_is_not_readonly = @project.status != 5
+
+    edit_permission = (edit_permission || User.current.admin) && project_is_not_readonly
+
+    attachments_disk_filenames = []
+    p = Project.find(@containers[0].id)
+    p.attachments.each do |attachment|
+        attachments_disk_filenames.push(attachment.filename)
+    end
 %>
 
 <script type="text/javascript" language="javascript">
@@ -70,6 +92,13 @@
                     }
                 }
                 buttonsContainer.insertBefore(editorButton, buttonsContainer.children[0]);
+            }
+        }
+        if (<%= view_permission || edit_permission%>) {
+            addOnlyOfficeConvert(<%= raw FileUtility.get_all_available_formats %>, document.getElementsByClassName("filename"), <%= @containers[0].id %>, "File");
+            var onlyofficeButtonsConvert = document.getElementsByClassName("onlyoffice-editor-button-convert");
+            for (var i = 0; i < onlyofficeButtonsConvert.length; i++) {
+                onlyofficeButtonsConvert[i].title = "<%= l(:onlyoffice_convert_dropdown) %>";
             }
         }
     }
