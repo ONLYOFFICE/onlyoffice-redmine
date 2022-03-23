@@ -166,32 +166,6 @@
   <div id="iframeEditor"></div>
 </div>
 
-<script type="text/javascript" language="javascript">
-
-<%= 
-  editor_base_url = Setting.plugin_onlyoffice_redmine["oo_address"]
-
-  attachment = OnlyofficeCreateController.creteCheakFile
-  
-  url = send("download_named_attachment_url", attachment, attachment.filename)
-
-  path = url.to_s
-  key = ServiceConverter.generate_revision_id(path)
-
-  is_convert = 0
-
-  begin
-    res_convert = ServiceConverter.get_converted_uri(path, "docx", "pdf", key, false, nil)
-    is_convert = res_convert[0]
-  end
-%>
-
-  console.log("<%= url %>")
-  console.log("<%= res_convert[1] %>")
-  console.log("<%= res_convert %>")
-
-</script>
-
 
 
 
