@@ -22,7 +22,7 @@ class Config
         def get_config(key)
             init
             get = Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") && istrial ? @trial_data[key] : Setting.plugin_onlyoffice_redmine[key]
-            return check_valid_url(get)
+            return key.eql?("oo_address") ? check_valid_url(get) : get
         end
 
         def istrial
