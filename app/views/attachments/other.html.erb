@@ -26,6 +26,8 @@
     (DocumentHelper.permission_to_edit_file(user, attachment.project, attachment.container_type) || user.admin)) && project_is_not_readonly
 %>
 
+<%= render :partial => 'onlyoffice_convert/downloadas', :locals => {:file_id => attachment_id} %>
+
 <script type="text/javascript" language="javascript">
   var downloadButton = document.getElementsByClassName("contextual")[0].getElementsByClassName("icon icon-download")[0];
 
@@ -44,4 +46,24 @@
       window.location.reload();
   }
   downloadButton.parentElement.insertBefore(editorButton, downloadButton);
+
+  var downloadAsButton = document.createElement("a");
+
+  downloadAsButton.innerText = "<%= l(:onlyoffice_convert_download_file_as) %>";
+  downloadAsButton.className = "onlyoffice-editor-button icon";
+  downloadAsButton.style.backgroundImage = 'url(/plugin_assets/onlyoffice_redmine/images/download_as.svg)';
+  downloadAsButton.style.backgroundSize = "16px";
+  downloadAsButton.style.margin = "0 6px";
+  downloadAsButton.style.cursor = "pointer";
+
+  downloadAsButton.href = "#";
+  downloadAsButton.onclick = function () {
+      //window.open(window.location.origin + "/onlyoffice/download_as/"+ <%= attachment_id %>);
+      //window.location.reload();
+      displayFormDownloadAs(true);
+  }
+
+  downloadButton.parentElement.insertBefore(downloadAsButton, downloadButton);
+
+  
 </script>
