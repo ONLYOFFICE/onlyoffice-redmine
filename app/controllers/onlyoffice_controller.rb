@@ -24,6 +24,17 @@ class OnlyofficeController < AccountController
   before_action :find_attachment, :only => [ :download, :editor, :callback, :save_as ]
   before_action :file_readable, :read_authorize, :only => [ :editor ]
 
+  def self.detect_content_type(attachment)
+    content_type = attachment.content_type
+    if content_type.blank? || content_type == "application/octet-stream"
+      content_type =
+        Redmine::MimeType.of(attachment.filename).presence ||
+        "application/octet-stream"
+    end
+
+    content_type
+  end
+
   def check_settings
     render plain: is_valid_setings(params[:url], params[:secret])
   end
@@ -233,18 +244,25 @@ class OnlyofficeController < AccountController
     editor_base_url = url
     is_command = ""
 
+    attachment = OnlyofficeConvertController.crete_file(nil, "OnlyOfficeCheakConvertService.docx", "docx")
+    url_file = send("download_named_attachment_url", attachment, attachment.filename)
+
+    path = url_file.to_s
+    key = ServiceConverter.generate_revision_id(path)
+    is_convert = 0
+
     begin
       res_health = CallbackHelper.do_request(editor_base_url + "healthcheck")
       res_command = CallbackHelper.command_request("version",  nil, editor_base_url, secret)
       is_command += res_command["version"]
 
-      #res_convert = ServiceConverter.get_converted_uri(path, "docx", "pdf", key, false, nil)
-      #is_convert = res_convert[0]
+      res_convert = ServiceConverter.get_converted_uri(editor_base_url, nil, path, "docx", "pdf", key, false, nil, nil, secret)
+      is_convert = res_convert[0]
     rescue
       return false
     end
 
-    if is_command.empty? #|| is_convert != 100
+    if is_command.empty? || is_convert != 100
       return false
     end
 
