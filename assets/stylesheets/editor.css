@@ -17,13 +17,9 @@
  *
  */
 
-.theme-Circle > #wrapper > #wrapper2 > #wrapper3 > #main > #content {
-    margin-left: -20px !important;
-    padding: 0;
-}
 
 #content {
-    padding: 0;
+    padding: 0 !important;
 }
 
 #onlyoffice-container {
