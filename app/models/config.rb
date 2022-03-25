@@ -27,7 +27,7 @@ class Config
 
         def istrial
             init
-            if !@config.nil? && istrial_at_settings
+            if !@config.nil? && !istrial_at_settings
                 if Time.now < Time.parse(@config["data"]) + (@config['trial']*24*60*60)
                     return true
                 else

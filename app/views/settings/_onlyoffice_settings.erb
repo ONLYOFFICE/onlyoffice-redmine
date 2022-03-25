@@ -154,6 +154,11 @@
       }
 
       if (<%= Config.istrial_at_settings %>) document.getElementById("settings_editor_demo").disabled = true;
+      <%
+        if Config.istrial_at_settings
+          Setting.plugin_onlyoffice_redmine["editor_demo"] = ""
+        end
+      %>
 
       $('#settings_editor_demo')[0].parentNode.onclick = function () {
         if (document.getElementById("settings_editor_demo").disabled == false) {
