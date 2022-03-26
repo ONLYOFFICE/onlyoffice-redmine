@@ -20,10 +20,11 @@
 
 <%= form_tag(onlyoffice_convert_path(@page.id), multipart: true, id: "conversion") do |f| %>
     <%= hidden_field_tag 'back_page', back_url %>
+    <%= hidden_field_tag 'type', "" %>
     <%= render :partial => 'form', :locals => {:f => f} %>
     <div style = "display: flex; align-items: center;" >
-        <p><%= submit_tag l(:onlyoffice_convert_submit) %></p>
-        <p><%= submit_tag l(:label_no_preview_download) %></p>
+        <p><%= submit_tag l(:onlyoffice_convert_submit), onclick: "isButton(this)", id: "convert", data: { disable_with: false }%></p>
+        <p><%= submit_tag l(:label_no_preview_download), onclick: "isButton(this)", id: "download_as", data: { disable_with: false } %></p>
         <p><%= link_to l(:button_cancel), back_url %></p>
         <div id="progress_bar">
             <div id="progress"></div>
@@ -34,13 +35,19 @@
 <% end %>
 
 <script type="text/javascript" language="javascript">
-    var t = "<%= @file.project.id %>";
-    console.log(t)
-
+    var isDisable = function (bool) {
+        $('#convert')[0].disabled = bool;
+        $('#download_as')[0].disabled = bool;
+    }
+    var isButton = function (element) {
+        $('#type')[0].value = element.id;
+    }
     var form = $('#conversion')[0]
 
     form.addEventListener("submit", function() {
+        isDisable(true)
         form.submit();
+        setTimeout(isDisable, 3000, false);
     }, false );
 
 </script>
