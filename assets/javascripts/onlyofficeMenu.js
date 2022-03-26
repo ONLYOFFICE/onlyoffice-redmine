@@ -77,8 +77,7 @@ var addOnlyOfficeConvert = function(formats, attachmentsDiskFilename, pageId, pa
                 let attachmentHref = attachmentsList[i].children[0].children[0].href;
                 convertButton.href = "#";
                 convertButton.onclick = function () {
-                    window.open(window.location.origin + "/onlyoffice/conversion/"+ pageId + "/" + pageType + attachmentHref.substring(attachmentHref.lastIndexOf("/")));
-                    window.location.reload();
+                    window.location.replace(window.location.origin + "/onlyoffice/conversion/"+ pageId + "/" + pageType + attachmentHref.substring(attachmentHref.lastIndexOf("/")));
                 }
                 var deleteButton = attachmentsList[i].children[attachmentsList[i].children.length - 1].getElementsByClassName("delete icon-only icon-del")[0];
                 if (!!deleteButton) {
@@ -105,8 +104,7 @@ var addOnlyOfficeConvert = function(formats, attachmentsDiskFilename, pageId, pa
                 let attachmentHref = document.getElementsByClassName("icon-only icon-del")[i].href;
                 convertButton.href = "#";
                 convertButton.onclick = function () {
-                    window.open(window.location.origin + "/onlyoffice/conversion/"+ pageId + "/" + pageType + attachmentHref.substring(attachmentHref.lastIndexOf("/")));
-                    window.location.reload();
+                    window.location.replace(window.location.origin + "/onlyoffice/conversion/"+ pageId + "/" + pageType + attachmentHref.substring(attachmentHref.lastIndexOf("/")));
                 }
                 var downloadButton = document.getElementsByClassName("icon-only icon-download")[i];
                 if (!!downloadButton) {
