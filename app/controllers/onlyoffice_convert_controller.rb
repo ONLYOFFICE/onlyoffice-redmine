@@ -39,7 +39,7 @@ class OnlyofficeConvertController < ApplicationController
         end
 
         if res_convert[0].eql?(100)
-            if params[:commit].eql?(l(:label_no_preview_download))
+            if params[:type].eql?('download_as')
                 redirect_to res_convert[1]
             else
                 @page = get_page(params[:page_id], params[:page_type])
