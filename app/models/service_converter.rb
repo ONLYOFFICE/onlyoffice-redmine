@@ -51,7 +51,7 @@ class ServiceConverter
           uri = URI.parse(doc_server_url + @@document_converter_url)  # create the request url
           http = Net::HTTP.new(uri.host, uri.port)  # create a connection to the http server
   
-          CallbackHelper.check_cert(@@document_converter_url)
+          CallbackHelper.check_cert(@@document_converter_url, http)
   
           http.read_timeout = @@convert_timeout
           req = Net::HTTP::Post.new(uri.request_uri)  # create the post request
