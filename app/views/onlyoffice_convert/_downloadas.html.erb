@@ -21,6 +21,7 @@
         <h3 class="title"><%= l(:onlyoffice_convert_download_file_as) %></h3>
 
         <%= form_tag(onlyoffice_convert_path(@file_id,@file_id), multipart: true, id: "conversion") do |f| %>
+            <%= hidden_field_tag 'type', "download_as" %>
             <%= render :partial => 'onlyoffice_convert/form' %>
             <div style = "display: flex; align-items: center;" >
                 <p><%= submit_tag l(:label_no_preview_download) %></p>
