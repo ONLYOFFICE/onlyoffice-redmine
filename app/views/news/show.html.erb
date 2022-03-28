@@ -53,7 +53,10 @@
                 onlyofficeButtons[i].title = "<%= l(:edit_in_onlyoffice) %>";
             }
         }
-        addOnlyOfficeConvert(<%= raw FileUtility.get_all_available_formats %>, <%= raw attachments_disk_filenames %>, <%= @news.id %>, "News");
-        var onlyofficeButtonsConvert = document.getElementsByClassName("onlyoffice-editor-button");
+        addOnlyOfficeConvert(<%= raw FormatUtility.not_supported_convert_formats %>, <%= raw FileUtility.get_all_available_formats %>, <%= raw attachments_disk_filenames %>, <%= @news.id %>, "News");
+        var onlyofficeButtonsConvert = document.getElementsByClassName("onlyoffice-editor-button-convert");
+        for (var i = 0; i < onlyofficeButtonsConvert.length; i++) {
+            onlyofficeButtonsConvert[i].title = "<%= l(:onlyoffice_convert_dropdown) %>";
+        }
     }
 </script>

@@ -95,7 +95,7 @@
             }
         }
         if (<%= view_permission || edit_permission%>) {
-            addOnlyOfficeConvert(<%= raw FileUtility.get_all_available_formats %>, document.getElementsByClassName("filename"), <%= @containers[0].id %>, "File");
+            addOnlyOfficeConvert(<%= raw FormatUtility.not_supported_convert_formats %>, <%= raw FileUtility.get_all_available_formats %>, document.getElementsByClassName("filename"), <%= @containers[0].id %>, "File");
             var onlyofficeButtonsConvert = document.getElementsByClassName("onlyoffice-editor-button-convert");
             for (var i = 0; i < onlyofficeButtonsConvert.length; i++) {
                 onlyofficeButtonsConvert[i].title = "<%= l(:onlyoffice_convert_dropdown) %>";

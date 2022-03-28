@@ -58,14 +58,14 @@ var addOnlyOfficeCreateButton = function(containerElement) {
     }
 }
 
-var addOnlyOfficeConvert = function(formats, attachmentsDiskFilename, pageId, pageType) {
+var addOnlyOfficeConvert = function(not_support_convert_formats, formats, attachmentsDiskFilename, pageId, pageType) {
     if (document.getElementsByClassName("attachments")[0] != null) {
         var attachmentsTable = document.getElementsByClassName("attachments")[0].children[1];
         var attachmentsList = attachmentsTable.children[0].children;
 
         for (var i = 0; i < attachmentsList.length; i++) {
             var ext = attachmentsDiskFilename[i].substring(attachmentsDiskFilename[i].lastIndexOf("."));
-            if (formats.indexOf(ext) !== -1) {
+            if (formats.indexOf(ext) !== -1 && not_support_convert_formats.indexOf(ext) == -1) {
                 var convertButton = document.createElement("a");
 
                 convertButton.id = "onlyoffice-button-convert-" + i;
@@ -92,7 +92,7 @@ var addOnlyOfficeConvert = function(formats, attachmentsDiskFilename, pageId, pa
         for (var i = 0; i < attachmentsList.length; i++) {
             var filename = attachmentsDiskFilename[i].firstChild.innerText;
             var ext = filename.substring(filename.lastIndexOf("."));
-            if (formats.indexOf(ext) !== -1) {
+            if (formats.indexOf(ext) !== -1 && not_support_convert_formats.indexOf(ext) == -1) {
                 var convertButton = document.createElement("a");
 
                 convertButton.id = "onlyoffice-button-convert-" + i;
