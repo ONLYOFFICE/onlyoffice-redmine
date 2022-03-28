@@ -24,6 +24,9 @@
   project_is_not_readonly = @project.status != 5
   edit_permission = (DocumentHelper.is_editable(attachment) &&
     (DocumentHelper.permission_to_edit_file(user, attachment.project, attachment.container_type) || user.admin)) && project_is_not_readonly
+
+  ext = attachment.filename[attachment.filename.index(".")+1..]
+  is_conversion = FormatUtility.format_supported(ext).length > 0 ? true : false
 %>
 
 <%= render :partial => 'onlyoffice_convert/downloadas', :locals => {:file_id => attachment_id} %>
@@ -47,6 +50,8 @@
   }
   downloadButton.parentElement.insertBefore(editorButton, downloadButton);
 
+  <% if is_conversion %>
+
   var downloadAsButton = document.createElement("a");
 
   downloadAsButton.innerText = "<%= l(:onlyoffice_convert_download_file_as) %>";
@@ -63,5 +68,5 @@
 
   downloadButton.parentElement.insertBefore(downloadAsButton, downloadButton);
 
-  
+  <% end %>
 </script>
