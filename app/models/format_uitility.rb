@@ -25,97 +25,97 @@ class FormatUtility
 
             case ext
                 when "djvu"
-                    @@supported_formats = ["bmp", "gif", "jpg","png"]
+                    @@supported_formats = []
                 when "doc"
-                    @@supported_formats = ["bmp", "docm", "docx", "docxf", "dotm", "dotx", "epub", "fb2", "gif", "html", "jpg", "odt", "ott", "pdf", "pdfa", "png", "rtf", "txt"]
+                    @@supported_formats = ["docm", "docx", "docxf", "dotm", "dotx", "epub", "fb2", "html", "odt", "ott", "pdf", "pdfa", "rtf", "txt"]
                 when "docm"
-                    @@supported_formats = ["bmp", "docx", "docxf", "dotm", "dotx", "epub", "fb2", "gif", "html", "jpg", "odt", "ott", "pdf", "pdfa", "png", "rtf", "txt"]
+                    @@supported_formats = ["docx", "docxf", "dotm", "dotx", "epub", "fb2", "html", "odt", "ott", "pdf", "pdfa", "rtf", "txt"]
                 when "docx"
-                    @@supported_formats = ["bmp", "docm", "docxf", "dotm", "dotx", "epub", "fb2", "gif", "html", "jpg", "odt", "ott", "pdf", "pdfa", "png", "rtf", "txt"]
+                    @@supported_formats = ["docm", "docxf", "dotm", "dotx", "epub", "fb2", "html", "odt", "ott", "pdf", "pdfa", "rtf", "txt"]
                 when "docxf" 
-                    @@supported_formats = ["bmp", "docm", "docx", "dotm", "dotx", "epub", "fb2", "gif", "html", "jpg", "odt", "ott", "pdf", "pdfa", "png", "rtf", "txt"]
+                    @@supported_formats = ["docm", "docx", "dotm", "dotx", "epub", "fb2", "html", "odt", "ott", "pdf", "pdfa", "rtf", "txt"]
                 when "dot" 
-                    @@supported_formats = ["bmp", "docm", "docx", "docxf", "dotm", "dotx", "epub", "fb2", "gif", "html", "jpg", "odt", "ott", "pdf", "pdfa", "png", "rtf", "txt"]
+                    @@supported_formats = ["docm", "docx", "docxf", "dotm", "dotx", "epub", "fb2", "html", "odt", "ott", "pdf", "pdfa", "rtf", "txt"]
                 when "dotm" 
-                    @@supported_formats = ["bmp", "docm", "docx", "docxf", "dotx", "epub", "fb2", "gif", "html", "jpg", "odt", "ott", "pdf", "pdfa", "png", "rtf", "txt"]
+                    @@supported_formats = ["docm", "docx", "docxf", "dotx", "epub", "fb2", "html", "odt", "ott", "pdf", "pdfa", "rtf", "txt"]
                 when "dotx" 
-                    @@supported_formats = ["bmp", "docm", "docx", "docxf", "dotm", "epub", "fb2", "gif", "html", "jpg", "odt", "ott", "pdf", "pdfa", "png", "rtf", "txt"]
+                    @@supported_formats = ["docm", "docx", "docxf", "dotm", "epub", "fb2", "html", "odt", "ott", "pdf", "pdfa", "rtf", "txt"]
                 when "epub" 
-                    @@supported_formats = ["bmp", "docm", "docx", "docxf", "dotm", "dotx", "fb2", "gif", "html", "jpg", "odt", "ott", "pdf", "pdfa", "png", "rtf", "txt"]
+                    @@supported_formats = ["docm", "docx", "docxf", "dotm", "dotx", "fb2", "html", "odt", "ott", "pdf", "pdfa", "rtf", "txt"]
                 when "fb2" 
-                    @@supported_formats = ["bmp", "docm", "docx", "docxf", "dotm", "dotx", "epub", "gif", "html", "jpg", "odt", "ott", "pdf", "pdfa", "png", "rtf", "txt"]
+                    @@supported_formats = ["docm", "docx", "docxf", "dotm", "dotx", "epub", "html", "odt", "ott", "pdf", "pdfa", "rtf", "txt"]
                 when "fodt" 
-                    @@supported_formats = ["bmp", "docm", "docx", "docxf", "dotm", "dotx", "epub", "fb2", "gif", "html", "jpg", "odt", "ott", "pdf", "pdfa", "png", "rtf", "txt"]
+                    @@supported_formats = ["docm", "docx", "docxf", "dotm", "dotx", "epub", "fb2", "html", "odt", "ott", "pdf", "pdfa", "rtf", "txt"]
                 when "html" 
-                    @@supported_formats = ["bmp", "docm", "docx", "docxf", "dotm", "dotx", "epub", "fb2", "gif", "jpg", "odt", "ott", "pdf", "pdfa", "png", "rtf", "txt"]
+                    @@supported_formats = ["docm", "docx", "docxf", "dotm", "dotx", "epub", "fb2", "odt", "ott", "pdf", "pdfa", "rtf", "txt"]
                 when "mht" 
-                    @@supported_formats = ["bmp", "docm", "docx", "docxf", "dotm", "dotx", "epub", "fb2", "gif", "jpg", "odt", "ott", "pdf", "pdfa", "png", "rtf", "txt"]
+                    @@supported_formats = ["docm", "docx", "docxf", "dotm", "dotx", "epub", "fb2", "odt", "ott", "pdf", "pdfa", "rtf", "txt"]
                 when "odt" 
-                    @@supported_formats = ["bmp", "docm", "docx", "docxf", "dotm", "dotx", "epub", "fb2", "gif", "html", "jpg", "ott", "pdf", "pdfa", "png", "rtf", "txt"]
+                    @@supported_formats = ["docm", "docx", "docxf", "dotm", "dotx", "epub", "fb2", "html", "ott", "pdf", "pdfa", "rtf", "txt"]
                 when "ott" 
-                    @@supported_formats = ["bmp", "docm", "docx", "docxf", "dotm", "dotx", "epub", "fb2", "gif", "html", "jpg", "odt", "pdf", "pdfa", "png", "rtf", "txt"]
+                    @@supported_formats = ["docm", "docx", "docxf", "dotm", "dotx", "epub", "fb2", "html", "odt", "pdf", "pdfa", "rtf", "txt"]
                 when "oxps" 
-                    @@supported_formats = ["bmp", "gif", "jpg", "pdf", "pdfa", "png"]
+                    @@supported_formats = ["pdf", "pdfa"]
                 when "pdf" 
-                    @@supported_formats = ["bmp", "gif", "jpg","png"]
+                    @@supported_formats = []
                 when "rtf" 
-                    @@supported_formats = ["bmp", "docm", "docx", "docxf", "dotm", "dotx", "epub", "fb2", "gif", "html", "jpg", "odt", "ott", "pdf", "pdfa", "png", "txt"]
+                    @@supported_formats = ["docm", "docx", "docxf", "dotm", "dotx", "epub", "fb2", "html", "odt", "ott", "pdf", "pdfa", "txt"]
                 when "txt" 
-                    @@supported_formats = ["bmp", "docm", "docx", "docxf", "dotm", "dotx", "epub", "fb2", "gif", "html", "jpg", "odt", "ott", "pdf", "pdfa", "png", "rtf"]
+                    @@supported_formats = ["docm", "docx", "docxf", "dotm", "dotx", "epub", "fb2", "html", "odt", "ott", "pdf", "pdfa", "rtf"]
                 when "xps" 
-                    @@supported_formats = ["bmp", "gif", "jpg", "pdf", "pdfa", "png"]
+                    @@supported_formats = ["pdf", "pdfa"]
                 when "xml" 
-                    @@supported_formats = ["bmp", "docm", "docx", "docxf", "dotm", "dotx", "epub", "fb2", "gif", "html", "jpg", "odt", "ott", "pdf", "pdfa", "png", "rtf", "txt"]
+                    @@supported_formats = ["docm", "docx", "docxf", "dotm", "dotx", "epub", "fb2", "html", "odt", "ott", "pdf", "pdfa", "rtf", "txt"]
                 when "oform" 
                     @@supported_formats = []
 
 
                 when "csv" 
-                    @@supported_formats = ["bmp", "gif", "jpg", "ods", "ots", "pdf", "pdfa", "png", "xlsm", "xlsx", "xltm", "xltx"]
+                    @@supported_formats = ["ods", "ots", "pdf", "pdfa", "xlsm", "xlsx", "xltm", "xltx"]
                 when "fods" 
-                    @@supported_formats = ["bmp", "csv", "gif", "jpg", "ods", "ots", "pdf", "pdfa", "png", "xlsm", "xlsx", "xltm", "xltx"]
+                    @@supported_formats = ["csv", "ods", "ots", "pdf", "pdfa", "xlsm", "xlsx", "xltm", "xltx"]
                 when "ods" 
-                    @@supported_formats = ["bmp", "csv", "gif", "jpg", "ots", "pdf", "pdfa", "png", "xlsm", "xlsx", "xltm", "xltx"]
+                    @@supported_formats = ["csv", "ots", "pdf", "pdfa", "xlsm", "xlsx", "xltm", "xltx"]
                 when "ots" 
-                    @@supported_formats = ["bmp", "csv", "gif", "jpg", "ods", "pdf", "pdfa", "png", "xlsm", "xlsx", "xltm", "xltx"]
+                    @@supported_formats = ["csv", "ods", "pdf", "pdfa", "xlsm", "xlsx", "xltm", "xltx"]
                 when "xls" 
-                    @@supported_formats = ["bmp", "csv", "gif", "jpg", "ods", "ots", "pdf", "pdfa", "png", "xlsm", "xlsx", "xltm", "xltx"]
+                    @@supported_formats = ["csv", "ods", "ots", "pdf", "pdfa", "xlsm", "xlsx", "xltm", "xltx"]
                 when "xlsm" 
-                    @@supported_formats = ["bmp", "csv", "gif", "jpg", "ods", "ots", "pdf", "pdfa", "png", "xlsx", "xltm", "xltx"]
+                    @@supported_formats = ["csv", "ods", "ots", "pdf", "pdfa", "xlsx", "xltm", "xltx"]
                 when "xlsx" 
-                    @@supported_formats = ["bmp", "csv", "gif", "jpg", "ods", "ots", "pdf", "pdfa", "png", "xlsm", "xltm", "xltx"]
+                    @@supported_formats = ["csv", "ods", "ots", "pdf", "pdfa", "xlsm", "xltm", "xltx"]
                 when "xlt" 
-                    @@supported_formats = ["bmp", "csv", "gif", "jpg", "ods", "ots", "pdf", "pdfa", "png", "xlsm", "xlsx", "xltm", "xltx"]
+                    @@supported_formats = ["csv", "ods", "ots", "pdf", "pdfa", "xlsm", "xlsx", "xltm", "xltx"]
                 when "xltm" 
-                    @@supported_formats = ["bmp", "csv", "gif", "jpg", "ods", "ots", "pdf", "pdfa", "png", "xlsm", "xlsx", "xltx"]
+                    @@supported_formats = ["csv", "ods", "ots", "pdf", "pdfa", "xlsm", "xlsx", "xltx"]
                 when "xltx" 
-                    @@supported_formats = ["bmp", "csv", "gif", "jpg", "ods", "ots", "pdf", "pdfa", "png", "xlsm", "xlsx", "xltm"]
+                    @@supported_formats = ["csv", "ods", "ots", "pdf", "pdfa", "xlsm", "xlsx", "xltm"]
 
 
                 when "fodp" 
-                    @@supported_formats = ["bmp", "gif", "jpg", "odp", "otp", "pdf", "pdfa", "png", "potm", "potx", "pptm", "pptx"]
+                    @@supported_formats = ["odp", "otp", "pdf", "pdfa", "potm", "potx", "pptm", "pptx"]
                 when "odp" 
-                    @@supported_formats = ["bmp", "gif", "jpg", "otp", "pdf", "pdfa", "png", "potm", "potx", "pptm", "pptx"]
+                    @@supported_formats = ["otp", "pdf", "pdfa", "potm", "potx", "pptm", "pptx"]
                 when "otp" 
-                    @@supported_formats = ["bmp", "gif", "jpg", "odp", "pdf", "pdfa", "png", "potm", "potx", "pptm", "pptx"]
+                    @@supported_formats = ["odp", "pdf", "pdfa", "potm", "potx", "pptm", "pptx"]
                 when "pot" 
-                    @@supported_formats = ["bmp", "gif", "jpg", "odp", "otp", "pdf", "pdfa", "png", "potm", "potx", "pptm", "pptx"]
+                    @@supported_formats = ["odp", "otp", "pdf", "pdfa", "potm", "potx", "pptm", "pptx"]
                 when "potm" 
-                    @@supported_formats = ["bmp", "gif", "jpg", "odp", "otp", "pdf", "pdfa", "png", "potx", "pptm", "pptx"]
+                    @@supported_formats = ["odp", "otp", "pdf", "pdfa", "potx", "pptm", "pptx"]
                 when "potx" 
-                    @@supported_formats = ["bmp", "gif", "jpg", "odp", "otp", "pdf", "pdfa", "png", "potm", "pptm", "pptx"]
+                    @@supported_formats = ["odp", "otp", "pdf", "pdfa", "potm", "pptm", "pptx"]
                 when "pps" 
-                    @@supported_formats = ["bmp", "gif", "jpg", "odp", "otp", "pdf", "pdfa", "png", "potm", "potx", "pptm", "pptx"]
+                    @@supported_formats = ["odp", "otp", "pdf", "pdfa", "potm", "potx", "pptm", "pptx"]
                 when "ppsm" 
-                    @@supported_formats = ["bmp", "gif", "jpg", "odp", "otp", "pdf", "pdfa", "png", "potm", "potx", "pptm", "pptx"]
+                    @@supported_formats = ["odp", "otp", "pdf", "pdfa", "potm", "potx", "pptm", "pptx"]
                 when "ppsx" 
-                    @@supported_formats = ["bmp", "gif", "jpg", "odp", "otp", "pdf", "pdfa", "png", "potm", "potx", "pptm", "pptx"]
+                    @@supported_formats = ["odp", "otp", "pdf", "pdfa", "potm", "potx", "pptm", "pptx"]
                 when "ppt" 
-                    @@supported_formats = ["bmp", "gif", "jpg", "odp", "otp", "pdf", "pdfa", "png", "potm", "potx", "pptm", "pptx"]
+                    @@supported_formats = ["odp", "otp", "pdf", "pdfa", "potm", "potx", "pptm", "pptx"]
                 when "pptm" 
-                    @@supported_formats = ["bmp", "gif", "jpg", "odp", "otp", "pdf", "pdfa", "png", "potm", "potx", "pptx"]
+                    @@supported_formats = ["odp", "otp", "pdf", "pdfa", "potm", "potx", "pptx"]
                 when "pptx" 
-                    @@supported_formats = ["bmp", "gif", "jpg", "odp", "otp", "pdf", "pdfa", "png", "potm", "potx", "pptm"]
+                    @@supported_formats = ["odp", "otp", "pdf", "pdfa", "potm", "potx", "pptm"]
             else
                 @@supported_formats = []
             end
@@ -124,12 +124,8 @@ class FormatUtility
       
         end
 
-        def is_download_as (ext)
-            if @@download_as_exts.include? ext
-                return true
-            else
-                return false
-            end
+        def not_supported_convert_formats
+            return FileUtility.get_all_available_formats.find_all{ |elem| format_supported(elem[1..]).length == 0 }
         end
     end
 end
