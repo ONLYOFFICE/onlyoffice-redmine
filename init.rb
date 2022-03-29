@@ -34,5 +34,6 @@ Redmine::Plugin.register :onlyoffice_redmine do
                      'editor_help' => 'on',
                      'editor_compact_header' => '',
                      'editor_toolbar_no_tabs' => '',
-                     'editor_feedback' => 'on'}, partial: 'settings/onlyoffice_settings'
+                     'editor_feedback' => 'on',
+                     'is_trial_over' => 'true'}, partial: 'settings/onlyoffice_settings'
 end

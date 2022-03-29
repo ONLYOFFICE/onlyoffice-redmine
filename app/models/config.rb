@@ -31,7 +31,7 @@ class Config
                 if Time.now < Time.parse(@config["data"]) + (@config['trial']*24*60*60)
                     return true
                 else
-                    Setting.plugin_onlyoffice_redmine["is_trial_over"] = "on"
+                    Setting.plugin_onlyoffice_redmine["is_trial_over"] = "false"
                     return false
                 end
             end
@@ -39,7 +39,7 @@ class Config
         end
 
         def istrial_at_settings
-            return Setting.plugin_onlyoffice_redmine["is_trial_over"].eql?("on")
+            return Setting.plugin_onlyoffice_redmine["is_trial_over"].eql?("false")
         end
 
         def check_valid_url(url)
