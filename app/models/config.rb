@@ -55,6 +55,7 @@ class Config
                 "data" => Time.now, 
                 "trial" => 30,
             }
+            Setting.plugin_onlyoffice_redmine["is_trial_over"] = "true"
             File.open(path, 'w'){ |file| file.write data.to_json }
         end
     end
