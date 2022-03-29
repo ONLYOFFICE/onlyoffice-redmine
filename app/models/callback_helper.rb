@@ -65,7 +65,7 @@ class CallbackHelper
 
       uri = URI.parse(FileUtility.replace_doc_edito_url_to_internal(download_url))
       http = Net::HTTP.new(uri.host, uri.port)
-      check_cert(uri, http)
+      check_cert(http)
 
       if data == nil
         raise 'stream is null'
@@ -80,7 +80,7 @@ class CallbackHelper
       uri = URI.parse(force ? url : FileUtility.replace_doc_edito_url_to_internal(url))
       http = Net::HTTP.new(uri.host, uri.port)
 
-      check_cert(uri, http)
+      check_cert(http)
 
       req = Net::HTTP::Get.new(uri)
       res = http.request(req)
@@ -108,7 +108,7 @@ class CallbackHelper
         uri = URI.parse(document_command_url)  # parse the document command url
         http = Net::HTTP.new(uri.host, uri.port)  # create a connection to the http server
 
-        check_cert(uri, http)
+        check_cert(http)
 
         req = Net::HTTP::Post.new(uri.request_uri)  # create the post request
         req.add_field("Content-Type", "application/json")  # set headers
@@ -180,7 +180,7 @@ class CallbackHelper
       return saved
     end
 
-    def check_cert(uri, http)
+    def check_cert(http)
       unless Setting.plugin_onlyoffice_redmine["check_cert"].eql?("on")
         http.use_ssl = true
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
