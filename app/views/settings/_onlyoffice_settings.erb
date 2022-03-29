@@ -114,6 +114,10 @@
         var editor_url = $("#settings_oo_address")[0].value;
         editor_url += editor_url.charAt(editor_url.length - 1) === '/' ? '' : '/';
         var secret = $("#settings_jwtsecret")[0].value;
+        if ($('#settings_editor_demo')[0].checked) {
+          editor_url = `<%= Config.get_config("oo_address") %>`;
+          secret = '<%= Config.get_config("jwtsecret") %>';
+        }
         var data = {
             url: editor_url,
             secret: secret
@@ -153,14 +157,17 @@
         }
       }
 
-      if (<%= Config.istrial_at_settings %>) document.getElementById("settings_editor_demo").disabled = true;
       <%
         if Config.istrial_at_settings
           Setting.plugin_onlyoffice_redmine["editor_demo"] = ""
         end
       %>
 
-      $('#settings_editor_demo')[0].parentNode.onclick = function () {
+      $('#settings_editor_demo')[0].onclick = function () {
+        if (<%= Config.istrial_at_settings %>) {
+          $('#settings_editor_demo')[0].checked = false;
+          $('#settings_editor_demo')[0].disabled = true;
+        }
         if (document.getElementById("settings_editor_demo").disabled == false) {
           if ($('#settings_editor_demo')[0].checked) {
             changing_activity_fields(true);
