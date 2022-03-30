@@ -111,6 +111,7 @@
         };
         $("#onlyoffice-error-notification")[0].style.display = "none";
 
+        var cert = $("#settings_check_cert")[0].checked;
         var editor_url = $("#settings_oo_address")[0].value;
         editor_url += editor_url.charAt(editor_url.length - 1) === '/' ? '' : '/';
         var secret = $("#settings_jwtsecret")[0].value;
@@ -120,7 +121,8 @@
         }
         var data = {
             url: editor_url,
-            secret: secret
+            secret: secret,
+            cert: cert
         };
         delete DocsAPI;
         var scriptAddress = document.getElementById("scriptDocServiceAddress");
@@ -162,14 +164,15 @@
           Setting.plugin_onlyoffice_redmine["editor_demo"] = ""
         end
       %>
-
-      $('#settings_editor_demo')[0].onclick = function () {
+      
+      var demoCheckBox = $('#settings_editor_demo')[0];
+      demoCheckBox.onclick = function () {
         if (<%= Config.istrial_at_settings %>) {
-          $('#settings_editor_demo')[0].checked = false;
-          $('#settings_editor_demo')[0].disabled = true;
+          demoCheckBox.checked = false;
+          demoCheckBox.disabled = true;
         }
-        if (document.getElementById("settings_editor_demo").disabled == false) {
-          if ($('#settings_editor_demo')[0].checked) {
+        if (demoCheckBox.disabled == false) {
+          if (demoCheckBox.checked) {
             changing_activity_fields(true);
           } else {
             changing_activity_fields(false);
