@@ -76,11 +76,11 @@ class CallbackHelper
       end
     end
 
-    def do_request(url, force = false)
+    def do_request(url, force = false, is_direct_cert = nil)
       uri = URI.parse(force ? url : FileUtility.replace_doc_edito_url_to_internal(url))
       http = Net::HTTP.new(uri.host, uri.port)
 
-      check_cert(http)
+      check_cert(http, is_direct_cert)
 
       req = Net::HTTP::Get.new(uri)
       res = http.request(req)
@@ -88,7 +88,7 @@ class CallbackHelper
     end
 
     # send the command request
-    def command_request(method, key = nil, url = nil, secret = nil)
+    def command_request(method, key = nil, url = nil, secret = nil, is_direct_cert = nil)
       editor_base_url = url.nil? ? Config.get_config("oo_address") : url
       document_command_url = editor_base_url + @@commandUrl
       # create a payload object with the method and key
@@ -108,7 +108,7 @@ class CallbackHelper
         uri = URI.parse(document_command_url)  # parse the document command url
         http = Net::HTTP.new(uri.host, uri.port)  # create a connection to the http server
 
-        check_cert(http)
+        check_cert(http, is_direct_cert)
 
         req = Net::HTTP::Post.new(uri.request_uri)  # create the post request
         req.add_field("Content-Type", "application/json")  # set headers
@@ -180,8 +180,8 @@ class CallbackHelper
       return saved
     end
 
-    def check_cert(http)
-      unless Setting.plugin_onlyoffice_redmine["check_cert"].eql?("on")
+    def check_cert(http, is_direct = true)
+      unless Setting.plugin_onlyoffice_redmine["check_cert"].eql?("on") and is_direct
         http.use_ssl = true
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       end
