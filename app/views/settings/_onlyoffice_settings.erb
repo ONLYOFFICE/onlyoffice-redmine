@@ -87,7 +87,9 @@
         let notice = $("#onlyoffice-error-notification")[0];
         notice.style.display = "block";
         notice.children[0].innerText = errorMes;
-        $('#settings form input[type=submit]')[0].disabled = false;
+        setTimeout(() => {
+          $('#settings form input[type=submit]')[0].disabled = false;
+        }, 10);
     };
 
     var checkSettings = function () {
