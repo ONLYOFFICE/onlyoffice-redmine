@@ -1,5 +1,7 @@
 class OnlyofficeConvertController < ApplicationController
 
+    @@res_convert = [0,0]
+
     def convert_page
         @page = get_page(params[:page_id], params[:page_type])
         @file_id = params[:file_id]
@@ -29,32 +31,38 @@ class OnlyofficeConvertController < ApplicationController
         url = send("download_named_attachment_url", attachment, attachment.filename)
         path = url.to_s
         key = ServiceConverter.generate_revision_id(path + l(:label_no_preview_download) + title)
-        res_convert = [0, 0]
-
-        begin
-            res_convert = ServiceConverter.get_converted_uri(editor_base_url, title, path, current_type, next_type, key, false, nil, nil, secret)
-        rescue => ex
-            render_403 :message => l(:onlyoffice_editor_cannot_be_reached)
-            return
-        end
-
-        if res_convert[0].eql?(100)
-            if params[:type].eql?('download_as')
-                redirect_to res_convert[1]
-            else
-                @page = get_page(params[:page_id], params[:page_type])
-                attachment = OnlyofficeConvertController.crete_file(res_convert[1], title, next_type)
-                @page.attachments << attachment
-                if @page.save
-                    flash[:notice] = l(:notice_successful_create)
-                else
-                    flash[:error] = l(:onlyoffice_attachment_create_error)
-                end
-                redirect_to params[:back_page]
-            end
+        
+        if params[:type].eql?('ajax')
+            @@res_convert = ServiceConverter.get_converted_uri(editor_base_url, title, path, current_type, next_type, key, true, nil, nil, secret)
+            render plain: @@res_convert
         else
-            render_403 :message => l(:onlyoffice_editor_cannot_be_reached)
-            return
+            begin
+                if !params[:ajax]
+                    @@res_convert = ServiceConverter.get_converted_uri(editor_base_url, title, path, current_type, next_type, key, false, nil, nil, secret)
+                end
+                @@res_convert = ServiceConverter.get_response_uri(JSON.parse(@@res_convert))
+            rescue => ex
+                render_403 :message => ex
+                return
+            end
+            if @@res_convert[0].eql?(100)
+                if params[:type].eql?('download_as')
+                    redirect_to @@res_convert[1]
+                else
+                    @page = get_page(params[:page_id], params[:page_type])
+                    attachment = OnlyofficeConvertController.crete_file(@@res_convert[1], title, next_type)
+                    @page.attachments << attachment
+                    if @page.save
+                        flash[:notice] = l(:notice_successful_create)
+                    else
+                        flash[:error] = l(:onlyoffice_attachment_create_error)
+                    end
+                    redirect_to params[:back_page]
+                end
+            else
+                render_403 :message => l(:onlyoffice_editor_cannot_be_reached)
+                return
+            end
         end
     end
 
