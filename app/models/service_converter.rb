@@ -72,9 +72,8 @@ class ServiceConverter
         rescue => ex
           raise ex.message
         end
-  
-        json_data = JSON.parse(data)  # parse response body
-        return get_response_uri(json_data)  # get response url
+
+        return data # get response url
       end
 
       # generate the document key value
@@ -131,6 +130,7 @@ class ServiceConverter
   
         error_element = file_result['error']
         if error_element != nil  # if an error occurs
+          puts "ОШИБКА", error_element.to_i
           process_convert_service_responce_error(error_element.to_i)  # get an error message
         end
   
