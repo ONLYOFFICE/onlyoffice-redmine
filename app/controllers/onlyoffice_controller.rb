@@ -24,17 +24,6 @@ class OnlyofficeController < AccountController
   before_action :find_attachment, :only => [ :download, :editor, :callback, :save_as ]
   before_action :file_readable, :read_authorize, :only => [ :editor ]
 
-  def self.detect_content_type(attachment)
-    content_type = attachment.content_type
-    if content_type.blank? || content_type == "application/octet-stream"
-      content_type =
-        Redmine::MimeType.of(attachment.filename).presence ||
-        "application/octet-stream"
-    end
-
-    content_type
-  end
-
   def check_settings
     render plain: is_valid_setings(params[:url], params[:secret])
   end

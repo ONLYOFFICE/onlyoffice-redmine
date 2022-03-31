@@ -180,7 +180,7 @@ class CallbackHelper
     end
 
     def check_cert(url, http)
-      if Setting.plugin_onlyoffice_redmine["check_cert"].eql?("on")
+      unless Setting.plugin_onlyoffice_redmine["check_cert"].eql?("on")
         http.use_ssl = true
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       end
