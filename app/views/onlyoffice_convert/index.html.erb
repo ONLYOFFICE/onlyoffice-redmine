@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 %>
+<% if User.current.allowed_to?(:add_documents, @file.project) %>
 
     <h2><%= l(:onlyoffice_convert_dropdown) %></h2>
     <h2><%= @file.filename %></h2>
@@ -21,14 +22,15 @@
 <%= form_tag(onlyoffice_convert_path(@page.id), multipart: true, id: "conversion") do |f| %>
     <%= hidden_field_tag 'back_page', back_url %>
     <%= hidden_field_tag 'type', "" %>
+    <%= hidden_field_tag 'ajax', true %>
     <%= render :partial => 'form', :locals => {:f => f} %>
     <div style = "display: flex; align-items: center;" >
         <p><%= submit_tag l(:onlyoffice_convert_submit), onclick: "isButton(this)", id: "convert", data: { disable_with: false }%></p>
         <p><%= submit_tag l(:label_no_preview_download), onclick: "isButton(this)", id: "download_as", data: { disable_with: false } %></p>
         <p><%= link_to l(:button_cancel), back_url %></p>
-        <div id="progress_bar">
+        <div id="progress_bar" style = "display: none">
             <div id="progress"></div>
-            <%= label_tag "progress", "0%" %>
+            <%= label_tag "progress", "0%", id: "progress_label" %>
         </div>
     </div>
 
@@ -42,13 +44,75 @@
     var isButton = function (element) {
         $('#type')[0].value = element.id;
     }
-    var form = $('#conversion')[0]
 
-    form.addEventListener("submit", function() {
-        isDisable(true)
-        form.submit();
+    var showProgress = function () {
+        $('#progress')[0].style.setProperty('--percent', 0 + '%')
+        $('#progress_bar')[0].style.display = 'flex';
+    }
+    var form = $('#conversion')[0];
+
+    form.addEventListener("submit", function(event) {
+        isDisable(true);
+        showProgress();
+        event.preventDefault();
+        sendSubmit();
         setTimeout(isDisable, 3000, false);
     }, false );
+
+    var sendSubmit = function () {
+        var bar = $('#progress_label')[0];
+
+        var data = {
+            utf8: $('input[name = "utf8"]')[0].value,
+            authenticity_token: $('input[name = "authenticity_token"]')[0].value,
+            back_page: $('#back_page')[0].value, 
+            type: $('#type')[0].value, 
+            file_id: $('#file_id')[0].value, 
+            page_id: $('#page_id')[0].value, 
+            page_type: $('#page_type')[0].value,
+            field_name: $('#field_name')[0].value,
+            onlyoffice_convert_current_type: $('#onlyoffice_convert_current_type')[0].value, 
+            onlyoffice_convert_end_type: $('#onlyoffice_convert_end_type')[0].value,
+            type: 'ajax',
+            ajax: true
+        };
+
+        var outputtype = $('#onlyoffice_convert_end_type')[0].value;
+        
+        function _callAjax() {
+            $.ajax({
+                type: 'POST',
+                url: '<%= onlyoffice_convert_path(@page.id) %>',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(data)
+            }).always(function (result, textStatus) {
+                var req = JSON.parse(result);
+                if (req.error) {
+                    console.log("Error: " + req.error);
+                } else {
+                    if (req.error) {
+                        onError(req.error);
+                        return;
+                    }
+                    if (req.percent != null) {
+                        var perc = req.percent / 100;
+                        if (perc > 0) {
+                            $('#progress')[0].style.setProperty('--percent', req.percent + '%')
+                        }
+                        bar.innerHTML = req.percent + "%";
+                    }
+                    if (!req.endConvert) {
+                        setTimeout(_callAjax, 1000);
+                    } else {
+                        console.log("Выполнено");
+                        data.type = $('#type')[0].value;
+                        form.submit();
+                    }
+                }
+            });
+        }
+        _callAjax();
+    }
 
 </script>
 
@@ -71,13 +135,15 @@
         background: #EEEEEE;
         height: 16px;
         width: 60%;
+        --percent: 0%;
     }
 
     #progress:after {
         content: '';
         display: block;
         background: #BAE0BA;
-        width: 0%;
+        width: var(--percent);
         height: 100%;
     }
 </style>
+<% end %>
