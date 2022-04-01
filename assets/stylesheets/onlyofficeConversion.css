@@ -1,0 +1,28 @@
+form#conversion div p {
+    padding-right: 1%;
+}
+
+#progress_bar{
+    padding-left: 3%;
+    display: flex;
+    width: 100%;
+}
+
+#progress_bar label{
+    padding-left: 1%;
+}
+
+#progress {
+    background: #EEEEEE;
+    height: 16px;
+    width: 60%;
+    --percent: 0%;
+}
+
+#progress:after {
+    content: '';
+    display: block;
+    background: #BAE0BA;
+    width: var(--percent);
+    height: 100%;
+}

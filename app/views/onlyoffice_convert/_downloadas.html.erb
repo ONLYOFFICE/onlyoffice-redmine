@@ -1,4 +1,4 @@
-<%
+<%=
     @file_id = file_id
     @file = Attachment.find_by_id(@file_id)
     @file_name = @file.filename[0..@file.filename.index(".")-1]
@@ -6,6 +6,8 @@
 
     @formats = FormatUtility.format_supported(@ext)
 %>
+
+<%= stylesheet_link_tag 'onlyofficeConversion', plugin: 'onlyoffice_redmine' %>
 
 
 <div id = "donwload_as" tabindex="-1" role="dialog" class="none ui-dialog ui-corner-all ui-widget ui-widget-content ui-front modal ui-draggable" aria-describedby="ajax-modal" aria-labelledby="ui-id-2" style="height: auto; width: 600px; top: 271.9px; left: 454.5px; z-index: 101;">
@@ -30,6 +32,9 @@
                     <div id="progress"></div>
                     <%= label_tag "progress", "0%", id: "progress_label" %>
                 </div>
+                <div id="onlyoffice-notification" style="display: none; width: 100%; padding-top: 0.5%;">
+                    <div class="flash notice"><%= l(:onlyoffice_done) %></div>
+                </div>
             </div>
 
         <% end %>
@@ -40,122 +45,16 @@
 <script type="text/javascript" language="javascript">
     document.body.appendChild(document.getElementById("donwload_as"))
     var form = '';
-
-    var showProgress = function () {
-        $('#progress')[0].style.setProperty('--percent', 0 + '%')
-        $('#progress_bar')[0].style.display = 'flex';
-    }
-
-    var displayFormDownloadAs = function (bool) {
-        if (bool){
-            $("#donwload_as")[0].style.display = "block";
-            $("body")[0].style.background = "#000";
-            $("#wrapper")[0].style = "background: #000; opacity: 70%;";
-
-            form = $('#conversion')[0];
-
-            form.addEventListener("submit", function(event) {
-                isDisable(true);
-                showProgress();
-                event.preventDefault();
-                sendSubmit();
-                setTimeout(isDisable, 3000, false);
-            }, false );
-        } else {
-            $("#donwload_as")[0].style.display = "none";
-            $("body")[0].style.background = "none";
-            $("#wrapper")[0].style = "background: none; opacity: 100%;";
-        }
-    }
+    var ajaxUrl = '<%= onlyoffice_convert_path(@file_id,@file_id) %>';
 
     var isDisable = function (bool) {
         $('#conversion input[type=submit]')[0].disabled = bool;
     }
 
-    displayFormDownloadAs(false);
-
-    var sendSubmit = function () {
-        var bar = $('#progress_label')[0];
-
-        var data = {
-            utf8: $('input[name = "utf8"]')[0].value,
-            authenticity_token: $('input[name = "authenticity_token"]')[0].value, 
-            type: $('#type')[0].value, 
-            file_id: $('#file_id')[0].value, 
-            page_id: $('#page_id')[0].value, 
-            page_type: $('#page_type')[0].value,
-            field_name: $('#field_name')[0].value,
-            onlyoffice_convert_current_type: $('#onlyoffice_convert_current_type')[0].value, 
-            onlyoffice_convert_end_type: $('#onlyoffice_convert_end_type')[0].value,
-            type: 'ajax',
-            ajax: true
-        };
-
-        var outputtype = $('#onlyoffice_convert_end_type')[0].value;
-        
-        function _callAjax() {
-            $.ajax({
-                type: 'POST',
-                url: '<%= onlyoffice_convert_path(@file_id,@file_id) %>',
-                contentType: "application/json; charset=utf-8",
-                data: JSON.stringify(data)
-            }).always(function (result, textStatus) {
-                var req = JSON.parse(result);
-                if (req.error) {
-                    console.log("Error: " + req.error);
-                } else {
-                    if (req.error) {
-                        onError(req.error);
-                        return;
-                    }
-                    if (req.percent != null) {
-                        var perc = req.percent / 100;
-                        if (perc > 0) {
-                            $('#progress')[0].style.setProperty('--percent', req.percent + '%');
-                        }
-                        bar.innerHTML = req.percent + "%";
-                    }
-                    if (!req.endConvert) {
-                        setTimeout(_callAjax, 1000);
-                    } else {
-                        console.log("Выполнено");
-                        data.type = $('#type')[0].value;
-                        form.submit();
-                    }
-                }
-            });
-        }
-        _callAjax();
-    }
 </script>
 
-<style>
-    form#conversion div p {
-        padding-right: 1%;
-    }
+<%= javascript_include_tag "onlyofficeConversion", :plugin => "onlyoffice_redmine" %>
 
-    #progress_bar{
-        padding-left: 3%;
-        display: flex;
-        width: 100%;
-    }
-
-    #progress_bar label{
-        padding-left: 1%;
-    }
-
-    #progress {
-        background: #EEEEEE;
-        height: 16px;
-        width: 60%;
-        --percent: 0%;
-    }
-
-    #progress:after {
-        content: '';
-        display: block;
-        background: #BAE0BA;
-        width: var(--percent);
-        height: 100%;
-    }
-</style>
+<script type="text/javascript" language="javascript">
+    displayFormDownloadAs(false);
+</script>
