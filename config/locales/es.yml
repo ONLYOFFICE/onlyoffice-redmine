@@ -1,7 +1,7 @@
 es:
   open_in_onlyoffice: "Abrir en ONLYOFFICE"
   edit_in_onlyoffice: "Editar en ONLYOFFICE"
-  onlyoffice_settings_doc_url: "Dirección del Servicio de Edición de Documentos"
+  onlyoffice_settings_doc_url: "Document Editing Service address (leave blank to disable the plugin)"
   onlyoffice_settings_jwtsecret: "Clave secreta (deje en blanco o desactive)"
   onlyoffice_settings_forcesave: "Habilitar Forzar guardar"
   onlyoffice_settings_file_type: "Abrir archivo para editar (debido a las restricciones de formato los datos podrían perderse al guardar en los formatos de la siguiente lista)"

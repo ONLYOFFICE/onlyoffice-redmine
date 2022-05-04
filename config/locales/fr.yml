@@ -1,7 +1,7 @@
 fr:
   open_in_onlyoffice: "Ouvrir dans ONLYOFFICE"
   edit_in_onlyoffice: "Modifier dans ONLYOFFICE"
-  onlyoffice_settings_doc_url: "Adresse du service d'édition de document"
+  onlyoffice_settings_doc_url: "Document Editing Service address (leave blank to disable the plugin)"
   onlyoffice_settings_jwtsecret: "Clé secrète (laisser vide pour désactiver)"
   onlyoffice_settings_forcesave: "Activer Sauvegarde Force"
   onlyoffice_settings_file_type: "Ouvrir le fichier pour édition (en raison de restrictions de format, des données peuvent être perdues lors de l'enregistrement dans les formats de la liste ci-dessous)"
