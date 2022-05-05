@@ -30,7 +30,7 @@ class OnlyofficeConvertController < ApplicationController
 
         url = send("download_named_attachment_url", attachment, attachment.filename)
         path = url.to_s
-        key = ServiceConverter.generate_revision_id(path + l(:label_no_preview_download) + title)
+        key = ServiceConverter.generate_revision_id(attachment.diskfile + attachment.digest + title)
         
         if params[:type].eql?('ajax')
             @@res_convert = ServiceConverter.get_converted_uri(editor_base_url, title, path, current_type, next_type, key, true, nil, nil, secret)
