@@ -17,6 +17,7 @@
 
 <%= render :parent %>
 
+<div style="display:none;">
 <%
   attachment_id = request.original_url[request.original_url.rindex("/") + 1, request.original_url.length]
   attachment = Attachment.find(attachment_id)
@@ -28,45 +29,20 @@
   ext = attachment.filename[attachment.filename.index(".")+1..]
   is_conversion = FormatUtility.format_supported(ext).length > 0 ? true : false
 %>
+</div>
 
 <%= render :partial => 'onlyoffice_convert/downloadas', :locals => {:file_id => attachment_id} %>
 
+<%= javascript_include_tag "onlyofficeCreateConvertButton", :plugin => "onlyoffice_redmine" %>
+
 <script type="text/javascript" language="javascript">
-  var downloadButton = document.getElementsByClassName("contextual")[0].getElementsByClassName("icon icon-download")[0];
-
-  var editorButton = document.createElement("a");
-
-  editorButton.innerText = "<%= edit_permission ? l(:edit_in_onlyoffice) : l(:open_in_onlyoffice) %>";
-  editorButton.className = "onlyoffice-editor-button icon";
-  editorButton.style.backgroundImage = 'url(/plugin_assets/onlyoffice_redmine/images/onlyoffice.ico)';
-  editorButton.style.backgroundSize = "16px";
-  editorButton.style.margin = "0 6px";
-  editorButton.style.cursor = "pointer";
-
-  let attachmentHref = window.location.href;
-  editorButton.onclick = function () {
-      window.open(window.location.origin + "/onlyoffice/editor" + attachmentHref.substring(attachmentHref.lastIndexOf("/")));
-      window.location.reload();
-  }
-  downloadButton.parentElement.insertBefore(editorButton, downloadButton);
+  var text = "<%= edit_permission ? l(:edit_in_onlyoffice) : l(:open_in_onlyoffice) %>";
+  var image = 'url(/plugin_assets/onlyoffice_redmine/images/onlyoffice.ico)';
+  createConvertButton(true, text, image);
 
   <% if is_conversion %>
-  
-  var downloadAsButton = document.createElement("a");
-
-  downloadAsButton.innerText = "<%= l(:onlyoffice_convert_download_file_as) %>";
-  downloadAsButton.className = "onlyoffice-editor-button icon";
-  downloadAsButton.style.backgroundImage = 'url(/plugin_assets/onlyoffice_redmine/images/download_as.svg)';
-  downloadAsButton.style.backgroundSize = "16px";
-  downloadAsButton.style.margin = "0 6px";
-  downloadAsButton.style.cursor = "pointer";
-
-  downloadAsButton.href = "#";
-  downloadAsButton.onclick = function () {
-      displayFormDownloadAs(true);
-  }
-
-  downloadButton.parentElement.insertBefore(downloadAsButton, downloadButton);
-
+    text = "<%= l(:onlyoffice_convert_download_file_as) %>";
+    image = 'url(/plugin_assets/onlyoffice_redmine/images/download_as.svg)';
+    createConvertButton(false, text, image);
   <% end %>
 </script>
