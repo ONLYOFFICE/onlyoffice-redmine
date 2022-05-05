@@ -25,18 +25,13 @@ class ServiceConverter
     def get_converted_uri(doc_server_url, title, document_uri, from_ext, to_ext, document_revision_id, is_async, file_pass, lang = nil, secret = nil)
 
         from_ext = from_ext == nil ? File.extname(document_uri).downcase : from_ext  # get the current document extension
-  
-        # get the current document name or uuid
-        if title.nil?
-          title = File.basename(URI.parse(document_uri).path)
-          title = title.nil? ? UUID.generate.to_s : title
-        end
+
         # get the document key
         document_revision_id = document_revision_id.empty? ? document_uri : document_revision_id
         document_revision_id = generate_revision_id(document_revision_id)
   
         payload = {  # write all the conversion parameters to the payload
-          :async => is_async ? true : false,
+          :async => is_async,
           :url => document_uri,
           :outputtype => to_ext.delete('.'),
           :filetype => from_ext.delete('.'),
@@ -118,8 +113,7 @@ class ServiceConverter
           else
             error_message = 'ErrorCode = ' + error_code.to_s  # default value for the error message
         end
-        puts error_message
-        # raise error_message
+        raise error_message
   
       end
   
@@ -130,7 +124,7 @@ class ServiceConverter
   
         error_element = file_result['error']
         if error_element != nil  # if an error occurs
-          puts "ОШИБКА", error_element.to_i
+          puts 'ConvertError: ErrorCode = ' + error_element
           process_convert_service_responce_error(error_element.to_i)  # get an error message
         end
   

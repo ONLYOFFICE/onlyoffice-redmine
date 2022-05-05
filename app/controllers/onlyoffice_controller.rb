@@ -245,7 +245,6 @@ class OnlyofficeController < AccountController
       res_command = CallbackHelper.command_request("version",  nil, editor_base_url, secret)
       is_command += res_command["version"]
 
-      #res_convert = ServiceConverter.get_converted_uri(editor_base_url, nil, path, "docx", "pdf", key, false, nil, nil, secret)
       is_convert = res_convert[0]
     rescue
       return false
