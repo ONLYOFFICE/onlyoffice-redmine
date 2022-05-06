@@ -32,7 +32,7 @@ class CallbackHelper
       if JWTHelper.is_enabled
         inHeader = false
         token = nil
-        jwtHeader = Config.get_config("jwtHeader")
+        jwtHeader = JWTHelper.jwt_header
         if data["token"]
           token = JWTHelper.decode(data["token"])
         elsif request.headers[jwtHeader]
@@ -115,7 +115,7 @@ class CallbackHelper
         JWTHelper.init
         if !secret.nil? || JWTHelper.is_enabled
           payload["token"] = JWTHelper.encode(payload, secret)  # get token and save it to the payload
-          jwtHeader = "Authorization"  # get signature authorization header
+          jwtHeader = JWTHelper.jwt_header  # get signature authorization header
           req.add_field(jwtHeader, "Bearer #{JWTHelper.encode({ :payload => payload }, secret)}")  # set it to the request with the Bearer prefix
         end
         req.body = payload.to_json   # convert the payload object into the json format
