@@ -27,7 +27,6 @@ Redmine::Plugin.register :onlyoffice_redmine do
 
 
   settings default: {'oo_address' => 'http://localhost/',
-                     'jwtHeader' => 'Authorization',
                      'jwtsecret' => '',
                      'editor_demo' => '',
                      'editor_chat' => 'on',
@@ -35,6 +34,5 @@ Redmine::Plugin.register :onlyoffice_redmine do
                      'editor_compact_header' => '',
                      'editor_toolbar_no_tabs' => '',
                      'editor_feedback' => 'on',
-                     'is_trial_over' => 'true',
                      'check_cert' => ''}, partial: 'settings/onlyoffice_settings'
 end
