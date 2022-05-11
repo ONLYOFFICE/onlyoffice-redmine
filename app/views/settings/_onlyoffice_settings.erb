@@ -86,6 +86,7 @@
         if ($("#flash_notice")[0]) $("#flash_notice")[0].remove();
         let notice = $("#onlyoffice-error-notification")[0];
         notice.style.display = "block";
+        notice.children[0].style.display = "block";
         notice.children[0].innerText = errorMes;
         setTimeout(() => {
           $('#settings form input[type=submit]')[0].disabled = false;
@@ -145,44 +146,20 @@
         checkSettings();
     };
 
-    var changing_activity_fields  = function (bool) {
-      document.getElementById("settings_oo_address").disabled = bool
-      document.getElementById("settings_jwtsecret").disabled = bool
-    };
-
     $(document).ready(function () {
       if (<%= Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") %>) {
         if (<%= Config.istrial %>){
           document.getElementById("onlyoffice-error-notification").children[0].style.display = "none";
-          changing_activity_fields(true);
         } else {
           showError("<%= l(:onlyoffice_editor_trial_period_ended) %>");
           document.getElementById("settings_editor_demo").checked = false;
         }
       }
-
       <%
-        if Config.istrial_at_settings
+        if Config.istrial_over
           Setting.plugin_onlyoffice_redmine["editor_demo"] = ""
         end
       %>
-      
-      var demoCheckBox = $('#settings_editor_demo')[0];
-      demoCheckBox.onclick = function () {
-        if (<%= Config.istrial_at_settings %>) {
-          demoCheckBox.checked = false;
-          demoCheckBox.disabled = true;
-        }
-        if (demoCheckBox.disabled == false) {
-          if (demoCheckBox.checked) {
-            changing_activity_fields(true);
-          } else {
-            changing_activity_fields(false);
-          }
-        } else {
-          showError("<%= l(:onlyoffice_editor_trial_period_ended) %>");
-        }
-      }
     });
 
     if(ele.addEventListener){
