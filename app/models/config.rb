@@ -21,6 +21,10 @@ class Config
             end
         end
 
+        def get_trial(key)
+            @trial_data[key]
+        end
+
         def get_config(key)
             init
             get = Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") && istrial ? @trial_data[key] : Setting.plugin_onlyoffice_redmine[key]
@@ -40,7 +44,7 @@ class Config
             return false
         end
 
-        def istrial_at_settings
+        def istrial_over
             @is_trial_over
         end
 
