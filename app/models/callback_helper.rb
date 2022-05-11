@@ -88,7 +88,7 @@ class CallbackHelper
     end
 
     # send the command request
-    def command_request(method, key = nil, url = nil, secret = nil, is_direct_cert = nil)
+    def command_request(method, key = nil, url = nil, secret = nil, is_direct = nil)
       editor_base_url = url.nil? ? Config.get_config("oo_address") : url
       document_command_url = editor_base_url + @@commandUrl
       # create a payload object with the method and key
@@ -108,14 +108,20 @@ class CallbackHelper
         uri = URI.parse(document_command_url)  # parse the document command url
         http = Net::HTTP.new(uri.host, uri.port)  # create a connection to the http server
 
-        check_cert(uri.to_s, http, is_direct_cert)
+        check_cert(uri.to_s, http, is_direct)
+
+        if is_direct
+          istrial = !Config.istrial_over
+        else
+          istrial = Config.istrial
+        end
 
         req = Net::HTTP::Post.new(uri.request_uri)  # create the post request
         req.add_field("Content-Type", "application/json")  # set headers
         JWTHelper.init
         if !secret.nil? || JWTHelper.is_enabled
           payload["token"] = JWTHelper.encode(payload, secret)  # get token and save it to the payload
-          jwtHeader = JWTHelper.jwt_header  # get signature authorization header
+          jwtHeader = istrial ? Config.get_trial("jwtHeader") : JWTHelper.jwt_header  # get signature authorization header
           req.add_field(jwtHeader, "Bearer #{JWTHelper.encode({ :payload => payload }, secret)}")  # set it to the request with the Bearer prefix
         end
         req.body = payload.to_json   # convert the payload object into the json format
