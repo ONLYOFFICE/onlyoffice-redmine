@@ -107,7 +107,7 @@ class CallbackHelper
         new_date = callback_date.year.to_s[2,4] + callback_date.month.to_s + callback_date.day.to_s
         new_time = callback_date.hour.to_s + callback_date.minute.to_s + callback_date.second.to_s
 
-        new_disk_directory = callback_date.year.to_s + "/" + callback_date.month.to_s
+        new_disk_directory = callback_date.year.to_s + "/" + (callback_date.month < 10 && !callback_date.month.to_s.first.eql?('0') ? '0' : '') + callback_date.month.to_s
         new_absolute_directory = attachment.diskfile.split("files")[0] + "files/" + new_disk_directory
         new_filename = new_date + new_time + "_" + attachment.disk_filename.split("_")[1]
 
@@ -128,8 +128,8 @@ class CallbackHelper
         delete_diskfile_by_digest(old_digest, old_diskfile)
 
         saved = 0
-      rescue StandardError => error
-        saved = 1
+      rescue => error
+        raise error.message
       end
 
       return saved
