@@ -5,7 +5,6 @@ class Config
                 "jwtsecret" => "sn2puSUF7muF5Jas", 
             }
     @config = nil
-    @is_trial_over = false
 
     class << self
         def init
@@ -21,31 +20,22 @@ class Config
             end
         end
 
-        def get_trial(key)
-            @trial_data[key]
-        end
-
-        def get_config(key)
+        def get_config(key, for_settings = false)
             init
-            get = Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") && istrial ? @trial_data[key] : Setting.plugin_onlyoffice_redmine[key]
+            get = (Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") && istrial) || for_settings ? @trial_data[key] : Setting.plugin_onlyoffice_redmine[key]
             return key.eql?("oo_address") ? check_valid_url(get) : get
         end
 
         def istrial
             init
-            if !@config.nil? && !@is_trial_over
+            if !@config.nil?
                 if Time.now < Time.parse(@config["data"]) + (@config['trial']*24*60*60)
                     return true
                 else
-                    @is_trial_over = true 
                     return false
                 end
             end
             return false
-        end
-
-        def istrial_over
-            @is_trial_over
         end
 
         def check_valid_url(url)
@@ -61,7 +51,6 @@ class Config
                 "data" => Time.now, 
                 "trial" => 30,
             }
-            @is_trial_over = false
             File.open(path, 'w'){ |file| file.write data.to_json }
         end
     end

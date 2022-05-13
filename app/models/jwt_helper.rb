@@ -17,11 +17,13 @@
 
 class JWTHelper
   @jwt_secret = nil
-  @jwt_header = "Authorization"
+  @jwt_header = nil
   
   class << self
     def init
         @jwt_secret = Config.get_config("jwtsecret")
+        demo_header = Config.get_config("jwtHeader")
+        @jwt_header = demo_header.nil? ? "Authorization" : demo_header
     end
 
     def jwt_header

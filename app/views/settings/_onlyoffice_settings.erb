@@ -70,9 +70,7 @@
   </label>
 </fieldset>
 
-<div id="onlyoffice-error-notification" style="display: none">
-  <div class="flash error"></div>
-</div>
+<div class="flash error" id="onlyoffice-error-notification" style="display: none"></div>
 
 <script type="text/javascript" language="javascript">
     document.getElementsByClassName("box tabular settings")[0].classList.remove("settings");
@@ -86,8 +84,7 @@
         if ($("#flash_notice")[0]) $("#flash_notice")[0].remove();
         let notice = $("#onlyoffice-error-notification")[0];
         notice.style.display = "block";
-        notice.children[0].style.display = "block";
-        notice.children[0].innerText = errorMes;
+        notice.innerText = errorMes;
         setTimeout(() => {
           $('#settings form input[type=submit]')[0].disabled = false;
         }, 10);
@@ -119,13 +116,14 @@
         editor_url += editor_url.charAt(editor_url.length - 1) === '/' ? '' : '/';
         var secret = $("#settings_jwtsecret")[0].value;
         if ($('#settings_editor_demo')[0].checked) {
-          editor_url = `<%= Config.get_config("oo_address") %>`;
-          secret = '<%= Config.get_config("jwtsecret") %>';
+          editor_url = `<%= Config.get_config("oo_address", true) %>`;
+          secret = '<%= Config.get_config("jwtsecret", true) %>';
         }
         var data = {
             url: editor_url,
             secret: secret,
-            cert: cert
+            cert: cert,
+            demo: $('#settings_editor_demo')[0].checked
         };
         delete DocsAPI;
         var scriptAddress = document.getElementById("scriptDocServiceAddress");
@@ -148,18 +146,11 @@
 
     $(document).ready(function () {
       if (<%= Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") %>) {
-        if (<%= Config.istrial %>){
-          document.getElementById("onlyoffice-error-notification").children[0].style.display = "none";
-        } else {
-          showError("<%= l(:onlyoffice_editor_trial_period_ended) %>");
-          document.getElementById("settings_editor_demo").checked = false;
+        if (!<%= Config.istrial %>) {
+            showError("<%= l(:onlyoffice_editor_trial_period_ended) %>");
+            document.getElementById("settings_editor_demo").checked = false;
         }
       }
-      <%
-        if Config.istrial_over
-          Setting.plugin_onlyoffice_redmine["editor_demo"] = ""
-        end
-      %>
     });
 
     if(ele.addEventListener){
