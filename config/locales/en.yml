@@ -25,3 +25,4 @@ en:
   onlyoffice_create_pptx: "Presentation"
   onlyoffice_create_docxf: "Form template"
   onlyoffice_attachment_create_error: "Error while creating"
+  onlyoffice_editor_demo_enabled: "You are using public demo ONLYOFFICE Document Server. Please do not store private sensitive data."
