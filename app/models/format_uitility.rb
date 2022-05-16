@@ -17,7 +17,6 @@
 
 class FormatUtility
     @@supported_formats = nil
-    @@download_as_exts = ["docx", "xlsx", "pptx"]
 
     class << self
 
