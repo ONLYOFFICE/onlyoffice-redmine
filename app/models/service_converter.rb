@@ -84,39 +84,7 @@ class ServiceConverter
         key[(key.length - [key.length, 20].min)..key.length]  # the resulting key is of the length 20 or less
 
       end
-  
-      # create an error message for the error code
-      def process_convert_service_responce_error(error_code)
-  
-        error_message = 'unknown error'
-  
-        # add an error message to the error message template depending on the error code
-        case error_code
-          when -8
-            error_message = 'Error occurred in the ConvertService.ashx: Error document VKey'
-          when -7
-            error_message = 'Error occurred in the ConvertService.ashx: Error document request'
-          when -6
-            error_message = 'Error occurred in the ConvertService.ashx: Error database'
-          when -5
-            error_message = 'Error occurred in the ConvertService.ashx: Incorrect password'
-          when -4
-            error_message = 'Error occurred in the ConvertService.ashx: Error download error'
-          when -3
-            error_message = 'Error occurred in the ConvertService.ashx: Error convertation error'
-          when -2
-            error_message = 'Error occurred in the ConvertService.ashx: Error convertation timeout'
-          when -1
-            error_message = 'Error occurred in the ConvertService.ashx: Error convertation unknown'
-          when 0
-            # public const int c_nErrorNo = 0
-          else
-            error_message = 'ErrorCode = ' + error_code.to_s  # default value for the error message
-        end
-        raise error_message
-  
-      end
-  
+
       # get the response url
       def get_response_uri(json_data)
   
@@ -124,8 +92,7 @@ class ServiceConverter
   
         error_element = file_result['error']
         if error_element != nil  # if an error occurs
-          puts 'ConvertError: ErrorCode = ' + error_element
-          process_convert_service_responce_error(error_element.to_i)  # get an error message
+          raise 'ConvertError: ErrorCode = ' + error_element.to_i
         end
   
         is_end_convert = file_result['endConvert']  # check if the conversion is completed
