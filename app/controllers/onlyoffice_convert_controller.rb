@@ -42,6 +42,7 @@ class OnlyofficeConvertController < ApplicationController
                 end
                 @@res_convert = ServiceConverter.get_response_uri(JSON.parse(@@res_convert))
             rescue => ex
+                logger.error(ex)
                 render_error({:message => ex, :status => 403})
                 return
             end
