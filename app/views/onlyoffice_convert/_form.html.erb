@@ -38,5 +38,14 @@
 </fieldset>
 
 <script type="text/javascript" language="javascript">
-
+    var showNotice = function (type) {
+        var notice = $('#onlyoffice-notification')[0];
+        notice.children[0].className = type === 'success' ? 'flash notice' : 'flash error';
+        notice.children[0].innerText = type === 'success' ? '<%= l(:onlyoffice_convert_success) %>' : '<%= l(:onlyoffice_convert_error) %>';
+        notice.style.display = 'block';
+        setTimeout(() => {
+            notice.style.display = 'none';
+        }, 3000);
+        showProgress(false);
+    }
 </script>

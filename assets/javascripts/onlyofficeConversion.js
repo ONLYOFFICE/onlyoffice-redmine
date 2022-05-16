@@ -1,20 +1,9 @@
 var showProgress = function (bool) {
     $('#progress')[0].style.setProperty('--percent', 0 + '%')
-    if (bool){
+    if (bool) {
         $('#progress_bar')[0].style.display = 'flex';
     } else {
         $('#progress_bar')[0].style.display = 'none';
-    }
-}
-
-var showNotice = function (bool) {
-    var notice = $('#onlyoffice-notification')[0];
-    if (bool){
-        notice.style.display = 'block';
-        setTimeout(showNotice, 3000, false);
-        showProgress(false);
-    } else {
-        notice.style.display = 'none';
     }
 }
 
@@ -35,7 +24,7 @@ var sendSubmit = function (back_page = $('#back_page')[0]) {
         type: 'ajax',
         ajax: true
     };
-    
+
     function _callAjax() {
         $.ajax({
             type: 'POST',
@@ -43,30 +32,23 @@ var sendSubmit = function (back_page = $('#back_page')[0]) {
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(data)
         }).always(function (result) {
-            var req = JSON.parse(result);
-            if (req.error) {
-                console.log("Error: " + req.error);
-            } else {
-                if (req.error) {
-                    onError(req.error);
-                    return;
-                }
-                if (req.percent != null) {
-                    var perc = req.percent / 100;
-                    if (perc > 0) {
-                        $('#progress')[0].style.setProperty('--percent', req.percent + '%')
-                    }
-                    bar.innerHTML = req.percent + "%";
-                }
-                if (!req.endConvert) {
-                    setTimeout(_callAjax, 1000);
-                } else {
-                    data.type = $('#type')[0].value;
-                    form.submit();
-                    setTimeout(showNotice, 1000, true);
-                    if (back_page == undefined) {
-                        displayFormDownloadAs(false);
-                    }
+            var responseText = result.responseText;
+            try {
+                var response = $.parseJSON(responseText);
+            } catch (e) {
+                showNotice('error');
+                return;
+            }
+            if (response.percent < 100) {
+                data.type = $('#type')[0].value;
+                form.submit();
+            } else if (response.percent >= 100) {
+                isDisable(false);
+                $('#progress')[0].style.setProperty('--percent', response.percent + '%')
+                bar.innerText = response.percent + "%";
+                showNotice('success');
+                if (back_page == undefined) {
+                    displayFormDownloadAs(false);
                 }
             }
         });
@@ -75,21 +57,20 @@ var sendSubmit = function (back_page = $('#back_page')[0]) {
 }
 
 var displayFormDownloadAs = function (bool) {
-    if (bool){
+    if (bool) {
         resetForm();
 
         $("#donwload_as")[0].style.display = "block";
         $("body")[0].style.background = "#000";
         $("#wrapper")[0].style = "background: #000; opacity: 70%;";
 
-        form = $('#conversion')[0];
+        var form = $('#conversion')[0];
 
-        form.addEventListener("submit", function(event) {
+        form.addEventListener("submit", function (event) {
             isDisable(true);
             showProgress(true);
             event.preventDefault();
             sendSubmit();
-            setTimeout(isDisable, 3000, false);
         }, false );
     } else {
         $("#donwload_as")[0].style.display = "none";

@@ -33,7 +33,7 @@
                     <%= label_tag "progress", "0%", id: "progress_label" %>
                 </div>
                 <div id="onlyoffice-notification" style="display: none; width: 100%; padding-top: 0.5%;">
-                    <div class="flash notice"><%= l(:onlyoffice_done) %></div>
+                    <div></div>
                 </div>
             </div>
 
@@ -44,13 +44,11 @@
 
 <script type="text/javascript" language="javascript">
     document.body.appendChild(document.getElementById("donwload_as"))
-    var form = '';
     var ajaxUrl = '<%= onlyoffice_convert_path(@file_id,@file_id) %>';
 
     var isDisable = function (bool) {
         $('#conversion input[type=submit]')[0].disabled = bool;
     }
-
 </script>
 
 <%= javascript_include_tag "onlyofficeConversion", :plugin => "onlyoffice_redmine" %>
