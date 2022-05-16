@@ -26,3 +26,12 @@ form#conversion div p {
     width: var(--percent);
     height: 100%;
 }
+
+.display_none{
+    display: none;
+}
+.onlyoffice-notification{
+    display: none;
+    width: 100%; 
+    padding-top: 0.5%;
+}
