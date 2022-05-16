@@ -30,8 +30,8 @@ class OnlyofficeConvertController < ApplicationController
 
         url = send("download_named_attachment_url", attachment, attachment.filename)
         path = url.to_s
-        key = ServiceConverter.generate_revision_id(attachment.diskfile + attachment.digest + title)
-        
+        key = DocumentHelper.get_key(attachment)
+
         if params[:type].eql?('ajax')
             @@res_convert = ServiceConverter.get_converted_uri(editor_base_url, title, path, current_type, next_type, key, true, nil, nil, secret)
             render plain: @@res_convert
@@ -42,7 +42,7 @@ class OnlyofficeConvertController < ApplicationController
                 end
                 @@res_convert = ServiceConverter.get_response_uri(JSON.parse(@@res_convert))
             rescue => ex
-                render_403 :message => ex
+                render_error({:message => ex, :status => 403})
                 return
             end
             if @@res_convert[0].eql?(100)
@@ -60,7 +60,7 @@ class OnlyofficeConvertController < ApplicationController
                     redirect_to params[:back_page]
                 end
             else
-                render_403 :message => l(:onlyoffice_editor_cannot_be_reached)
+                render_error({:message => l(:onlyoffice_editor_cannot_be_reached), :status => 403})
                 return
             end
         end
