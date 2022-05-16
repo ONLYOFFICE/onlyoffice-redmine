@@ -36,6 +36,7 @@ var sendSubmit = function (back_page = $('#back_page')[0]) {
             try {
                 var response = $.parseJSON(responseText);
             } catch (e) {
+                isDisable(false);
                 showNotice('error');
                 return;
             }
