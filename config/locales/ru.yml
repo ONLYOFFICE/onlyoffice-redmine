@@ -28,7 +28,7 @@ ru:
   onlyoffice_convert_download_file_as: "Скачать файл как"
   onlyoffice_convert_download_as: "Скачать как"
   onlyoffice_convert_success: "Успешно"
-  onlyoffice_convert_error: "Что-то пошло не так"
+  onlyoffice_convert_error: "Ошибка скачивания преобразованного файла"
   onlyoffice_create_docx: "Документ"
   onlyoffice_create_xlsx: "Таблица"
   onlyoffice_create_pptx: "Презентация"
