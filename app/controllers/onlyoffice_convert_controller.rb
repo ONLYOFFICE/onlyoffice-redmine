@@ -43,7 +43,7 @@ class OnlyofficeConvertController < ApplicationController
                 @@res_convert = ServiceConverter.get_response_uri(JSON.parse(@@res_convert))
             rescue => ex
                 logger.error(ex)
-                render_error({:message => ex, :status => 403})
+                render_error({:message =>l(:onlyoffice_convert_error), :status => 500})
                 return
             end
             if @@res_convert[0].eql?(100)
@@ -61,7 +61,7 @@ class OnlyofficeConvertController < ApplicationController
                     redirect_to params[:back_page]
                 end
             else
-                render_error({:message => l(:onlyoffice_editor_cannot_be_reached), :status => 403})
+                render_error({:message => l(:onlyoffice_editor_cannot_be_reached), :status => 500})
                 return
             end
         end
