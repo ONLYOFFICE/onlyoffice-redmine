@@ -35,9 +35,12 @@
   edit_permission = (edit_permission || User.current.admin) && project_is_not_readonly
   is_editable_array = []
   attachments_disk_filenames = []
+  is_convert = []
   @news.attachments.each do |attachment|
     is_editable_array = is_editable_array + [DocumentHelper.is_editable(attachment)]
     attachments_disk_filenames = attachments_disk_filenames + [attachment.disk_filename]
+    ext = attachment.disk_filename[attachment.disk_filename.index(".")+1..]
+    is_convert = is_convert + [FormatUtility.format_supported(ext).length == 0 ? false : true]
   end
 %>
 
@@ -53,7 +56,7 @@
                 onlyofficeButtons[i].title = "<%= l(:edit_in_onlyoffice) %>";
             }
         }
-        addOnlyOfficeConvert(<%= raw FormatUtility.not_supported_convert_formats %>, <%= raw FileUtility.get_all_available_formats %>, <%= raw attachments_disk_filenames %>, <%= @news.id %>, "News");
+        addOnlyOfficeConvert(<%= raw is_convert %>, <%= raw FileUtility.get_all_available_formats %>, <%= raw attachments_disk_filenames %>, <%= @news.id %>, "News");
         var onlyofficeButtonsConvert = document.getElementsByClassName("onlyoffice-editor-button-convert");
         for (var i = 0; i < onlyofficeButtonsConvert.length; i++) {
             onlyofficeButtonsConvert[i].title = "<%= l(:onlyoffice_convert_dropdown) %>";

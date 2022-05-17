@@ -28,9 +28,12 @@
 
    view_or_manage_permission = view_or_manage_permission || User.current.admin
    is_openable_array = []
+   is_convert = []
    @containers.each do |container|
      container.attachments.each do |attachment|
-       is_openable_array = is_openable_array + [FileUtility.is_openable(attachment)]
+        ext = attachment.disk_filename[attachment.disk_filename.index(".")+1..]
+        is_convert = is_convert + [FormatUtility.format_supported(ext).length == 0 ? false : true]
+        is_openable_array = is_openable_array + [FileUtility.is_openable(attachment)]
      end
    end
 
@@ -55,7 +58,6 @@
         attachments_disk_filenames.push(attachment.filename)
     end
 %>
-
 <script type="text/javascript" language="javascript">
     if (<%= view_or_manage_permission %>) {
         var attachmentList = document.getElementsByClassName("file");
@@ -95,7 +97,7 @@
             }
         }
         if (<%= view_permission || edit_permission%>) {
-            addOnlyOfficeConvert(<%= raw FormatUtility.not_supported_convert_formats %>, <%= raw FileUtility.get_all_available_formats %>, document.getElementsByClassName("filename"), <%= @containers[0].id %>, "File");
+            addOnlyOfficeConvert(<%= raw is_convert %>, <%= raw FileUtility.get_all_available_formats %>, document.getElementsByClassName("filename"), <%= @containers[0].id %>, "File");
             var onlyofficeButtonsConvert = document.getElementsByClassName("onlyoffice-editor-button-convert");
             for (var i = 0; i < onlyofficeButtonsConvert.length; i++) {
                 onlyofficeButtonsConvert[i].title = "<%= l(:onlyoffice_convert_dropdown) %>";

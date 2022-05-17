@@ -125,8 +125,5 @@ class FormatUtility
       
         end
 
-        def not_supported_convert_formats
-            return FileUtility.get_all_available_formats.find_all{ |elem| format_supported(elem[1..]).length == 0 }
-        end
     end
 end
