@@ -28,7 +28,7 @@ de:
   onlyoffice_convert_download_file_as: "Download file as"
   onlyoffice_convert_download_as: "Herunterladen als"
   onlyoffice_convert_success: "Done"
-  onlyoffice_convert_error: "Fehler beim Herunterladen der konvertierten Datei"
+  onlyoffice_convert_error: "Conversion error"
   onlyoffice_create_docx: "Dokument"
   onlyoffice_create_xlsx: "Arbeitsmappe"
   onlyoffice_create_pptx: "Präsentation"

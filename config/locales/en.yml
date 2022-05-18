@@ -28,7 +28,7 @@ en:
   onlyoffice_convert_download_file_as: "Download file as"
   onlyoffice_convert_download_as: "Download as"
   onlyoffice_convert_success: "Success"
-  onlyoffice_convert_error: "Failed to download converted file"
+  onlyoffice_convert_error: "Conversion error"
   onlyoffice_create_docx: "Document"
   onlyoffice_create_xlsx: "Spreadsheet"
   onlyoffice_create_pptx: "Presentation"

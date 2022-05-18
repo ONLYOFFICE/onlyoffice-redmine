@@ -28,7 +28,7 @@ it:
   onlyoffice_convert_download_file_as: "Download file as"
   onlyoffice_convert_download_as: "Scaricare come"
   onlyoffice_convert_success: "Done"
-  onlyoffice_convert_error: "Impossibile scaricare il file convertito"
+  onlyoffice_convert_error: "Conversion error"
   onlyoffice_create_docx: "Documento"
   onlyoffice_create_xlsx: "Foglio di calcolo"
   onlyoffice_create_pptx: "Presentazione"
