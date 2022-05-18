@@ -104,6 +104,13 @@
                 }).always(function (result, textStatus, jqXHR) {
                     let ok = result !== 'false';
                     if (ok) {
+                        if ($('#settings_editor_demo')[0].checked) {
+                            $('#settings_editor_demo')[0].value = 'on';
+                        }
+                        $("<input>", {type: "hidden", name: "settings[demo_date_start]",
+                            value: $('#settings_editor_demo')[0].checked ? "<%= Setting.plugin_onlyoffice_redmine["demo_date_start"].nil? || Setting.plugin_onlyoffice_redmine["demo_date_start"].eql?('') ? Time.now : Setting.plugin_onlyoffice_redmine["demo_date_start"] %>"
+                                : "<%= Setting.plugin_onlyoffice_redmine["demo_date_start"] %>"})
+                            .appendTo("#settings form");
                         $('#settings form')[0].submit();
                     } else showError("<%= l(:onlyoffice_editor_cannot_be_reached) %>");
                 });

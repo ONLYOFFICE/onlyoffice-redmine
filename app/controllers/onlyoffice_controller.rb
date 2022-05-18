@@ -236,6 +236,11 @@ class OnlyofficeController < AccountController
     begin
       Setting.plugin_onlyoffice_redmine["editor_demo"] = direct_demo ? "on" : ""
       Setting.plugin_onlyoffice_redmine["check_cert"] = direct_cert ? "on" : ""
+
+      demo_date = Setting.plugin_onlyoffice_redmine["demo_date_start"]
+      if direct_demo && (demo_date.nil? || demo_date.eql?(''))
+        Setting.plugin_onlyoffice_redmine["demo_date_start"] = Time.now.to_s
+      end
       res_health = CallbackHelper.do_request(editor_base_url + "healthcheck", true)
 
       res_command = CallbackHelper.command_request("version",  nil, editor_base_url, secret)

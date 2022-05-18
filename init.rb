@@ -34,5 +34,6 @@ Redmine::Plugin.register :onlyoffice_redmine do
                      'editor_compact_header' => '',
                      'editor_toolbar_no_tabs' => '',
                      'editor_feedback' => 'on',
-                     'check_cert' => ''}, partial: 'settings/onlyoffice_settings'
+                     'check_cert' => '',
+                     'demo_date_start' => '' }, partial: 'settings/onlyoffice_settings'
 end
