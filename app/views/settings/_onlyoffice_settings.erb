@@ -144,11 +144,22 @@
         checkSettings();
     };
 
+    var fieldsDisable = function (value) {
+        $("#settings_oo_address").prop('disabled', value);
+        $("#settings_jwtsecret").prop('disabled', value);
+    };
+
     $(document).ready(function () {
+      $('#settings_editor_demo').change(function () {
+          fieldsDisable(this.checked);
+      });
+
       if (<%= Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") %>) {
+        fieldsDisable(true);
         if (!<%= Config.istrial %>) {
             showError("<%= l(:onlyoffice_editor_trial_period_ended) %>");
             document.getElementById("settings_editor_demo").checked = false;
+            fieldsDisable(false);
         }
       }
     });
