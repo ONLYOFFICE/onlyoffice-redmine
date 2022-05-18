@@ -32,7 +32,7 @@
    @containers.each do |container|
      container.attachments.each do |attachment|
         ext = attachment.disk_filename[attachment.disk_filename.index(".")+1..]
-        is_convert = is_convert + [FormatUtility.format_supported(ext).length == 0 ? false : true]
+        is_convert = is_convert + [FormatUtility.format_supported(ext).length != 0]
         is_openable_array = is_openable_array + [FileUtility.is_openable(attachment)]
      end
    end
