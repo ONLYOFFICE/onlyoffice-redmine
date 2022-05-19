@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 %>
-<% if User.current.allowed_to?(:add_documents, @file.project) %>
+<% if DocumentHelper.permission_to_read_file(User.current, @file.project, @file.container_type) %>
 <%= stylesheet_link_tag 'onlyofficeConversion', plugin: 'onlyoffice_redmine' %>
 
     <h2><%= l(:onlyoffice_convert_dropdown) %></h2>
@@ -26,7 +26,9 @@
     <%= hidden_field_tag 'ajax', true %>
     <%= render :partial => 'form', :locals => {:f => f} %>
     <div style = "display: flex; align-items: center;" >
-        <p><%= submit_tag l(:onlyoffice_convert_submit), onclick: "isButton(this)", id: "convert", data: { disable_with: false }%></p>
+        <% if DocumentHelper.permission_to_edit_file(User.current, @file.project, @file.container_type) %>
+          <p><%= submit_tag l(:onlyoffice_convert_submit), onclick: "isButton(this)", id: "convert", data: { disable_with: false }%></p>
+        <% end %>
         <p><%= submit_tag l(:label_no_preview_download), onclick: "isButton(this)", id: "download_as", data: { disable_with: false } %></p>
         <p><%= link_to l(:button_cancel), back_url %></p>
         <div id="progress_bar" style = "display: none">

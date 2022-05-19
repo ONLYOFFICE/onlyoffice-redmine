@@ -25,7 +25,7 @@
     (DocumentHelper.permission_to_edit_file(user, attachment.project, attachment.container_type) || user.admin)) && project_is_not_readonly
 
   ext = attachment.filename[attachment.filename.index(".")+1..]
-  is_conversion = FormatUtility.format_supported(ext).length > 0 ? true : false
+  is_conversion = FormatUtility.format_supported(ext).length > 0 && DocumentHelper.permission_to_read_file(user, attachment.project, attachment.container_type)
 %>
 
 
