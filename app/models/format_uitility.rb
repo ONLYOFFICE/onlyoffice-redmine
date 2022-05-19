@@ -61,8 +61,7 @@ class FormatUtility
                     @@supported_formats = ["docm", "docx", "docxf", "dotm", "dotx", "epub", "fb2", "html", "odt", "ott", "pdf", "pdfa", "txt"]
                 when "txt" 
                     @@supported_formats = []
-                    #@@supported_formats = ["docm", "docx", "docxf", "dotm", "dotx", "epub", "fb2", "html", "odt", "ott", "pdf", "pdfa", "rtf"]
-                when "xps" 
+                when "xps"
                     @@supported_formats = ["pdf", "pdfa"]
                 when "xml" 
                     @@supported_formats = ["docm", "docx", "docxf", "dotm", "dotx", "epub", "fb2", "html", "odt", "ott", "pdf", "pdfa", "rtf", "txt"]
@@ -72,8 +71,7 @@ class FormatUtility
 
                 when "csv" 
                     @@supported_formats = []
-                    #@@supported_formats = ["ods", "ots", "pdf", "pdfa", "xlsm", "xlsx", "xltm", "xltx"]
-                when "fods" 
+                when "fods"
                     @@supported_formats = ["csv", "ods", "ots", "pdf", "pdfa", "xlsm", "xlsx", "xltm", "xltx"]
                 when "ods" 
                     @@supported_formats = ["csv", "ots", "pdf", "pdfa", "xlsm", "xlsx", "xltm", "xltx"]

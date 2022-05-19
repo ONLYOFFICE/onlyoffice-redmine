@@ -46,7 +46,7 @@
 
 <script type="text/javascript" language="javascript">
     if (<%= view_permission || edit_permission%>) {
-        addOnlyOfficeButton(<%= raw FileUtility.get_all_available_formats %>, <%= raw attachments_disk_filenames %>);
+        addOnlyOfficeButton(<%= raw FileUtility.get_all_available_formats %>, <%= raw attachments_disk_filenames %>, <%= raw is_convert %>, <%= @page.id %>, "WikiPage");
         var onlyofficeButtons = document.getElementsByClassName("onlyoffice-editor-button");
         for (var i = 0; i < onlyofficeButtons.length; i++) {
             if (<%= view_permission %>) {
@@ -57,7 +57,6 @@
             }
         }
 
-        addOnlyOfficeConvert(<%= raw is_convert %>, <%= raw FileUtility.get_all_available_formats %>, <%= raw attachments_disk_filenames %>, <%= @page.id %>, "WikiPage");
         var onlyofficeButtonsConvert = document.getElementsByClassName("onlyoffice-editor-button-convert");
         for (var i = 0; i < onlyofficeButtonsConvert.length; i++) {
             onlyofficeButtonsConvert[i].title = "<%= l(:onlyoffice_convert_dropdown) %>";
