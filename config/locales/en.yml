@@ -1,7 +1,7 @@
 en:
   open_in_onlyoffice: "Open in ONLYOFFICE"
   edit_in_onlyoffice: "Edit in ONLYOFFICE"
-  onlyoffice_settings_doc_url: "Document Editing Service address"
+  onlyoffice_settings_doc_url: "Document Editing Service address (leave blank to disable the plugin)"
   onlyoffice_settings_jwtsecret: "Secret key (leave blank to disable)"
   onlyoffice_settings_forcesave: "Enable Force Save"
   onlyoffice_settings_file_type: "Open the file for editing (due to format restrictions, the data might be lost when saving to the formats from the list below)"
@@ -26,3 +26,4 @@ en:
   onlyoffice_create_docxf: "Form template"
   onlyoffice_attachment_create_error: "Error while creating"
   onlyoffice_editor_demo_enabled: "You are using public demo ONLYOFFICE Document Server. Please do not store private sensitive data."
+  onlyoffice_deactivate: "ONLYOFFICE отключён"

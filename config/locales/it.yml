@@ -1,7 +1,7 @@
 it:
   open_in_onlyoffice: "Aprire in ONLYOFFICE"
   edit_in_onlyoffice: "Modifica in ONLYOFFICE"
-  onlyoffice_settings_doc_url: "Indirizzo del servizio di modifica documentis"
+  onlyoffice_settings_doc_url: "Document Editing Service address (leave blank to disable the plugin)"
   onlyoffice_settings_jwtsecret: "Chiave segreta (lasciare vuoto per disabilitare)"
   onlyoffice_settings_forcesave: "Abilita salvataggio forzato"
   onlyoffice_settings_file_type: "Apri il file per la modifica (a causa di restrizioni di formato, i dati potrebbero andare persi durante il salvataggio nei formati della lista sottostante)"
@@ -26,3 +26,4 @@ it:
   onlyoffice_create_docxf: "Modello di modulo"
   onlyoffice_attachment_create_error: "Errore durante la creazione"
   onlyoffice_editor_demo_enabled: "Stai utilizzando la versione demo pubblica di ONLYOFFICE Docs. Non memorizzare dati sensibili privati."
+  onlyoffice_deactivate: "ONLYOFFICE отключён"

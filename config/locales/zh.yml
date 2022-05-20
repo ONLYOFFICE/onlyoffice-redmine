@@ -1,7 +1,7 @@
 zh:
   open_in_onlyoffice: "用 ONLYOFFICE 打开"
   edit_in_onlyoffice: "在ONLYOFFICE中编辑"
-  onlyoffice_settings_doc_url: "文档编辑的服务地址"
+  onlyoffice_settings_doc_url: "Document Editing Service address (leave blank to disable the plugin)"
   onlyoffice_settings_jwtsecret: "秘钥(留空为关闭)"
   onlyoffice_settings_forcesave: "启用强制保存"
   onlyoffice_settings_file_type: "默认的文件编辑器 (由于文件格式限制，保存为下列格式时，数据可能会缺失)"
@@ -26,4 +26,4 @@ zh:
   onlyoffice_create_docxf: "表单模板"
   onlyoffice_attachment_create_error: "创建时发生错误"
   onlyoffice_editor_demo_enabled: "您正在使用公开ONLYOFFICE Docs服务器的演示，请勿存储隐私数据。"
-  
+  onlyoffice_deactivate: "ONLYOFFICE отключён"
