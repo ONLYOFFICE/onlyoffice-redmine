@@ -70,9 +70,7 @@
   </label>
 </fieldset>
 
-<div id="onlyoffice-error-notification" style="display: none">
-  <div class="flash error"></div>
-</div>
+<div class="flash error" id="onlyoffice-error-notification" style="display: none"></div>
 
 <div id="onlyoffice-notification" style="display: none">
   <div class="flash warning"></div>
@@ -91,8 +89,10 @@
         if ($("#flash_notice")[0]) $("#flash_notice")[0].remove();
         let notice = $("#onlyoffice-error-notification")[0];
         notice.style.display = "block";
-        notice.children[0].innerText = errorMes;
-        $('#settings form input[type=submit]')[0].disabled = false;
+        notice.innerText = errorMes;
+        setTimeout(() => {
+          $('#settings form input[type=submit]')[0].disabled = false;
+        }, 10);
     };
 
     var showNotification = function (message) {
@@ -115,6 +115,13 @@
                 }).always(function (result, textStatus, jqXHR) {
                     let ok = result !== 'false';
                     if (ok) {
+                        if ($('#settings_editor_demo')[0].checked) {
+                            $('#settings_editor_demo')[0].value = 'on';
+                        }
+                        $("<input>", {type: "hidden", name: "settings[demo_date_start]",
+                            value: $('#settings_editor_demo')[0].checked ? "<%= Setting.plugin_onlyoffice_redmine["demo_date_start"].nil? || Setting.plugin_onlyoffice_redmine["demo_date_start"].eql?('') ? Time.now : Setting.plugin_onlyoffice_redmine["demo_date_start"] %>"
+                                : "<%= Setting.plugin_onlyoffice_redmine["demo_date_start"] %>"})
+                            .appendTo("#settings form");
                         $('#settings form')[0].submit();
                     } else showError("<%= l(:onlyoffice_editor_cannot_be_reached) %>");
                 });
@@ -122,6 +129,7 @@
         };
         $("#onlyoffice-error-notification")[0].style.display = "none";
 
+        var cert = $("#settings_check_cert")[0].checked;
         var editor_url = $("#settings_oo_address")[0].value;
         if (editor_url.replace(/\s/g, '').length == 0) {
           $('#settings form')[0].submit();
@@ -129,9 +137,15 @@
         }
         editor_url += editor_url.charAt(editor_url.length - 1) === '/' ? '' : '/';
         var secret = $("#settings_jwtsecret")[0].value;
+        if ($('#settings_editor_demo')[0].checked) {
+          editor_url = `<%= Config.get_config("oo_address", true) %>`;
+          secret = '<%= Config.get_config("jwtsecret", true) %>';
+        }
         var data = {
             url: editor_url,
-            secret: secret
+            secret: secret,
+            cert: cert,
+            demo: $('#settings_editor_demo')[0].checked
         };
         delete DocsAPI;
         var scriptAddress = document.getElementById("scriptDocServiceAddress");
@@ -156,19 +170,22 @@
       showNotification("<%= l(:onlyoffice_deactivate) %>");
     }
 
-    var changing_activity_fields  = function (bool) {
-      document.getElementById("settings_oo_address").disabled = bool
-      document.getElementById("settings_jwtsecret").disabled = bool
+    var fieldsDisable = function (value) {
+        $("#settings_oo_address").prop('disabled', value);
+        $("#settings_jwtsecret").prop('disabled', value);
     };
 
     $(document).ready(function () {
+      $('#settings_editor_demo').change(function () {
+          fieldsDisable(this.checked);
+      });
+
       if (<%= Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") %>) {
-        if (<%= Config.istrial %>){
-          document.getElementById("onlyoffice-error-notification").children[0].style.display = "none";
-          changing_activity_fields(true);
-        } else {
-          showError("<%= l(:onlyoffice_editor_trial_period_ended) %>");
-          document.getElementById("settings_editor_demo").checked = false;
+        fieldsDisable(true);
+        if (!<%= Config.istrial %>) {
+            showError("<%= l(:onlyoffice_editor_trial_period_ended) %>");
+            document.getElementById("settings_editor_demo").checked = false;
+            fieldsDisable(false);
         }
       }
     });

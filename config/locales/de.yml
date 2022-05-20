@@ -25,4 +25,5 @@ de:
   onlyoffice_create_pptx: "Präsentation"
   onlyoffice_create_docxf: "Formularvorlage"
   onlyoffice_attachment_create_error: "Fehler beim Erstellen "
+  onlyoffice_editor_demo_enabled: "Du verwendest den öffentlichen Demo ONLYOFFICE Docs Server. Bitte benutze ihn nicht zum Speichern von Deinen privaten sensiblen Daten."
   onlyoffice_deactivate: "ONLYOFFICE отключён"

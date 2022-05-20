@@ -32,7 +32,7 @@ class CallbackHelper
       if JWTHelper.is_enabled
         inHeader = false
         token = nil
-        jwtHeader = Config.get_config("jwtHeader")
+        jwtHeader = JWTHelper.jwt_header
         if data["token"]
           token = JWTHelper.decode(data["token"])
         elsif request.headers[jwtHeader]
@@ -63,7 +63,9 @@ class CallbackHelper
       res = do_request(FileUtility.replace_doc_edito_url_to_internal(download_url))
       data = res.body
 
-      check_cert(download_url)
+      uri = URI.parse(FileUtility.replace_doc_edito_url_to_internal(download_url))
+      http = Net::HTTP.new(uri.host, uri.port)
+      check_cert(uri.to_s, http)
 
       if data == nil
         raise 'stream is null'
@@ -74,11 +76,11 @@ class CallbackHelper
       end
     end
 
-    def do_request(url)
-      uri = URI.parse(FileUtility.replace_doc_edito_url_to_internal(url))
+    def do_request(url, force = false)
+      uri = URI.parse(force ? url : FileUtility.replace_doc_edito_url_to_internal(url))
       http = Net::HTTP.new(uri.host, uri.port)
 
-      check_cert(uri)
+      check_cert(uri.to_s, http)
 
       req = Net::HTTP::Get.new(uri)
       res = http.request(req)
@@ -106,14 +108,15 @@ class CallbackHelper
         uri = URI.parse(document_command_url)  # parse the document command url
         http = Net::HTTP.new(uri.host, uri.port)  # create a connection to the http server
 
-        check_cert(uri)
+        check_cert(uri.to_s, http)
 
         req = Net::HTTP::Post.new(uri.request_uri)  # create the post request
         req.add_field("Content-Type", "application/json")  # set headers
         JWTHelper.init
         if !secret.nil? || JWTHelper.is_enabled
           payload["token"] = JWTHelper.encode(payload, secret)  # get token and save it to the payload
-          jwtHeader = "Authorization"  # get signature authorization header
+          demo_header = Config.get_config("jwtHeader")
+          jwtHeader = demo_header.nil? ? JWTHelper.jwt_header : demo_header  # get signature authorization header
           req.add_field(jwtHeader, "Bearer #{JWTHelper.encode({ :payload => payload }, secret)}")  # set it to the request with the Bearer prefix
         end
         req.body = payload.to_json   # convert the payload object into the json format
@@ -178,10 +181,12 @@ class CallbackHelper
       return saved
     end
 
-    def check_cert(url)
-      if Setting.plugin_onlyoffice_redmine["check_cert"].eql?("on")
+    def check_cert(uri, http)
+      if uri.start_with? 'https'
         http.use_ssl = true
-        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        if Setting.plugin_onlyoffice_redmine["check_cert"].eql?("on")
+          http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        end
       end
     end
   

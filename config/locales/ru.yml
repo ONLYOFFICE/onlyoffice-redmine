@@ -25,5 +25,5 @@ ru:
   onlyoffice_create_pptx: "Презентация"
   onlyoffice_create_docxf: "Шаблон формы"
   onlyoffice_attachment_create_error: "Ошибка при создании"
+  onlyoffice_editor_demo_enabled: "Вы используете публичный демонстрационный сервер ONLYOFFICE Docs. Пожалуйста, не храните конфиденциальные данные."
   onlyoffice_deactivate: "ONLYOFFICE отключён"
-
