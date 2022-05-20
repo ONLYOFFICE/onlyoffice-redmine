@@ -1,5 +1,5 @@
 <%#
-# (c) Copyright Ascensio System SIA 2021
+# (c) Copyright Ascensio System SIA 2022
 # http://www.onlyoffice.com
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,86 +16,91 @@
 %>
 
 <%= render :parent %>
-<%= javascript_include_tag "onlyofficeMenu", :plugin => "onlyoffice_redmine" %>
+<% if OnlyofficeController.checking_activity_onlyoffice %>
 
-<%
-  view_permission = false
-  edit_permission = false
-  user_roles = User.current.roles_for_project(@project)
-  user_roles.each do |role|
-    if role.permissions.include? :view_documents
-      view_permission = true
+  <%= javascript_include_tag "onlyofficeMenu", :plugin => "onlyoffice_redmine" %>
+
+  <%
+    view_permission = false
+    edit_permission = false
+    user_roles = User.current.roles_for_project(@project)
+    user_roles.each do |role|
+      if role.permissions.include? :view_documents
+        view_permission = true
+      end
+      if role.permissions.include? :edit_documents
+        edit_permission = true
+      end
     end
-    if role.permissions.include? :edit_documents
-      edit_permission = true
+    project_is_not_readonly = @project.status != 5
+
+    edit_permission = (edit_permission || User.current.admin) && project_is_not_readonly
+    is_editable_array = []
+    attachments_disk_filenames = []
+    @document.attachments.each do |attachment|
+      is_editable_array = is_editable_array + [DocumentHelper.is_editable(attachment)]
+      attachments_disk_filenames = attachments_disk_filenames + [attachment.disk_filename]
     end
-  end
+  %>
 
-  is_editable_array = []
-  attachments_disk_filenames = []
-  @document.attachments.each do |attachment|
-    is_editable_array = is_editable_array + [DocumentHelper.is_editable(attachment)]
-    attachments_disk_filenames = attachments_disk_filenames + [attachment.disk_filename]
-  end
-%>
+  <% if User.current.allowed_to?(:add_documents, @project) %>
 
-<% if User.current.allowed_to?(:add_documents, @project) %>
+    <% content_for :header_tags do %>
+      <%= stylesheet_link_tag 'onlyoffice-icons', plugin: 'onlyoffice_redmine' %>
+    <% end %>
 
-  <% content_for :header_tags do %>
-    <%= stylesheet_link_tag 'onlyoffice-icons', plugin: 'onlyoffice_redmine' %>
-  <% end %>
-
-  <span id="onlyoffice-create-dropdown" class="drdn hidden">
-    <span class="drdn-trigger">
-        <span><%= l(:onlyoffice_create_dropdown) %> <span class="icon-only icon-actions" title="<%= l(:onlyoffice_create_dropdown)%>"><%= l(:onlyoffice_create_dropdown)%></span></span>
+    <span id="onlyoffice-create-dropdown" class="drdn hidden">
+      <span class="drdn-trigger">
+          <span><%= l(:onlyoffice_create_dropdown) %> <span class="icon-only icon-actions" title="<%= l(:onlyoffice_create_dropdown)%>"><%= l(:onlyoffice_create_dropdown)%></span></span>
+      </span>
+      <div class="drdn-content">
+        <%= form_tag(onlyoffice_create_new_doc_attachment_path(@document, @project), :multipart => true, :class => "drdn-items") do %>
+          <%= submit_tag(l(:onlyoffice_create_docx),:class => 'icon onlyoffice-create docx', :name => 'docType') %>
+          <%= submit_tag(l(:onlyoffice_create_xlsx),:class => 'icon onlyoffice-create xlsx', :name => 'docType') %>
+          <%= submit_tag(l(:onlyoffice_create_pptx),:class => 'icon onlyoffice-create pptx', :name => 'docType') %>
+          <%= submit_tag(l(:onlyoffice_create_docxf),:class => 'icon onlyoffice-create docxf', :name => 'docType') %>
+        <% end %>
+      </div>
     </span>
-    <div class="drdn-content">
-      <%= form_tag(onlyoffice_create_new_doc_attachment_path(@document, @project), :multipart => true, :class => "drdn-items") do %>
-        <%= submit_tag(l(:onlyoffice_create_docx),:class => 'icon onlyoffice-create docx', :name => 'docType') %>
-        <%= submit_tag(l(:onlyoffice_create_xlsx),:class => 'icon onlyoffice-create xlsx', :name => 'docType') %>
-        <%= submit_tag(l(:onlyoffice_create_pptx),:class => 'icon onlyoffice-create pptx', :name => 'docType') %>
-        <%= submit_tag(l(:onlyoffice_create_docxf),:class => 'icon onlyoffice-create docxf', :name => 'docType') %>
-      <% end %>
-    </div>
-  </span>
 
-  <% @document.custom_field_values.each do |value| %>
-    <p><%= custom_field_tag_with_label :document, value %></p>
+    <% @document.custom_field_values.each do |value| %>
+      <p><%= custom_field_tag_with_label :document, value %></p>
+    <% end %>
+
+    <script type="text/javascript" language="javascript">
+        var container = document.getElementById("attach_files_link").parentElement;
+        addOnlyOfficeCreateButton(container);
+    </script>
+
+    <style>
+      #onlyoffice-create-dropdown {
+          margin-left: 10px;
+      }
+      #onlyoffice-create-dropdown .drdn-content {
+          top: auto;
+      }
+      #onlyoffice-create-dropdown .drdn-items input.icon {
+          text-align: left;
+          width: 100%;
+          padding-left: 24px;
+          background-position-x: 4px;
+      }
+    </style>
+
   <% end %>
 
   <script type="text/javascript" language="javascript">
-      var container = document.getElementById("attach_files_link").parentElement;
-      addOnlyOfficeCreateButton(container);
+      if (<%= view_permission || edit_permission%>) {
+          addOnlyOfficeButton(<%= raw FileUtility.get_all_available_formats %>, <%= raw attachments_disk_filenames %>);
+          var onlyofficeButtons = document.getElementsByClassName("onlyoffice-editor-button");
+          for (var i = 0; i < onlyofficeButtons.length; i++) {
+              if (<%= view_permission %>) {
+                  onlyofficeButtons[i].title = "<%= l(:open_in_onlyoffice) %>";
+              }
+              if (<%= is_editable_array %>[parseInt(onlyofficeButtons[i].id.replace("onlyoffice-button-", ""))] && <%= edit_permission %>) {
+                  onlyofficeButtons[i].title = "<%= l(:edit_in_onlyoffice) %>";
+              }
+          }
+      }
   </script>
-
-  <style>
-    #onlyoffice-create-dropdown {
-        margin-left: 10px;
-    }
-    #onlyoffice-create-dropdown .drdn-content {
-        top: auto;
-    }
-    #onlyoffice-create-dropdown .drdn-items input.icon {
-        text-align: left;
-        width: 100%;
-        padding-left: 24px;
-        background-position-x: 4px;
-    }
-  </style>
-
 <% end %>
-
-<script type="text/javascript" language="javascript">
-    if (<%= view_permission || edit_permission%>) {
-        addOnlyOfficeButton(<%= raw FileUtility.get_all_available_formats %>, <%= raw attachments_disk_filenames %>);
-        var onlyofficeButtons = document.getElementsByClassName("onlyoffice-editor-button");
-        for (var i = 0; i < onlyofficeButtons.length; i++) {
-            if (<%= view_permission %>) {
-                onlyofficeButtons[i].title = "<%= l(:open_in_onlyoffice) %>";
-            }
-            if (<%= is_editable_array %>[parseInt(onlyofficeButtons[i].id.replace("onlyoffice-button-", ""))] && <%= edit_permission %>) {
-                onlyofficeButtons[i].title = "<%= l(:edit_in_onlyoffice) %>";
-            }
-        }
-    }
-</script>

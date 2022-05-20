@@ -1,5 +1,5 @@
 <%#
-# (c) Copyright Ascensio System SIA 2021
+# (c) Copyright Ascensio System SIA 2022
 # http://www.onlyoffice.com
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,11 +23,27 @@
   <%= content_tag(:label, l(:onlyoffice_settings_jwtsecret)) %>
   <%= text_field_tag 'settings[jwtsecret]', settings['jwtsecret'] %>
 </p>
-
+<fieldset>
+  <legend>
+    <span><%= l(:onlyoffice_additional_settings) %></span>
+  </legend>
+  <p>
+    <%= content_tag(:label, l(:onlyoffice_additional_settings_editor)) %>
+    <%= text_field_tag 'settings[inner_editor]', settings['inner_editor'], :placeholder => "http://docserver/" %>
+  </p>
+  <p>
+    <%= content_tag(:label, l(:onlyoffice_additional_settings_server)) %>
+    <%= text_field_tag 'settings[inner_server]', settings['inner_server'], :placeholder => "http://redmine/" %>
+  </p>
+</fieldset>
 <fieldset>
   <legend>
     <span><%= l(:onlyoffice_settings_editor_view) %></span>
   </legend>
+  <label class="floating">
+    <%= check_box_tag 'settings[editor_demo]', settings['editor_demo'], settings['editor_demo'].eql?('on') %>
+    <%= l(:onlyoffice_settings_editor_demo) %>
+  </label>
   <label class="floating">
     <%= check_box_tag 'settings[editor_chat]', settings['editor_chat'], settings['editor_chat'].eql?('on') %>
     <%= l(:onlyoffice_settings_editor_view_chat) %>
@@ -48,8 +64,135 @@
     <%= check_box_tag 'settings[editor_toolbar_no_tabs]', settings['editor_toolbar_no_tabs'], settings['editor_toolbar_no_tabs'].eql?('on') %>
     <%= l(:onlyoffice_settings_editor_view_toolbar) %>
   </label>
+  <label class="floating">
+    <%= check_box_tag 'settings[check_cert]', settings['check_cert'], settings['check_cert'].eql?('on') %>
+    <%= l(:onlyoffice_settings_check_cert) %>
+  </label>
 </fieldset>
 
+<div class="flash error" id="onlyoffice-error-notification" style="display: none"></div>
+
+<div id="onlyoffice-notification" style="display: none">
+  <div class="flash warning"></div>
+</div>
+
 <script type="text/javascript" language="javascript">
-    document.getElementsByClassName("box tabular settings")[0].classList.remove("settings")
+    document.getElementsByClassName("box tabular settings")[0].classList.remove("settings");
+
+    var contentDiv = document.getElementById("content");
+    contentDiv.insertBefore($("#onlyoffice-error-notification")[0], document.getElementsByTagName("h2")[0]);
+    contentDiv.insertBefore($("#onlyoffice-notification")[0], document.getElementsByTagName("h2")[0]);
+</script>
+
+<script type="text/javascript" language="javascript">
+    var showError = function (errorMes) {
+        if ($("#flash_notice")[0]) $("#flash_notice")[0].remove();
+        let notice = $("#onlyoffice-error-notification")[0];
+        notice.style.display = "block";
+        notice.innerText = errorMes;
+        setTimeout(() => {
+          $('#settings form input[type=submit]')[0].disabled = false;
+        }, 10);
+    };
+
+    var showNotification = function (message) {
+        let notice = $("#onlyoffice-notification")[0];
+        notice.style.display = "block";
+        notice.children[0].innerText = message;
+    };
+
+    var checkSettings = function () {
+        var scriptCallback = function () {
+            var resultScript = typeof DocsAPI !== "undefined";
+            if (!resultScript) {
+                showError("<%= l(:onlyoffice_editor_cannot_be_reached) %>");
+            } else {
+                $.ajax({
+                    type: 'POST',
+                    url: '<%= onlyoffice_check_settings_path %>',
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(data)
+                }).always(function (result, textStatus, jqXHR) {
+                    let ok = result !== 'false';
+                    if (ok) {
+                        if ($('#settings_editor_demo')[0].checked) {
+                            $('#settings_editor_demo')[0].value = 'on';
+                        }
+                        $("<input>", {type: "hidden", name: "settings[demo_date_start]",
+                            value: $('#settings_editor_demo')[0].checked ? "<%= Setting.plugin_onlyoffice_redmine["demo_date_start"].nil? || Setting.plugin_onlyoffice_redmine["demo_date_start"].eql?('') ? Time.now : Setting.plugin_onlyoffice_redmine["demo_date_start"] %>"
+                                : "<%= Setting.plugin_onlyoffice_redmine["demo_date_start"] %>"})
+                            .appendTo("#settings form");
+                        $('#settings form')[0].submit();
+                    } else showError("<%= l(:onlyoffice_editor_cannot_be_reached) %>");
+                });
+            }
+        };
+        $("#onlyoffice-error-notification")[0].style.display = "none";
+
+        var cert = $("#settings_check_cert")[0].checked;
+        var editor_url = $("#settings_oo_address")[0].value;
+        if (editor_url.replace(/\s/g, '').length == 0) {
+          $('#settings form')[0].submit();
+          return
+        }
+        editor_url += editor_url.charAt(editor_url.length - 1) === '/' ? '' : '/';
+        var secret = $("#settings_jwtsecret")[0].value;
+        if ($('#settings_editor_demo')[0].checked) {
+          editor_url = `<%= Config.get_config("oo_address", true) %>`;
+          secret = '<%= Config.get_config("jwtsecret", true) %>';
+        }
+        var data = {
+            url: editor_url,
+            secret: secret,
+            cert: cert,
+            demo: $('#settings_editor_demo')[0].checked
+        };
+        delete DocsAPI;
+        var scriptAddress = document.getElementById("scriptDocServiceAddress");
+        if (scriptAddress) scriptAddress.parentNode.removeChild(scriptAddress);
+        var script = document.createElement('script');
+        script.id = "scriptDocServiceAddress";
+        script.type = 'text/javascript';
+        document.head.appendChild(script);
+        scriptAddress = document.getElementById("scriptDocServiceAddress");
+        scriptAddress.onload = scriptCallback;
+        scriptAddress.onerror = scriptCallback;
+        scriptAddress.src = editor_url + "web-apps/apps/api/documents/api.js";
+    };
+
+    var ele = $('#settings form')[0];
+    var settingsCallback = function (e) {
+        e.preventDefault();
+        checkSettings();
+    };
+    
+    if (!<%= OnlyofficeController.checking_activity_onlyoffice %>){
+      showNotification("<%= l(:onlyoffice_deactivate) %>");
+    }
+
+    var fieldsDisable = function (value) {
+        $("#settings_oo_address").prop('disabled', value);
+        $("#settings_jwtsecret").prop('disabled', value);
+    };
+
+    $(document).ready(function () {
+      $('#settings_editor_demo').change(function () {
+          fieldsDisable(this.checked);
+      });
+
+      if (<%= Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") %>) {
+        fieldsDisable(true);
+        if (!<%= Config.istrial %>) {
+            showError("<%= l(:onlyoffice_editor_trial_period_ended) %>");
+            document.getElementById("settings_editor_demo").checked = false;
+            fieldsDisable(false);
+        }
+      }
+    });
+
+    if(ele.addEventListener){
+        ele.addEventListener("submit", settingsCallback, false);
+    } else if(ele.attachEvent){
+        ele.attachEvent('onsubmit', settingsCallback);
+    }
 </script>

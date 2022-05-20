@@ -1,5 +1,5 @@
 #
-# (c) Copyright Ascensio System SIA 2021
+# (c) Copyright Ascensio System SIA 2022
 # http://www.onlyoffice.com
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +23,7 @@ get 'onlyoffice/editor/:id/:action_data', :to => 'onlyoffice#editor', :id => /\d
 post 'onlyoffice/callback/:id/:rss', :to => 'onlyoffice#callback', :id => /\d+/, :rss => /.*/
 post 'onlyoffice/save_as/:id', :to => 'onlyoffice#save_as', :id => /\d+/, :as => 'onlyoffice_save_as'
 
+post 'onlyoffice/check/settings', :to => 'onlyoffice#check_settings', :as => 'onlyoffice_check_settings'
 
 get 'onlyoffice_create/new/:ext/:project_id', :to => 'onlyoffice_create#new', :as => 'onlyoffice_create_new'
 

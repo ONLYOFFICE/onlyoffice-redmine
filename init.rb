@@ -1,5 +1,5 @@
 #
-# (c) Copyright Ascensio System SIA 2021
+# (c) Copyright Ascensio System SIA 2022
 # http://www.onlyoffice.com
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,9 +28,12 @@ Redmine::Plugin.register :onlyoffice_redmine do
 
   settings default: {'oo_address' => 'http://localhost/',
                      'jwtsecret' => '',
+                     'editor_demo' => '',
                      'editor_chat' => 'on',
                      'editor_help' => 'on',
                      'editor_compact_header' => '',
                      'editor_toolbar_no_tabs' => '',
-                     'editor_feedback' => 'on'}, partial: 'settings/onlyoffice_settings'
+                     'editor_feedback' => 'on',
+                     'check_cert' => '',
+                     'demo_date_start' => '' }, partial: 'settings/onlyoffice_settings'
 end

@@ -1,5 +1,5 @@
 #
-# (c) Copyright Ascensio System SIA 2021
+# (c) Copyright Ascensio System SIA 2022
 # http://www.onlyoffice.com
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,10 +17,17 @@
 
 class JWTHelper
   @jwt_secret = nil
-
+  @jwt_header = nil
+  
   class << self
     def init
-      @jwt_secret = Setting.plugin_onlyoffice_redmine["jwtsecret"]
+        @jwt_secret = Config.get_config("jwtsecret")
+        demo_header = Config.get_config("jwtHeader")
+        @jwt_header = demo_header.nil? ? "Authorization" : demo_header
+    end
+
+    def jwt_header
+      @jwt_header
     end
 
     def is_enabled
