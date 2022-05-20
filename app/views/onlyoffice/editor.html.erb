@@ -33,6 +33,9 @@
     };
     var onAppReady = function () {
         innerAlert("Document editor ready");
+        if (<%= Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") %>) {
+            docEditor.showMessage("<%= l(:onlyoffice_editor_demo_enabled) %>");
+        }
     };
     var onError = function (event) {
         if (event) innerAlert(event.data);

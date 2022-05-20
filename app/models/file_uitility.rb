@@ -79,14 +79,9 @@ class FileUtility
       return Config.check_valid_url(url)
     end
 
-    def get_redmine_internal_url
+    def get_redmine_internal_url(redmine_url)
       url = Setting.plugin_onlyoffice_redmine["inner_server"]
-      if !url.present?
-        port = Setting.host_name[Setting.host_name.rindex(':'), Setting.host_name.length]
-        host = Socket.ip_address_list.find { |ai| ai.ipv4? && !ai.ipv4_loopback? }.ip_address
-        url = Setting.protocol + "://" + host + port
-        return Config.check_valid_url(url)
-      end
+      return Config.check_valid_url(url.present? ? url : redmine_url)
     end
 
     def replace_doc_edito_url_to_internal(url)

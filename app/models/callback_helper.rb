@@ -32,7 +32,7 @@ class CallbackHelper
       if JWTHelper.is_enabled
         inHeader = false
         token = nil
-        jwtHeader = Config.get_config("jwtHeader")
+        jwtHeader = JWTHelper.jwt_header
         if data["token"]
           token = JWTHelper.decode(data["token"])
         elsif request.headers[jwtHeader]
@@ -59,24 +59,29 @@ class CallbackHelper
 
     end
 
-    def save_from_uri(path, download_url)
+    def save_from_uri(directory, filename, download_url)
       res = do_request(FileUtility.replace_doc_edito_url_to_internal(download_url))
       data = res.body
+
+      uri = URI.parse(FileUtility.replace_doc_edito_url_to_internal(download_url))
+      http = Net::HTTP.new(uri.host, uri.port)
+      check_cert(uri.to_s, http)
 
       if data == nil
         raise 'stream is null'
       end
 
-      File.open(path, 'wb') do |file|
+      FileUtils.mkdir_p(directory)
+      File.open(File.join(directory, filename), 'wb') do |file|
         file.write(data)
       end
     end
 
-    def do_request(url)
-      uri = URI.parse(FileUtility.replace_doc_edito_url_to_internal(url))
+    def do_request(url, force = false)
+      uri = URI.parse(force ? url : FileUtility.replace_doc_edito_url_to_internal(url))
       http = Net::HTTP.new(uri.host, uri.port)
 
-      check_cert(uri, http)
+      check_cert(uri.to_s, http)
 
       req = Net::HTTP::Get.new(uri)
       res = http.request(req)
@@ -106,14 +111,15 @@ class CallbackHelper
         uri = URI.parse(document_command_url)  # parse the document command url
         http = Net::HTTP.new(uri.host, uri.port)  # create a connection to the http server
 
-        check_cert(uri, http)
+        check_cert(uri.to_s, http)
 
         req = Net::HTTP::Post.new(uri.request_uri)  # create the post request
         req.add_field("Content-Type", "application/json")  # set headers
         JWTHelper.init
         if !secret.nil? || JWTHelper.is_enabled
           payload["token"] = JWTHelper.encode(payload, secret)  # get token and save it to the payload
-          jwtHeader = "Authorization"  # get signature authorization header
+          demo_header = Config.get_config("jwtHeader")
+          jwtHeader = demo_header.nil? ? JWTHelper.jwt_header : demo_header  # get signature authorization header
           req.add_field(jwtHeader, "Bearer #{JWTHelper.encode({ :payload => payload }, secret)}")  # set it to the request with the Bearer prefix
         end
 
@@ -151,11 +157,11 @@ class CallbackHelper
         new_date = callback_date.year.to_s[2,4] + callback_date.month.to_s + callback_date.day.to_s
         new_time = callback_date.hour.to_s + callback_date.minute.to_s + callback_date.second.to_s
 
-        new_disk_directory = callback_date.year.to_s + "/" + callback_date.month.to_s
+        new_disk_directory = callback_date.year.to_s + "/" + ("%02d" % callback_date.month.to_s)
         new_absolute_directory = attachment.diskfile.split("files")[0] + "files/" + new_disk_directory
         new_filename = new_date + new_time + "_" + attachment.disk_filename.split("_")[1]
 
-        save_from_uri(File.join(new_absolute_directory, new_filename), download_uri)
+        save_from_uri(new_absolute_directory, new_filename, download_uri)
 
         new_digest = Digest::SHA256.new
         new_filesize = attachment.filesize
@@ -172,17 +178,19 @@ class CallbackHelper
         delete_diskfile_by_digest(old_digest, old_diskfile)
 
         saved = 0
-      rescue StandardError => error
-        saved = 1
+      rescue => error
+        raise error.message
       end
 
       return saved
     end
 
-    def check_cert(url, http)
-      unless Setting.plugin_onlyoffice_redmine["check_cert"].eql?("on")
+    def check_cert(uri, http)
+      if uri.start_with? 'https'
         http.use_ssl = true
-        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        if Setting.plugin_onlyoffice_redmine["check_cert"].eql?("on")
+          http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        end
       end
     end
   

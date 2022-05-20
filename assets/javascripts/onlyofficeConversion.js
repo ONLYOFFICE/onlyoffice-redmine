@@ -77,6 +77,7 @@ var displayFormDownloadAs = function (bool) {
             showProgress(true);
             event.preventDefault();
             sendSubmit();
+            setTimeout(isDisable, 3000, false);
         }, false );
     } else {
         $('#onlyoffice-modal').dialog("close");
