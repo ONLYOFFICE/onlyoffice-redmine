@@ -59,7 +59,7 @@ class CallbackHelper
 
     end
 
-    def save_from_uri(path, download_url)
+    def save_from_uri(directory, filename, download_url)
       res = do_request(FileUtility.replace_doc_edito_url_to_internal(download_url))
       data = res.body
 
@@ -71,7 +71,8 @@ class CallbackHelper
         raise 'stream is null'
       end
 
-      File.open(path, 'wb') do |file|
+      FileUtils.mkdir_p(directory)
+      File.open(File.join(directory, filename), 'wb') do |file|
         file.write(data)
       end
     end
@@ -153,11 +154,11 @@ class CallbackHelper
         new_date = callback_date.year.to_s[2,4] + callback_date.month.to_s + callback_date.day.to_s
         new_time = callback_date.hour.to_s + callback_date.minute.to_s + callback_date.second.to_s
 
-        new_disk_directory = callback_date.year.to_s + "/" + callback_date.month.to_s
+        new_disk_directory = callback_date.year.to_s + "/" + ("%02d" % callback_date.month.to_s)
         new_absolute_directory = attachment.diskfile.split("files")[0] + "files/" + new_disk_directory
         new_filename = new_date + new_time + "_" + attachment.disk_filename.split("_")[1]
 
-        save_from_uri(File.join(new_absolute_directory, new_filename), download_uri)
+        save_from_uri(new_absolute_directory, new_filename, download_uri)
 
         new_digest = Digest::SHA256.new
         new_filesize = attachment.filesize
@@ -174,8 +175,8 @@ class CallbackHelper
         delete_diskfile_by_digest(old_digest, old_diskfile)
 
         saved = 0
-      rescue StandardError => error
-        saved = 1
+      rescue => error
+        raise error.message
       end
 
       return saved

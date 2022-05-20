@@ -149,6 +149,7 @@ class OnlyofficeController < AccountController
         saved = CallbackHelper.process_save(data, @attachment)
         render plain: '{"error":' + saved.to_s + '}'
       rescue => ex
+        logger.error(ex.full_message)
         render plain: '{"error":1, "message": "' + ex.message + '"}'
       end
       return
