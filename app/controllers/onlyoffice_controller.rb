@@ -25,7 +25,7 @@ class OnlyofficeController < AccountController
   before_action :file_readable, :read_authorize, :only => [ :editor ]
 
   def check_settings
-    render plain: is_valid_setings(params[:url], params[:secret])
+    render plain: is_valid_setings(params[:url], params[:secret], params[:cert], params[:demo])
   end
 
   def download
@@ -229,12 +229,19 @@ class OnlyofficeController < AccountController
     content_type
   end
 
-  def is_valid_setings(url, secret = nil)
+  def is_valid_setings(url, secret = nil, direct_cert, direct_demo)
     editor_base_url = url
     is_command = ""
 
     begin
-      res_health = CallbackHelper.do_request(editor_base_url + "healthcheck")
+      Setting.plugin_onlyoffice_redmine["editor_demo"] = direct_demo ? "on" : ""
+      Setting.plugin_onlyoffice_redmine["check_cert"] = direct_cert ? "on" : ""
+
+      demo_date = Setting.plugin_onlyoffice_redmine["demo_date_start"]
+      if direct_demo && (demo_date.nil? || demo_date.eql?(''))
+        Setting.plugin_onlyoffice_redmine["demo_date_start"] = Time.now.to_s
+      end
+      res_health = CallbackHelper.do_request(editor_base_url + "healthcheck", true)
 
       res_command = CallbackHelper.command_request("version",  nil, editor_base_url, secret)
       is_command += res_command["version"]

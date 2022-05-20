@@ -7,6 +7,8 @@ fr:
   onlyoffice_settings_file_type: "Ouvrir le fichier pour édition (en raison de restrictions de format, des données peuvent être perdues lors de l'enregistrement dans les formats de la liste ci-dessous)"
   onlyoffice_additional_settings: "Paramètres avancés du serveur"
   onlyoffice_additional_settings_editor: "Adresse du ONLYOFFICE Docs pour les demandes internes du serveur"
+  onlyoffice_settings_editor_demo: "Se connecter à la version démo de ONLYOFFICE Docs"
+  onlyoffice_editor_trial_period_ended: "La période d’essai de 30 jours est expirée, vous n’êtes plus en mesure de vous connecter à la version démo de ONLYOFFICE Docs."
   onlyoffice_additional_settings_server: "Adresse du serveur pour les demandes internes du ONLYOFFICE Docs"
   onlyoffice_settings_editor_view: "Paramètres de personnalisation de l'éditeur"
   onlyoffice_settings_editor_view_chat: "Afficher le bouton du menu du chat"
@@ -23,3 +25,5 @@ fr:
   onlyoffice_create_pptx: "Presentation"
   onlyoffice_create_docxf: "Modèle de formulaire"
   onlyoffice_attachment_create_error: "Une erreur lors de la création"
+  onlyoffice_editor_demo_enabled: "Vous utilisez la version démo de ONLYOFFICE Docs, proposée à des fins de tests. Veuillez ne pas stocker vos données confidentielles."
+  
