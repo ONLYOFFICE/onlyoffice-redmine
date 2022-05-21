@@ -27,11 +27,11 @@ form#conversion div p {
     height: 100%;
 }
 
-.display_none{
+.display_none {
     display: none;
 }
-.onlyoffice-notification{
+#onlyoffice-notification {
     display: none;
     width: 100%; 
-    padding-top: 0.5%;
+    place-self: end;
 }

@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 %>
-<%= stylesheet_link_tag 'onlyofficeConversion', plugin: 'onlyoffice_redmine' %>
+<%= stylesheet_link_tag 'onlyofficeConversion', :plugin => "onlyoffice_redmine" %>
 
 <%
   attachment_id = request.original_url[request.original_url.rindex("/") + 1, request.original_url.length]

@@ -28,7 +28,7 @@
     </p>
     <p>
         <%= label_tag "onlyoffice_convert_current_type", l(:onlyoffice_convert_current_type) %>
-        <%= text_field_tag "onlyoffice_convert_current_type", @ext, disabled: true, style: "background-color: transparent; border: none; color: black" %>
+        <%= content_tag :span, @ext, style: "color: black; line-height: 2em; margin-left: 2px" %>
         <%= hidden_field_tag 'onlyoffice_convert_current_type', @ext %>
     </p>
     <p>
@@ -38,14 +38,17 @@
 </fieldset>
 
 <script type="text/javascript" language="javascript">
+    var noticeTimeout = null;
     var showNotice = function (type) {
+        if (noticeTimeout != null) clearTimeout(noticeTimeout);
+        isDisable(false);
+        showProgress(false);
         var notice = $('#onlyoffice-notification')[0];
         notice.children[0].className = type === 'success' ? 'flash notice' : 'flash error';
         notice.children[0].innerText = type === 'success' ? '<%= l(:onlyoffice_convert_success) %>' : '<%= l(:onlyoffice_convert_error) %>';
         notice.style.display = 'block';
-        setTimeout(() => {
+        noticeTimeout = setTimeout(() => {
             notice.style.display = 'none';
-        }, 3000);
-        showProgress(false);
+        }, 2000);
     }
 </script>

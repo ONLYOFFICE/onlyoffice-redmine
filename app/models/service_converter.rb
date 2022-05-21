@@ -22,23 +22,16 @@ class ServiceConverter
   
     class << self
         # get the url of the converted file
-    def get_converted_uri(doc_server_url, title, document_uri, from_ext, to_ext, document_revision_id, is_async, file_pass, lang = nil, secret = nil)
+    def get_converted_uri(doc_server_url, title, document_uri, from_ext, to_ext, document_revision_id, secret = nil)
 
-        from_ext = from_ext == nil ? File.extname(document_uri).downcase : from_ext  # get the current document extension
-
-        # get the document key
-        document_revision_id = document_revision_id.empty? ? document_uri : document_revision_id
-        document_revision_id = generate_revision_id(document_revision_id)
-  
         payload = {  # write all the conversion parameters to the payload
-          :async => is_async,
+          :async => false,
           :url => document_uri,
           :outputtype => to_ext.delete('.'),
           :filetype => from_ext.delete('.'),
           :title => title,
           :key => document_revision_id,
-          :password => file_pass,
-          :region => lang
+          :region => I18n.locale
         }
   
         data = nil
@@ -46,7 +39,7 @@ class ServiceConverter
           uri = URI.parse(doc_server_url + @@document_converter_url)  # create the request url
           http = Net::HTTP.new(uri.host, uri.port)  # create a connection to the http server
   
-          CallbackHelper.check_cert(@@document_converter_url, http)
+          CallbackHelper.check_cert(uri.to_s, http)
   
           http.read_timeout = @@convert_timeout
           req = Net::HTTP::Post.new(uri.request_uri)  # create the post request
@@ -62,27 +55,12 @@ class ServiceConverter
           req.body = payload.to_json
           res = http.request(req)  # get the response
           data = res.body  # and take its body
-        rescue TimeoutError
-          # try again
         rescue => ex
           raise ex.message
         end
 
-        return data # get response url
-      end
-
-      # generate the document key value
-      def generate_revision_id(expected_key)
-  
-        require 'zlib'
-  
-        if expected_key.length > 20  # check if the expected key length is greater than 20
-          expected_key = (Zlib.crc32 expected_key).to_s  # calculate 32-bit crc value from the expected key and turn it into the string
-        end
-  
-        key = expected_key.gsub(/[^0-9a-zA-Z.=]/, '_')
-        key[(key.length - [key.length, 20].min)..key.length]  # the resulting key is of the length 20 or less
-
+        json_data = JSON.parse(data)
+        return get_response_uri(json_data)
       end
 
       # get the response url
@@ -92,7 +70,7 @@ class ServiceConverter
   
         error_element = file_result['error']
         if error_element != nil  # if an error occurs
-          raise 'ConvertError: ErrorCode = ' + error_element.to_i
+          raise 'ConvertError: ErrorCode = ' + error_element.to_s
         end
   
         is_end_convert = file_result['endConvert']  # check if the conversion is completed

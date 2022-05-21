@@ -18,7 +18,7 @@ function createConvertButton(is_edit, text, image) {
     } else {
         button.href = "#";
         button.onclick = function () {
-            displayFormDownloadAs(true);
+            displayFormDownloadAs();
         }
     }
     downloadButton.parentElement.insertBefore(button, downloadButton);

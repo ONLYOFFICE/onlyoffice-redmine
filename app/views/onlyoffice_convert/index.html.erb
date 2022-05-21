@@ -15,7 +15,8 @@
 # limitations under the License.
 %>
 <% if DocumentHelper.permission_to_read_file(User.current, @file.project, @file.container_type) %>
-<%= stylesheet_link_tag 'onlyofficeConversion', plugin: 'onlyoffice_redmine' %>
+<%= stylesheet_link_tag 'onlyofficeConversion', :plugin => "onlyoffice_redmine" %>
+<%= javascript_include_tag "onlyofficeConversion", :plugin => "onlyoffice_redmine" %>
 
     <h2><%= l(:onlyoffice_convert_dropdown) %></h2>
     <h2><%= @file.filename %></h2>
@@ -23,7 +24,6 @@
 <%= form_tag(onlyoffice_convert_path(@page.id), multipart: true, id: "conversion") do |f| %>
     <%= hidden_field_tag 'back_page', back_url %>
     <%= hidden_field_tag 'type', "" %>
-    <%= hidden_field_tag 'ajax', true %>
     <%= render :partial => 'form', :locals => {:f => f} %>
     <div style = "display: flex; align-items: center;" >
         <% if DocumentHelper.permission_to_edit_file(User.current, @file.project, @file.container_type) %>
@@ -54,16 +54,8 @@
 
     var form = $('#conversion')[0];
     var ajaxUrl = '<%= onlyoffice_convert_path(@page.id) %>';
-
-    form.addEventListener("submit", function(event) {
-        isDisable(true);
-        showProgress(true);
-        event.preventDefault();
-        sendSubmit();
-        setTimeout(isDisable, 3000, false);
-    }, false );
+    addSubmitEvents(form);
 
 </script>
-<%= javascript_include_tag "onlyofficeConversion", :plugin => "onlyoffice_redmine" %>
 
 <% end %>

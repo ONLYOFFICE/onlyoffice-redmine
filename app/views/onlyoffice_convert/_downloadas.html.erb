@@ -2,20 +2,15 @@
     @file_id = file_id
     @file = Attachment.find_by_id(@file_id)
     @file_name = @file.filename[0..@file.filename.index(".")-1]
-    @ext = @file.filename[@file.filename.index(".")+1..]
+    @ext = DocumentHelper.file_ext(@file.disk_filename).delete(".")
 
     @formats = FormatUtility.format_supported(@ext)
 %>
 
-<%= stylesheet_link_tag 'onlyofficeConversion', plugin: 'onlyoffice_redmine' %>
-
-
 <div id = "download_as" class="display_none">
         <h3 class="title"><%= l(:onlyoffice_convert_download_file_as) %></h3>
-
-        <%= form_tag(onlyoffice_convert_path(@file_id,@file_id), multipart: true, id: "conversion") do |f| %>
+        <%= form_tag(onlyoffice_convert_path(@file_id, @file_id), multipart: true, id: "conversion") do |f| %>
             <%= hidden_field_tag 'type', "download_as" %>
-            <%= hidden_field_tag 'ajax', true %>
             <%= render :partial => 'onlyoffice_convert/form' %>
             <div style = "display: flex; align-items: center;" >
                 <p><%= submit_tag l(:label_no_preview_download) %></p>
