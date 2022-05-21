@@ -16,30 +16,32 @@
 %>
 
 <%= render :parent %>
+<% if OnlyofficeController.checking_activity_onlyoffice %>
 
-<% if User.current.allowed_to?(:add_documents, @project) %>
+    <% if User.current.allowed_to?(:add_documents, @project) %>
 
-<% content_for :header_tags do %>
-    <%= stylesheet_link_tag 'onlyoffice-icons', plugin: 'onlyoffice_redmine' %>
-<% end %>
+    <% content_for :header_tags do %>
+        <%= stylesheet_link_tag 'onlyoffice-icons', plugin: 'onlyoffice_redmine' %>
+    <% end %>
 
-<span id="onlyoffice-create-dropdown" class="drdn hidden">
-    <span class="drdn-trigger">
-        <span><%= l(:onlyoffice_create_dropdown) %> <span class="icon-only icon-actions" title="<%= l(:onlyoffice_create_dropdown)%>"><%= l(:onlyoffice_create_dropdown)%></span></span>
-    </span>
-    <div class="drdn-content">
-        <div class="drdn-items">
-            <%= link_to l(:onlyoffice_create_docx), onlyoffice_create_new_path('docx', @project), :class => 'icon onlyoffice-create docx' %>
-            <%= link_to l(:onlyoffice_create_xlsx), onlyoffice_create_new_path('xlsx', @project), :class => 'icon onlyoffice-create xlsx' %>
-            <%= link_to l(:onlyoffice_create_pptx), onlyoffice_create_new_path('pptx', @project), :class => 'icon onlyoffice-create pptx' %>
-            <%= link_to l(:onlyoffice_create_docxf), onlyoffice_create_new_path('docxf', @project), :class => 'icon onlyoffice-create docxf' %>
+    <span id="onlyoffice-create-dropdown" class="drdn hidden">
+        <span class="drdn-trigger">
+            <span><%= l(:onlyoffice_create_dropdown) %> <span class="icon-only icon-actions" title="<%= l(:onlyoffice_create_dropdown)%>"><%= l(:onlyoffice_create_dropdown)%></span></span>
+        </span>
+        <div class="drdn-content">
+            <div class="drdn-items">
+                <%= link_to l(:onlyoffice_create_docx), onlyoffice_create_new_path('docx', @project), :class => 'icon onlyoffice-create docx' %>
+                <%= link_to l(:onlyoffice_create_xlsx), onlyoffice_create_new_path('xlsx', @project), :class => 'icon onlyoffice-create xlsx' %>
+                <%= link_to l(:onlyoffice_create_pptx), onlyoffice_create_new_path('pptx', @project), :class => 'icon onlyoffice-create pptx' %>
+                <%= link_to l(:onlyoffice_create_docxf), onlyoffice_create_new_path('docxf', @project), :class => 'icon onlyoffice-create docxf' %>
+            </div>
         </div>
-    </div>
-</span>
+    </span>
 
-<%= javascript_include_tag "onlyofficeMenu", :plugin => "onlyoffice_redmine" %>
-<script type="text/javascript" language="javascript">
-    addOnlyOfficeCreateButton(document.getElementsByClassName("contextual")[0]);
-</script>
+    <%= javascript_include_tag "onlyofficeMenu", :plugin => "onlyoffice_redmine" %>
+    <script type="text/javascript" language="javascript">
+        addOnlyOfficeCreateButton(document.getElementsByClassName("contextual")[0]);
+    </script>
 
+    <% end %>
 <% end %>
