@@ -48,7 +48,8 @@ class ServiceConverter
           JWTHelper.init
           if !secret.nil? || JWTHelper.is_enabled
             payload["token"] = JWTHelper.encode(payload, secret)  # get token and save it to the payload
-            jwtHeader = "Authorization"  # get signature authorization header
+            demo_header = Config.get_config("jwtHeader")
+            jwtHeader = demo_header.nil? ? JWTHelper.jwt_header : demo_header  # get signature authorization header
             req.add_field(jwtHeader, "Bearer #{JWTHelper.encode({ :payload => payload }, secret)}")  # set it to the request with the Bearer prefix
           end
   

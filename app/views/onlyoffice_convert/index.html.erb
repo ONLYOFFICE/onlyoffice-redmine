@@ -22,7 +22,6 @@
     <h2><%= @file.filename %></h2>
 
 <%= form_tag(onlyoffice_convert_path(@page.id), multipart: true, id: "conversion") do |f| %>
-    <%= hidden_field_tag 'back_page', back_url %>
     <%= hidden_field_tag 'type', "" %>
     <%= render :partial => 'form', :locals => {:f => f} %>
     <div style = "display: flex; align-items: center;" >

@@ -248,6 +248,9 @@ class OnlyofficeController < AccountController
 
     key = DocumentHelper.get_key(attachment)
     is_convert = 0
+    converted_file_url = nil
+    demo_before_update = Setting.plugin_onlyoffice_redmine["editor_demo"]
+    cert_before_update = Setting.plugin_onlyoffice_redmine["check_cert"]
 
     begin
       Setting.plugin_onlyoffice_redmine["editor_demo"] = direct_demo ? "on" : ""
@@ -263,14 +266,19 @@ class OnlyofficeController < AccountController
       is_command += res_command["version"]
 
       res_convert = ServiceConverter.get_converted_uri(editor_base_url, title, url_file.to_s, "docx", "pdf", key,  secret)
-      is_convert = JSON.parse(res_convert)['percent']
+      is_convert = res_convert[0]
+      converted_file_url = res_convert[1]
     rescue => ex
+      logger.error(ex)
+      Setting.plugin_onlyoffice_redmine["editor_demo"] = demo_before_update
+      Setting.plugin_onlyoffice_redmine["check_cert"] = cert_before_update
+      attachment.destroy
       return false
     end
 
     attachment.destroy
 
-    if is_command.empty? || is_convert != 100
+    if is_command.empty? || (is_convert != 100 && !converted_file_url.nil?)
       return false
     end
 

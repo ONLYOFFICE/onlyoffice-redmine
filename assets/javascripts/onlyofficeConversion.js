@@ -12,13 +12,13 @@ var sendSubmit = function () {
     var bar = $('#progress_label')[0];
 
     var data = {
-        back_page: (backPage == undefined) ? '' : backPage.value,
-        file_id: $('#file_id')[0].value, 
+        file_id: $('#file_id')[0].value,
         page_id: $('#page_id')[0].value, 
         page_type: $('#page_type')[0].value,
         field_name: $('#field_name')[0].value,
         onlyoffice_convert_current_type: $('#onlyoffice_convert_current_type')[0].value, 
-        onlyoffice_convert_end_type: $('#onlyoffice_convert_end_type')[0].value
+        onlyoffice_convert_end_type: $('#onlyoffice_convert_end_type')[0].value,
+        type: $('#type')[0].value
     };
 
     function _callAjax() {
@@ -44,13 +44,11 @@ var sendSubmit = function () {
                 }
                 if (response.percent && response.percent < 100) {
                     setTimeout(_callAjax, 1000);
-                } else {
-                    data.type = $('#type')[0].value;
-                    form.submit();
+                }
+                if (response.url) {
+                    window.location.href = response.url;
                     showNotice("success");
-                    if (back_page == undefined) {
-                        $('#onlyoffice-modal').dialog("close");
-                    }
+                    $('#onlyoffice-modal').dialog("close");
                 }
             }
         });
