@@ -7,6 +7,7 @@ class Config
             }
 
     class << self
+
         def get_config(key, for_settings = false)
             get = (Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") && istrial) || for_settings ? @trial_data[key] : Setting.plugin_onlyoffice_redmine[key]
             return key.eql?("oo_address") ? check_valid_url(get) : get

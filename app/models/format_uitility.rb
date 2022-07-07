@@ -118,9 +118,9 @@ class FormatUtility
             else
                 @@supported_formats = []
             end
-      
+
             return @@supported_formats
-      
+
         end
 
     end
