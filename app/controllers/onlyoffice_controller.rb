@@ -33,7 +33,7 @@ class OnlyofficeController < AccountController
   end
 
   def check_settings
-    render plain: is_valid_setings(params[:url], params[:secret], params[:cert], params[:demo])
+    render plain: is_valid_settings(params[:url], params[:secret], params[:cert], params[:demo])
   end
 
   def download
@@ -238,7 +238,7 @@ class OnlyofficeController < AccountController
     content_type
   end
 
-  def is_valid_setings(url, secret = nil, direct_cert, direct_demo)
+  def is_valid_settings(url, secret = nil, direct_cert, direct_demo)
     editor_base_url = url
     is_command = ""
 
