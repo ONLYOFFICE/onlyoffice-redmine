@@ -242,9 +242,9 @@ class OnlyofficeController < AccountController
     editor_base_url = url
     is_command = ""
 
-    attachment = OnlyofficeConvertController.crete_file(nil, "OnlyOfficeCheakConvertService.docx", "docx")
+    attachment = OnlyofficeConvertController.crete_file(nil, "OnlyOfficeCheakConvertService", "docx")
     url_file = send("download_named_attachment_url", attachment, attachment.filename)
-    title = attachment.filename[..attachment.disk_filename.index(".")] + 'pdf'
+    title = attachment.filename[..attachment.disk_filename.index(".")] + 'docx'
 
     key = DocumentHelper.get_key(attachment)
     is_convert = 0
@@ -265,7 +265,7 @@ class OnlyofficeController < AccountController
       res_command = CallbackHelper.command_request("version",  nil, editor_base_url, secret)
       is_command += res_command["version"]
 
-      res_convert = ServiceConverter.get_converted_uri(editor_base_url, title, url_file.to_s, "docx", "pdf", key,  secret)
+      res_convert = ServiceConverter.get_converted_uri(editor_base_url, title, url_file.to_s, "docx", "docx", key,  secret)
       is_convert = res_convert[0]
       converted_file_url = res_convert[1]
     rescue => ex

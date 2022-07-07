@@ -31,25 +31,25 @@ class OnlyofficeConvertController < ApplicationController
           @@res_convert = ServiceConverter.get_converted_uri(editor_base_url, title, url.to_s, current_type, next_type, key)
           if @@res_convert[0] == 100 && !@@res_convert[1].nil?
             if params[:type].eql?('download_as')
-              render plain: '{ "url": "' + @@res_convert[1].to_s + '"}'
+              render plain: '{ "url": "' + @@res_convert[1].to_s + '" }'
             else
               @page, back_page = get_page(params[:page_id], params[:page_type], attachment)
-              new_attachment = OnlyofficeConvertController.crete_file(@@res_convert[1], title, next_type)
+              new_attachment = OnlyofficeConvertController.crete_file(@@res_convert[1], file_name, next_type)
               @page.attachments << new_attachment
               if @page.save
                 flash[:notice] = l(:notice_successful_create)
               else
                 flash[:error] = l(:onlyoffice_attachment_create_error)
               end
-              render plain: '{ "url": "' + back_page.to_s + '"}'
+              render plain: '{ "url": "' + back_page.to_s + '" }'
             end
           else
-            render plain: '{ "percent": "' + @@res_convert[0].to_s + '"}'
+            render plain: '{ "percent": "' + @@res_convert[0].to_s + '" }'
             return
           end
         rescue => ex
           logger.error(ex.full_message)
-          render plain: '{ "error": "' + ex.message + '"}'
+          render plain: '{ "error": "' + ex.message + '" }'
           return
         end
     end
@@ -85,7 +85,7 @@ class OnlyofficeConvertController < ApplicationController
             path = url.nil? ? Rails.root.join('plugins', 'onlyoffice_redmine', 'assets', 'document-templates', 'en-US', 'new.docx') : url
             file = url.nil? ? File.open(path, "rb") { |file| file.read } : URI.open(url, "rb").read
             attachment = Attachment.create(:file => file, :author => User.current)
-            attachment.filename = file_name
+            attachment.filename = file_name + "." + ext
             attachment.content_type = FileUtility.get_mimetype(ext)
             attachment.save
             return attachment
