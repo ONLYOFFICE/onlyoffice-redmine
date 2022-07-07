@@ -17,22 +17,23 @@
 
 <%= render :parent %>
 <% if OnlyofficeController.checking_activity_onlyoffice %>
+    <%= javascript_include_tag "onlyofficeMenu", :plugin => "onlyoffice_redmine" %>
 
-    <% view_or_manage_permission = false
-    user_roles = User.current.roles_for_project(@project)
-    user_roles.each do |role|
-        if (role.permissions.include? :manage_files) || (role.permissions.include? :view_files)
-        view_or_manage_permission = true
+    <% 
+        view_or_manage_permission = false
+        user_roles = User.current.roles_for_project(@project)
+        user_roles.each do |role|
+            if (role.permissions.include? :manage_files) || (role.permissions.include? :view_files)
+            view_or_manage_permission = true
+            end
         end
-    end
-
-    view_or_manage_permission = view_or_manage_permission || User.current.admin
-    is_openable_array = []
-    @containers.each do |container|
-        container.attachments.each do |attachment|
-        is_openable_array = is_openable_array + [FileUtility.is_openable(attachment)]
+        view_or_manage_permission = view_or_manage_permission || User.current.admin
+        is_openable_array = []
+        @containers.each do |container|
+            container.attachments.each do |attachment|
+            is_openable_array = is_openable_array + [FileUtility.is_openable(attachment)]
+            end
         end
-    end
     %>
 
     <script type="text/javascript" language="javascript">

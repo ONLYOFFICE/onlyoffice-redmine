@@ -1,0 +1,46 @@
+<%
+    @file_id = file_id
+    @file = Attachment.find_by_id(@file_id)
+    @file_name = @file.filename[0..@file.filename.index(".")-1]
+    @ext = DocumentHelper.file_ext(@file.disk_filename).delete(".")
+
+    @formats = FormatUtility.format_supported(@ext)
+%>
+
+<div id = "download_as" class="display_none">
+        <h3 class="title"><%= l(:onlyoffice_convert_download_file_as) %></h3>
+        <%= form_tag(onlyoffice_convert_path(@file_id, @file_id), multipart: true, id: "conversion") do |f| %>
+            <%= hidden_field_tag 'type', "download_as" %>
+            <%= render :partial => 'onlyoffice_convert/form' %>
+            <div style = "display: flex; align-items: center;" >
+                <p><%= submit_tag l(:label_no_preview_download) %></p>
+                <div id="progress_bar" style = "display: none">
+                    <div id="progress"></div>
+                    <%= label_tag "progress", "0%", id: "progress_label" %>
+                </div>
+                <div id="onlyoffice-notification">
+                    <div></div>
+                </div>
+            </div>
+        <% end %>
+</div>
+
+
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        var onlyoffice_modal = $('#ajax-modal')[0].cloneNode(true);
+        onlyoffice_modal.id = "onlyoffice-modal";
+        onlyoffice_modal.innerHTML = $("#download_as")[0].innerHTML;
+        document.body.appendChild(onlyoffice_modal);
+        $("#download_as")[0].remove();
+    });
+
+    var form = '';
+    var ajaxUrl = '<%= onlyoffice_convert_path(@file_id,@file_id) %>';
+
+    var isDisable = function (bool) {
+        $('#conversion input[type=submit]')[0].disabled = bool;
+    }
+</script>
+
+<%= javascript_include_tag "onlyofficeConversion", :plugin => "onlyoffice_redmine" %>

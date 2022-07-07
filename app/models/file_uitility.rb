@@ -46,7 +46,6 @@ class FileUtility
       if @@exts_presentation.include? ext
         return 'slide'
       end
-      'word'
     end
 
     def is_openable(attachment)

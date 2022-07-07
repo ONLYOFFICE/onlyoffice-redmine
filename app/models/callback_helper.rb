@@ -89,9 +89,11 @@ class CallbackHelper
     end
 
     # send the command request
+
     def command_request(method, key = nil, url = nil, secret = nil)
       editor_base_url = url.nil? ? Config.get_config("oo_address") : url
       document_command_url = editor_base_url + @@commandUrl
+
       # create a payload object with the method and key
       if method == "version"
         payload = {
@@ -120,6 +122,7 @@ class CallbackHelper
           jwtHeader = demo_header.nil? ? JWTHelper.jwt_header : demo_header  # get signature authorization header
           req.add_field(jwtHeader, "Bearer #{JWTHelper.encode({ :payload => payload }, secret)}")  # set it to the request with the Bearer prefix
         end
+
         req.body = payload.to_json   # convert the payload object into the json format
         res = http.request(req)  # get the response
         data = res.body  # and take its body

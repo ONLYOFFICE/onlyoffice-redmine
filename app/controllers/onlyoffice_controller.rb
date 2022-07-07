@@ -33,7 +33,7 @@ class OnlyofficeController < AccountController
   end
 
   def check_settings
-    render plain: is_valid_setings(params[:url], params[:secret], params[:cert], params[:demo])
+    render plain: is_valid_settings(params[:url], params[:secret], params[:cert], params[:demo])
   end
 
   def download
@@ -238,9 +238,19 @@ class OnlyofficeController < AccountController
     content_type
   end
 
-  def is_valid_setings(url, secret = nil, direct_cert, direct_demo)
+  def is_valid_settings(url, secret = nil, direct_cert, direct_demo)
     editor_base_url = url
     is_command = ""
+
+    attachment = OnlyofficeConvertController.crete_file(nil, "OnlyOfficeCheakConvertService", "docx")
+    url_file = send("download_named_attachment_url", attachment, attachment.filename)
+    title = attachment.filename[..attachment.disk_filename.index(".")] + 'docx'
+
+    key = DocumentHelper.get_key(attachment)
+    is_convert = 0
+    converted_file_url = nil
+    demo_before_update = Setting.plugin_onlyoffice_redmine["editor_demo"]
+    cert_before_update = Setting.plugin_onlyoffice_redmine["check_cert"]
 
     begin
       Setting.plugin_onlyoffice_redmine["editor_demo"] = direct_demo ? "on" : ""
@@ -254,11 +264,21 @@ class OnlyofficeController < AccountController
 
       res_command = CallbackHelper.command_request("version",  nil, editor_base_url, secret)
       is_command += res_command["version"]
-    rescue
+
+      res_convert = ServiceConverter.get_converted_uri(editor_base_url, title, url_file.to_s, "docx", "docx", key,  secret)
+      is_convert = res_convert[0]
+      converted_file_url = res_convert[1]
+    rescue => ex
+      logger.error(ex)
+      Setting.plugin_onlyoffice_redmine["editor_demo"] = demo_before_update
+      Setting.plugin_onlyoffice_redmine["check_cert"] = cert_before_update
+      attachment.destroy
       return false
     end
 
-    if is_command.empty?
+    attachment.destroy
+
+    if is_command.empty? || (is_convert != 100 && !converted_file_url.nil?)
       return false
     end
 

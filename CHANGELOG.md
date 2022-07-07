@@ -2,10 +2,11 @@
 
 
 ## Added
+- documents conversion
 - Added connection to a demo document server
 - Document Editing Service address is now splitted in two settings: inner address (address that confluence will use to access service) and public address (address that user will use to access editors)
 - validation of server settings on the settings page
-- ignoring self signed certificate 
+- ignoring self signed certificate
 
 ## Fixed
 - issue with permissions
