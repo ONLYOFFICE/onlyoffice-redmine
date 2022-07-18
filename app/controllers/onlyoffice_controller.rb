@@ -43,9 +43,9 @@ class OnlyofficeController < AccountController
       render_403
     end
 
-    attachment_id = JSON.parse(JWTHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["attachment_id"]
-    type = JSON.parse(JWTHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["type"]
-    user_id = JSON.parse(JWTHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["userid"]
+    attachment_id = JSON.parse(JwtHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["attachment_id"]
+    type = JSON.parse(JwtHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["type"]
+    user_id = JSON.parse(JwtHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["userid"]
 
     user = User.find(user_id)
     read_authorize(user)
@@ -67,7 +67,7 @@ class OnlyofficeController < AccountController
   end
 
   def editor
-    JWTHelper.init
+    JwtHelper.init
     DocumentHelper.init(request.base_url)
     @user = User.current
     @editor_config = DocumentHelper.get_attachment_config(@user, @attachment, I18n.locale,  params[:action_data])
@@ -85,8 +85,8 @@ class OnlyofficeController < AccountController
       render_403
     end
 
-    type = JSON.parse(JWTHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["type"]
-    attachment_id = JSON.parse(JWTHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["attachment_id"]
+    type = JSON.parse(JwtHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["type"]
+    attachment_id = JSON.parse(JwtHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["attachment_id"]
 
     if !type.eql?("callback")
       logger.error("Not callback token type.")

@@ -32,7 +32,7 @@ class DocumentHelper
         :type => "download",
         :userid => user_id
       }
-      return @@base_url + "/onlyoffice/download/#{id}?key=#{JWTHelper.encode(payload, Setting.plugin_onlyoffice_redmine["onlyoffice_key"])}"
+      return @@base_url + "/onlyoffice/download/#{id}?key=#{JwtHelper.encode(payload, Setting.plugin_onlyoffice_redmine["onlyoffice_key"])}"
     end
 
     def get_callback_url(id, user)
@@ -40,7 +40,7 @@ class DocumentHelper
         :attachment_id => id,
         :type => "callback"
       }
-      url = @@base_url + "/onlyoffice/callback/#{id}/#{user.rss_key}?key=#{JWTHelper.encode(payload, Setting.plugin_onlyoffice_redmine["onlyoffice_key"])}"
+      url = @@base_url + "/onlyoffice/callback/#{id}/#{user.rss_key}?key=#{JwtHelper.encode(payload, Setting.plugin_onlyoffice_redmine["onlyoffice_key"])}"
     end
 
     def get_document_type(file_name)
@@ -163,8 +163,8 @@ class DocumentHelper
           }
         }
       }
-      if JWTHelper.is_enabled
-        config["token"] = JWTHelper.encode(config)
+      if JwtHelper.is_enabled
+        config["token"] = JwtHelper.encode(config)
       end
       return config
     end

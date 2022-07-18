@@ -29,16 +29,16 @@ class CallbackHelper
 
       data = JSON.parse(callback_body)
 
-      if JWTHelper.is_enabled
+      if JwtHelper.is_enabled
         inHeader = false
         token = nil
-        jwtHeader = JWTHelper.jwt_header
+        jwtHeader = JwtHelper.jwt_header
         if data["token"]
-          token = JWTHelper.decode(data["token"])
+          token = JwtHelper.decode(data["token"])
         elsif request.headers[jwtHeader]
           hdr = request.headers[jwtHeader]
           hdr.slice!(0, "Bearer ".length)
-          token = JWTHelper.decode(hdr)
+          token = JwtHelper.decode(hdr)
           inHeader = true
         else
           raise "Expected JWT"
@@ -115,12 +115,12 @@ class CallbackHelper
 
         req = Net::HTTP::Post.new(uri.request_uri)  # create the post request
         req.add_field("Content-Type", "application/json")  # set headers
-        JWTHelper.init
-        if !secret.nil? || JWTHelper.is_enabled
-          payload["token"] = JWTHelper.encode(payload, secret)  # get token and save it to the payload
+        JwtHelper.init
+        if !secret.nil? || JwtHelper.is_enabled
+          payload["token"] = JwtHelper.encode(payload, secret)  # get token and save it to the payload
           demo_header = Config.get_config("jwtHeader")
-          jwtHeader = demo_header.nil? ? JWTHelper.jwt_header : demo_header  # get signature authorization header
-          req.add_field(jwtHeader, "Bearer #{JWTHelper.encode({ :payload => payload }, secret)}")  # set it to the request with the Bearer prefix
+          jwtHeader = demo_header.nil? ? JwtHelper.jwt_header : demo_header  # get signature authorization header
+          req.add_field(jwtHeader, "Bearer #{JwtHelper.encode({ :payload => payload }, secret)}")  # set it to the request with the Bearer prefix
         end
 
         req.body = payload.to_json   # convert the payload object into the json format

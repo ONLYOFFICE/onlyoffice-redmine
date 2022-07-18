@@ -45,12 +45,12 @@ class ServiceConverter
           req = Net::HTTP::Post.new(uri.request_uri)  # create the post request
           req.add_field("Accept", "application/json")  # set headers
           req.add_field("Content-Type", "application/json")
-          JWTHelper.init
-          if !secret.nil? || JWTHelper.is_enabled
-            payload["token"] = JWTHelper.encode(payload, secret)  # get token and save it to the payload
+          JwtHelper.init
+          if !secret.nil? || JwtHelper.is_enabled
+            payload["token"] = JwtHelper.encode(payload, secret)  # get token and save it to the payload
             demo_header = Config.get_config("jwtHeader")
-            jwtHeader = demo_header.nil? ? JWTHelper.jwt_header : demo_header  # get signature authorization header
-            req.add_field(jwtHeader, "Bearer #{JWTHelper.encode({ :payload => payload }, secret)}")  # set it to the request with the Bearer prefix
+            jwtHeader = demo_header.nil? ? JwtHelper.jwt_header : demo_header  # get signature authorization header
+            req.add_field(jwtHeader, "Bearer #{JwtHelper.encode({ :payload => payload }, secret)}")  # set it to the request with the Bearer prefix
           end
 
           req.body = payload.to_json

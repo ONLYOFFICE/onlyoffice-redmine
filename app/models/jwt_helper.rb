@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-class JWTHelper
+class JwtHelper
   @jwt_secret = nil
   @jwt_header = nil
   
