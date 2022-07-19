@@ -23,9 +23,9 @@ jobs:
         run: |
           cd ${{ github.workspace }}
           git submodule update --init --recursive
-          mkdir -p ./onlyoffice-redmine
-          rsync -av --exclude='onlyoffice-redmine' ./ ./onlyoffice-redmine
-          cd ./onlyoffice-redmine
+          mkdir -p ./onlyoffice_redmine
+          rsync -av --exclude='onlyoffice_redmine' ./ ./onlyoffice_redmine
+          cd ./onlyoffice_redmine
           rm -rf ./.github/
           rm -rf ./.git/
           rm ./.gitmodules
@@ -33,7 +33,7 @@ jobs:
           rm -r az-Latn-AZ bg-BG cs-CZ el-GR en-GB ko-KR lv-LV nl-NL pl-PL sk-SK sv-SE tr-TR uk-UA vi-VN
           rm .git
       - name: Build Artifact
-        run: zip -r onlyoffice-redmine.zip onlyoffice-redmine/
+        run: zip -r onlyoffice_redmine.zip onlyoffice_redmine/
       - name: Create Release
         uses: actions/create-release@v1
         id: create_release
@@ -51,6 +51,6 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: onlyoffice-redmine.zip
-          asset_name: onlyoffice-redmine.zip
+          asset_path: onlyoffice_redmine.zip
+          asset_name: onlyoffice_redmine.zip
           asset_content_type: application/zip
