@@ -98,17 +98,17 @@ class DocumentHelper
     def go_back_url(attachment)
       case attachment.container_type
       when "Project"
-      then return @@base_url + "/projects/#{attachment.project}/files"
+      then return @@base_url + "projects/#{attachment.project}/files"
       when "Issue"
-      then return @@base_url + "/issues/#{attachment.container.id}"
+      then return @@base_url + "issues/#{attachment.container.id}"
       when "News"
-      then return @@base_url + "/news/#{attachment.container.id}"
+      then return @@base_url + "news/#{attachment.container.id}"
       when "Document"
-      then return @@base_url + "/documents/#{attachment.container.id}"
+      then return @@base_url + "documents/#{attachment.container.id}"
       when "WikiPage"
-      then return @@base_url + "/projects/#{attachment.project}/wiki"
+      then return @@base_url + "projects/#{attachment.project}/wiki"
       else
-        return @@base_url + "/projects/#{attachment.project}"
+        return @@base_url + "projects/#{attachment.project}"
       end
     end
 
