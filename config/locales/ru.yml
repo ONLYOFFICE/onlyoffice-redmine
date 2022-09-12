@@ -9,7 +9,7 @@ ru:
   onlyoffice_additional_settings_editor: "Адрес ONLYOFFICE Docs для внутренних запросов сервера"
   onlyoffice_additional_settings_server: "Адрес сервера для внутренних запросов ONLYOFFICE Docs"
   onlyoffice_settings_editor_demo: "Подключиться к демонстрационному серверу ONLYOFFICE Docs."
-  onlyoffice_editor_trial_period_ended: "30-дневный тестовый период закончен, вы больше не можете подключаться к демонстрационному серверу ONLYOFFICE Docs." 
+  onlyoffice_editor_trial_period_ended: "30-дневный тестовый период закончен, вы больше не можете подключаться к демонстрационному серверу ONLYOFFICE Docs."
   onlyoffice_settings_editor_view: "Настройка редактора"
   onlyoffice_settings_editor_view_chat: "Отображать кнопку чата"
   onlyoffice_settings_check_cert: "Отключить проверку сертификата (небезопасно)"
