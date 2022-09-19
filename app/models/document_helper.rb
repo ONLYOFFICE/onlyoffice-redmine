@@ -47,8 +47,15 @@ class DocumentHelper
       doc_type = FileUtility.get_file_type(file_name)
     end
 
-    def file_ext(file_name)
+    def file_name_without_ext(file_name)
+      name = File.basename(file_name, ".*")
+    end
+
+    def file_ext(file_name, remove_dot = false)
       ext = File.extname(file_name).downcase
+      if remove_dot
+        ext = ext.delete(".")
+      end
     end
 
     def permission_to_edit_file(user, project, container_type)
@@ -98,7 +105,7 @@ class DocumentHelper
     def go_back_url(attachment)
       case attachment.container_type
       when "Project"
-      then return @@base_url + "projects/#{attachment.project}/files"
+      then return @@base_url + "projects/#{attachment.project.id}/files"
       when "Issue"
       then return @@base_url + "issues/#{attachment.container.id}"
       when "News"
@@ -106,9 +113,9 @@ class DocumentHelper
       when "Document"
       then return @@base_url + "documents/#{attachment.container.id}"
       when "WikiPage"
-      then return @@base_url + "projects/#{attachment.project}/wiki"
+      then return @@base_url + "projects/#{attachment.project.id}/wiki"
       else
-        return @@base_url + "projects/#{attachment.project}"
+        return @@base_url + "projects/#{attachment.project.id}"
       end
     end
 

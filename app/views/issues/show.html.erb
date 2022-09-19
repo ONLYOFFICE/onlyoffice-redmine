@@ -42,7 +42,7 @@
     @issue.attachments.each do |attachment|
       is_editable_array = is_editable_array + [DocumentHelper.is_editable(attachment)]
       attachments_disk_filenames = attachments_disk_filenames + [attachment.disk_filename]
-      ext = attachment.disk_filename[attachment.disk_filename.index(".")+1..]
+      ext = DocumentHelper.file_ext(attachment.disk_filename, true)
       is_convert = is_convert + [FormatUtility.format_supported(ext).length != 0]
     end
   %>

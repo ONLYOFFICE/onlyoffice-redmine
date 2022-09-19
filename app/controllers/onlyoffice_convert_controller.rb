@@ -7,8 +7,8 @@ class OnlyofficeConvertController < ApplicationController
         @file = Attachment.find_by_id(@file_id)
         @page, back_url = get_page(params[:page_id], params[:page_type], @file)
 
-        @file_name = @file.filename[0..@file.filename.index(".")-1]
-        @ext = DocumentHelper.file_ext(@file.disk_filename).delete(".")
+        @file_name = DocumentHelper.file_name_without_ext(@file.filename)
+        @ext = DocumentHelper.file_ext(@file.disk_filename, true)
         @formats = FormatUtility.format_supported(@ext)
 
         render :action => 'index'

@@ -1,8 +1,8 @@
 <%
     @file_id = file_id
     @file = Attachment.find_by_id(@file_id)
-    @file_name = @file.filename[0..@file.filename.index(".")-1]
-    @ext = DocumentHelper.file_ext(@file.disk_filename).delete(".")
+    @file_name = DocumentHelper.file_name_without_ext(@file.filename)
+    @ext = DocumentHelper.file_ext(@file.disk_filename, true)
 
     @formats = FormatUtility.format_supported(@ext)
 %>
