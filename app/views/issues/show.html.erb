@@ -35,6 +35,7 @@
     project_is_not_readonly = @project.status != 5
 
     issue_is_not_closed =  @issue.status_id != 5
+    view_permission = view_permission || User.current.admin
     edit_permission = (edit_permission || User.current.admin) && project_is_not_readonly && issue_is_not_closed
     is_editable_array = []
     attachments_disk_filenames = []

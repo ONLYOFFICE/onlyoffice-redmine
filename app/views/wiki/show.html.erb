@@ -33,6 +33,7 @@
       end
     end
     project_is_not_readonly = @project.status != 5
+    view_permission = view_permission || User.current.admin
     edit_permission = (edit_permission || User.current.admin) && project_is_not_readonly
     is_editable_array = []
     attachments_disk_filenames = []
