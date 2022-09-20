@@ -142,13 +142,13 @@ class DocumentHelper
           :fileType => ext,
           :key => get_key(attachment),
           :permissions => {
-            :edit => permission_to_edit && is_editable(attachment) ? true : false,
-            :fillForms => permission_to_edit && is_editable(attachment) && ext.eql?("oform") ? true : false
+            :edit => permission_to_edit && is_editable(attachment),
+            :fillForms => permission_to_edit && is_editable(attachment) && ext.eql?("oform")
           }
         },
         :editorConfig => {
           :actionLink => action_data ? JSON.parse(action_data) : nil,
-          :mode => permission_to_edit.eql?(true) && is_editable(attachment) ? "edit" : "view",
+          :mode => (permission_to_edit && is_editable(attachment)) ? "edit" : "view",
           :lang => lang ? lang : "en",
           :callbackUrl => get_callback_url(attachment.id, user),
           :user => {
@@ -160,11 +160,11 @@ class DocumentHelper
             :goback => {
               :url => go_back_url(attachment)
             },
-            :chat => Setting.plugin_onlyoffice_redmine["editor_chat"].eql?("on") ? true : false,
-            :help => Setting.plugin_onlyoffice_redmine["editor_help"].eql?("on") ? true : false,
-            :feedback => Setting.plugin_onlyoffice_redmine["editor_feedback"].eql?("on") ? true : false,
-            :compactHeader => Setting.plugin_onlyoffice_redmine["editor_compact_header"].eql?("on") ? true : false,
-            :toolbarNoTabs => Setting.plugin_onlyoffice_redmine["editor_toolbar_no_tabs"].eql?("on") ? true : false
+            :chat => Setting.plugin_onlyoffice_redmine["editor_chat"].eql?("on"),
+            :help => Setting.plugin_onlyoffice_redmine["editor_help"].eql?("on"),
+            :feedback => Setting.plugin_onlyoffice_redmine["editor_feedback"].eql?("on"),
+            :compactHeader => Setting.plugin_onlyoffice_redmine["editor_compact_header"].eql?("on"),
+            :toolbarNoTabs => Setting.plugin_onlyoffice_redmine["editor_toolbar_no_tabs"].eql?("on")
           }
         }
       }
