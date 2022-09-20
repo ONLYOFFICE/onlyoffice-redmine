@@ -128,7 +128,7 @@ class DocumentHelper
       if Setting.plugin_onlyoffice_redmine["onlyoffice_key"].eql?(nil)
         Setting.plugin_onlyoffice_redmine["onlyoffice_key"] = Token.generate_token_value
       end
-      ext = file_ext(attachment.disk_filename).delete(".")
+      ext = file_ext(attachment.disk_filename, true)
       project_is_not_readonly = attachment.project.status != 5
       permission_to_edit = (permission_to_edit_file(user, attachment.project, attachment.container_type) || user.admin) && !attachment.container_type.eql?("Project")
       permission_to_edit = permission_to_edit && project_is_not_readonly
