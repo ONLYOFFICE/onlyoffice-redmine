@@ -53,9 +53,7 @@ class DocumentHelper
 
     def file_ext(file_name, remove_dot = false)
       ext = File.extname(file_name).downcase
-      if remove_dot
-        ext = ext.delete(".")
-      end
+      return remove_dot ? ext.delete(".") : ext;
     end
 
     def permission_to_edit_file(user, project, container_type)
