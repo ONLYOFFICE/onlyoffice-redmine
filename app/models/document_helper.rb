@@ -24,6 +24,10 @@ class DocumentHelper
 
     def init (url)
       @@base_url = FileUtility.get_redmine_internal_url(url)
+
+      if Setting.plugin_onlyoffice_redmine["onlyoffice_key"].eql?(nil)
+        Setting.plugin_onlyoffice_redmine["onlyoffice_key"] = Token.generate_token_value
+      end
     end
 
     def get_download_url(id, user_id)
@@ -123,9 +127,6 @@ class DocumentHelper
     end
 
     def get_attachment_config(user, attachment, lang, action_data)
-      if Setting.plugin_onlyoffice_redmine["onlyoffice_key"].eql?(nil)
-        Setting.plugin_onlyoffice_redmine["onlyoffice_key"] = Token.generate_token_value
-      end
       ext = file_ext(attachment.disk_filename, true)
       project_is_not_readonly = attachment.project.status != 5
       permission_to_edit = (permission_to_edit_file(user, attachment.project, attachment.container_type) || user.admin) && !attachment.container_type.eql?("Project")

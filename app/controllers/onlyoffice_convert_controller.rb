@@ -15,6 +15,9 @@ class OnlyofficeConvertController < ApplicationController
     end
 
     def convert
+        JwtHelper.init
+        DocumentHelper.init(request.base_url)
+
         file_name = params[:field_name]
         current_type = params[:onlyoffice_convert_current_type]
         next_type = params[:onlyoffice_convert_end_type]
@@ -24,11 +27,11 @@ class OnlyofficeConvertController < ApplicationController
         attachment = Attachment.find_by_id(params[:file_id])
         title = file_name + "." + next_type
 
-        url = send("download_named_attachment_url", attachment, attachment.filename)
+        url = DocumentHelper.get_download_url(attachment.id, User.current.id)
         key = DocumentHelper.get_key(attachment)
 
         begin
-          @@res_convert = ServiceConverter.get_converted_uri(editor_base_url, title, url.to_s, current_type, next_type, key)
+          @@res_convert = ServiceConverter.get_converted_uri(editor_base_url, title, url, current_type, next_type, key)
           if @@res_convert[0] == 100 && !@@res_convert[1].nil?
             if params[:type].eql?('download_as')
               render plain: '{ "url": "' + @@res_convert[1].to_s + '" }'
