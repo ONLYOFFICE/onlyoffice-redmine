@@ -17,7 +17,7 @@
 
 <p>
   <%= content_tag(:label, l(:onlyoffice_settings_doc_url)) %>
-  <%= text_field_tag 'settings[oo_address]', settings['oo_address'] %>
+  <%= text_field_tag 'settings[oo_address]', settings['oo_address'], :placeholder => "http://docserver/" %>
 </p>
 
 <fieldset>
@@ -32,6 +32,10 @@
     <%= content_tag(:label, l(:onlyoffice_additional_settings_server)) %>
     <%= text_field_tag 'settings[inner_server]', settings['inner_server'], :placeholder => "http://redmine/" %>
   </p>
+  <label class="block">
+    <%= check_box_tag 'settings[editor_demo]', settings['editor_demo'], settings['editor_demo'].eql?('on') %>
+    <%= l(:onlyoffice_settings_editor_demo) %>
+  </label>
 </fieldset>
 <fieldset>
   <legend>
@@ -50,10 +54,6 @@
   <legend>
     <span><%= l(:onlyoffice_settings_editor_view) %></span>
   </legend>
-  <label class="block">
-    <%= check_box_tag 'settings[editor_demo]', settings['editor_demo'], settings['editor_demo'].eql?('on') %>
-    <%= l(:onlyoffice_settings_editor_demo) %>
-  </label>
   <label class="block">
     <%= check_box_tag 'settings[editor_chat]', settings['editor_chat'], settings['editor_chat'].eql?('on') %>
     <%= l(:onlyoffice_settings_editor_view_chat) %>
