@@ -17,8 +17,4 @@
 
 <%= render :parent %>
 
-<%
-  attachment_id = request.original_url[request.original_url.rindex("/") + 1, request.original_url.length]
-%>
-
-<%= render :partial => 'attachments/onlyoffice_buttons', :locals => {:file_id => attachment_id} %>
+<%= render :partial => 'attachments/onlyoffice_buttons', :locals => {:file_id => @attachment.id} %>
