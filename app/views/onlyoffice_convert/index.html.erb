@@ -25,7 +25,7 @@
     <%= hidden_field_tag 'type', "" %>
     <%= render :partial => 'form', :locals => {:f => f} %>
     <div style = "display: flex; align-items: center;" >
-        <% if DocumentHelper.permission_to_edit_file(User.current, @attachment.project, @attachment.container_type) %>
+        <% if DocumentHelper.permission_to_add_file(User.current, @attachment.project, @attachment.container_type) %>
           <p><%= submit_tag l(:onlyoffice_convert_submit), onclick: "ONLYOFFICE.Convert.isButton(this)", id: "convert", data: { disable_with: false }%></p>
         <% end %>
         <p><%= submit_tag l(:label_no_preview_download), onclick: "ONLYOFFICE.Convert.isButton(this)", id: "download_as", data: { disable_with: false } %></p>

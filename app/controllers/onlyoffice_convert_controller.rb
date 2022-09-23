@@ -16,6 +16,12 @@ class OnlyofficeConvertController < OnlyofficeBaseController
         JwtHelper.init
         DocumentHelper.init(request.base_url)
 
+        download_as = params[:type].eql?('download_as')
+
+        if !download_as
+          check_add_permissions(params[:page_type])
+        end
+
         file_name = params[:field_name]
         current_type = params[:onlyoffice_convert_current_type]
         next_type = params[:onlyoffice_convert_end_type]
@@ -32,7 +38,7 @@ class OnlyofficeConvertController < OnlyofficeBaseController
         begin
           @@res_convert = ServiceConverter.get_converted_uri(editor_base_url, title, url, current_type, next_type, key)
           if @@res_convert[0] == 100 && !@@res_convert[1].nil?
-            if params[:type].eql?('download_as')
+            if download_as
               render plain: '{ "url": "' + @@res_convert[1].to_s + '" }'
             else
               @page, back_page = get_page(params[:page_id], params[:page_type], @attachment)
@@ -93,5 +99,18 @@ class OnlyofficeConvertController < OnlyofficeBaseController
             return attachment
         end
 
+    end
+
+    private
+
+    def check_add_permissions(page_type)
+      if @project && @project.archived?
+        @archived_project = @project
+        render_403 :message => :notice_not_authorized_archived_project
+      elsif DocumentHelper.permission_to_add_file(User.current, @project, page_type)
+        true
+      else
+        deny_access
+      end
     end
 end
