@@ -1,14 +1,12 @@
-class OnlyofficeConvertController < ApplicationController
+class OnlyofficeConvertController < OnlyofficeBaseController
 
-    @@res_convert = [0, nil]
+    before_action :find_attachment, :file_readable, :read_authorize, :only => [ :convert_page, :convert ]
 
     def convert_page
-        @file_id = params[:file_id]
-        @file = Attachment.find_by_id(@file_id)
-        @page, back_url = get_page(params[:page_id], params[:page_type], @file)
+        @page, back_url = get_page(params[:page_id], params[:page_type], @attachment)
 
-        @file_name = DocumentHelper.file_name_without_ext(@file.filename)
-        @ext = DocumentHelper.file_ext(@file.disk_filename, true)
+        @file_name = DocumentHelper.file_name_without_ext(@attachment.filename)
+        @ext = DocumentHelper.file_ext(@attachment.disk_filename, true)
         @formats = FormatUtility.format_supported(@ext)
 
         render :action => 'index'
@@ -24,11 +22,12 @@ class OnlyofficeConvertController < ApplicationController
 
         editor_base_url = Config.get_config("oo_address")
 
-        attachment = Attachment.find_by_id(params[:file_id])
         title = file_name + "." + next_type
 
-        url = DocumentHelper.get_download_url(attachment.id, User.current.id)
-        key = DocumentHelper.get_key(attachment)
+        url = DocumentHelper.get_download_url(@attachment.id, User.current.id)
+        key = DocumentHelper.get_key(@attachment)
+
+        @@res_convert = [0, nil]
 
         begin
           @@res_convert = ServiceConverter.get_converted_uri(editor_base_url, title, url, current_type, next_type, key)
@@ -36,7 +35,7 @@ class OnlyofficeConvertController < ApplicationController
             if params[:type].eql?('download_as')
               render plain: '{ "url": "' + @@res_convert[1].to_s + '" }'
             else
-              @page, back_page = get_page(params[:page_id], params[:page_type], attachment)
+              @page, back_page = get_page(params[:page_id], params[:page_type], @attachment)
               new_attachment = OnlyofficeConvertController.crete_file(@@res_convert[1], file_name, next_type)
               @page.attachments << new_attachment
               if @page.save

@@ -1,15 +1,13 @@
 <%
-    @file_id = file_id
-    @file = Attachment.find_by_id(@file_id)
-    @file_name = DocumentHelper.file_name_without_ext(@file.filename)
-    @ext = DocumentHelper.file_ext(@file.disk_filename, true)
+    @file_name = DocumentHelper.file_name_without_ext(@attachment.filename)
+    @ext = DocumentHelper.file_ext(@attachment.disk_filename, true)
 
     @formats = FormatUtility.format_supported(@ext)
 %>
 
 <div id = "download_as" class="display_none">
         <h3 class="title"><%= l(:onlyoffice_convert_download_file_as) %></h3>
-        <%= form_tag(onlyoffice_convert_path(@file_id, @file_id), multipart: true, id: "conversion") do |f| %>
+        <%= form_tag(onlyoffice_convert_path(@attachment.id, @attachment.id), multipart: true, id: "conversion") do |f| %>
             <%= hidden_field_tag 'type', "download_as" %>
             <%= render :partial => 'onlyoffice_convert/form' %>
             <div style = "display: flex; align-items: center;" >
@@ -41,7 +39,7 @@
 
         var form = '';
         var getAjaxUrl = function () {
-            return '<%= onlyoffice_convert_path(@file_id, @file_id) %>';
+            return '<%= onlyoffice_convert_path(@attachment.id, @attachment.id) %>';
         }
 
         var isDisable = function (bool) {

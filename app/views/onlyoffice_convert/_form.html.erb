@@ -15,11 +15,11 @@
 # limitations under the License.
 %>
 
-<%= error_messages_for @file %>
+<%= error_messages_for @attachment %>
 
 <fieldset class="box tabular" style="border: none;">
 
-    <%= hidden_field_tag 'file_id', @file_id %>
+    <%= hidden_field_tag 'file_id', @attachment.id %>
     <%= hidden_field_tag 'page_id', params[:page_id] %>
     <%= hidden_field_tag 'page_type', params[:page_type] %>
     <p>

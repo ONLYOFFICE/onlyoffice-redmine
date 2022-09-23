@@ -14,18 +14,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 %>
-<% if DocumentHelper.permission_to_read_file(User.current, @file.project, @file.container_type) %>
+<% if DocumentHelper.permission_to_read_file(User.current, @attachment.project, @attachment.container_type) %>
 <%= stylesheet_link_tag 'onlyofficeConversion', :plugin => "onlyoffice_redmine" %>
 <%= javascript_include_tag "onlyofficeConversion", :plugin => "onlyoffice_redmine" %>
 
     <h2><%= l(:onlyoffice_convert_dropdown) %></h2>
-    <h2><%= @file.filename %></h2>
+    <h2><%= @attachment.filename %></h2>
 
 <%= form_tag(onlyoffice_convert_path(@page.id), multipart: true, id: "conversion") do |f| %>
     <%= hidden_field_tag 'type', "" %>
     <%= render :partial => 'form', :locals => {:f => f} %>
     <div style = "display: flex; align-items: center;" >
-        <% if DocumentHelper.permission_to_edit_file(User.current, @file.project, @file.container_type) %>
+        <% if DocumentHelper.permission_to_edit_file(User.current, @attachment.project, @attachment.container_type) %>
           <p><%= submit_tag l(:onlyoffice_convert_submit), onclick: "ONLYOFFICE.Convert.isButton(this)", id: "convert", data: { disable_with: false }%></p>
         <% end %>
         <p><%= submit_tag l(:label_no_preview_download), onclick: "ONLYOFFICE.Convert.isButton(this)", id: "download_as", data: { disable_with: false } %></p>

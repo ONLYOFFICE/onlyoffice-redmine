@@ -16,7 +16,7 @@
         var bar = $('#progress_label')[0];
 
         var data = {
-            file_id: $('#file_id')[0].value,
+            id: $('#file_id')[0].value,
             page_id: $('#page_id')[0].value,
             page_type: $('#page_type')[0].value,
             field_name: $('#field_name')[0].value,
