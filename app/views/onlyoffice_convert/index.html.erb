@@ -26,9 +26,9 @@
     <%= render :partial => 'form', :locals => {:f => f} %>
     <div style = "display: flex; align-items: center;" >
         <% if DocumentHelper.permission_to_edit_file(User.current, @file.project, @file.container_type) %>
-          <p><%= submit_tag l(:onlyoffice_convert_submit), onclick: "isButton(this)", id: "convert", data: { disable_with: false }%></p>
+          <p><%= submit_tag l(:onlyoffice_convert_submit), onclick: "ONLYOFFICE.Convert.isButton(this)", id: "convert", data: { disable_with: false }%></p>
         <% end %>
-        <p><%= submit_tag l(:label_no_preview_download), onclick: "isButton(this)", id: "download_as", data: { disable_with: false } %></p>
+        <p><%= submit_tag l(:label_no_preview_download), onclick: "ONLYOFFICE.Convert.isButton(this)", id: "download_as", data: { disable_with: false } %></p>
         <p><%= link_to l(:button_cancel), back_url %></p>
         <div id="progress_bar" style = "display: none">
             <div id="progress"></div>
@@ -43,18 +43,33 @@
 
 
 <script type="text/javascript" language="javascript">
-    var isDisable = function (bool) {
-        $('#convert')[0].disabled = bool;
-        $('#download_as')[0].disabled = bool;
-    }
-    var isButton = function (element) {
-        $('#type')[0].value = element.id;
-    }
+    (function() {
+        if (!window.ONLYOFFICE) ONLYOFFICE = {};
+        if (!window.ONLYOFFICE.Convert) ONLYOFFICE.Convert = {};
 
-    var form = $('#conversion')[0];
-    var ajaxUrl = '<%= onlyoffice_convert_path(@page.id) %>';
-    addSubmitEvents(form);
+        var convertBtn = $('#convert');
+        var downloadBtn = $('#download_as');
+        
+        var convertForm = $('#conversion');
+        var typeField = $('#type');
 
+        var isDisable = function (bool) {
+            convertBtn.attr("disabled", bool);
+            downloadBtn.attr("disabled", bool);
+        }
+        var isButton = function (element) {
+            typeField.val(element.id);
+        }
+        var getAjaxUrl = function () {
+            return '<%= onlyoffice_convert_path(@page.id) %>';
+        }
+
+        ONLYOFFICE.Convert.addSubmitEvents(convertForm[0]);
+
+        ONLYOFFICE.Convert.isDisable = isDisable;
+        ONLYOFFICE.Convert.isButton = isButton;
+        ONLYOFFICE.Convert.getAjaxUrl = getAjaxUrl;
+    })();
 </script>
 
 <% end %>

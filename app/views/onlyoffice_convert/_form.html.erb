@@ -38,17 +38,24 @@
 </fieldset>
 
 <script type="text/javascript" language="javascript">
-    var noticeTimeout = null;
-    var showNotice = function (type) {
-        if (noticeTimeout != null) clearTimeout(noticeTimeout);
-        isDisable(false);
-        showProgress(false);
-        var notice = $('#onlyoffice-notification')[0];
-        notice.children[0].className = type === 'success' ? 'flash notice' : 'flash error';
-        notice.children[0].innerText = type === 'success' ? '<%= l(:onlyoffice_convert_success) %>' : '<%= l(:onlyoffice_convert_error) %>';
-        notice.style.display = 'block';
-        noticeTimeout = setTimeout(() => {
-            notice.style.display = 'none';
-        }, 2000);
-    }
+    (function() {
+        if (!window.ONLYOFFICE) ONLYOFFICE = {};
+        if (!window.ONLYOFFICE.Convert) ONLYOFFICE.Convert = {};
+
+        var noticeTimeout = null;
+        var showNotice = function (type) {
+            if (noticeTimeout != null) clearTimeout(noticeTimeout);
+            ONLYOFFICE.Convert.isDisable(false);
+            ONLYOFFICE.Convert.showProgress(false);
+            var notice = $('#onlyoffice-notification')[0];
+            notice.children[0].className = type === 'success' ? 'flash notice' : 'flash error';
+            notice.children[0].innerText = type === 'success' ? '<%= l(:onlyoffice_convert_success) %>' : '<%= l(:onlyoffice_convert_error) %>';
+            notice.style.display = 'block';
+            noticeTimeout = setTimeout(() => {
+                notice.style.display = 'none';
+            }, 2000);
+        }
+
+        ONLYOFFICE.Convert.showNotice = showNotice;
+    })();
 </script>

@@ -27,20 +27,30 @@
 
 
 <script type="text/javascript" language="javascript">
-    $(document).ready(function () {
-        var onlyoffice_modal = $('#ajax-modal')[0].cloneNode(true);
-        onlyoffice_modal.id = "onlyoffice-modal";
-        onlyoffice_modal.innerHTML = $("#download_as")[0].innerHTML;
-        document.body.appendChild(onlyoffice_modal);
-        $("#download_as")[0].remove();
-    });
+    (function() {
+        if (!window.ONLYOFFICE) ONLYOFFICE = {};
+        if (!window.ONLYOFFICE.Convert) ONLYOFFICE.Convert = {};
 
-    var form = '';
-    var ajaxUrl = '<%= onlyoffice_convert_path(@file_id,@file_id) %>';
+        $(document).ready(function () {
+            var onlyoffice_modal = $('#ajax-modal')[0].cloneNode(true);
+            onlyoffice_modal.id = "onlyoffice-modal";
+            onlyoffice_modal.innerHTML = $("#download_as")[0].innerHTML;
+            document.body.appendChild(onlyoffice_modal);
+            $("#download_as")[0].remove();
+        });
 
-    var isDisable = function (bool) {
-        $('#conversion input[type=submit]')[0].disabled = bool;
-    }
+        var form = '';
+        var getAjaxUrl = function () {
+            return '<%= onlyoffice_convert_path(@file_id, @file_id) %>';
+        }
+
+        var isDisable = function (bool) {
+            $('#conversion input[type=submit]')[0].disabled = bool;
+        }
+
+        ONLYOFFICE.Convert.isDisable = isDisable;
+        ONLYOFFICE.Convert.getAjaxUrl = getAjaxUrl;
+    })();
 </script>
 
 <%= javascript_include_tag "onlyofficeConversion", :plugin => "onlyoffice_redmine" %>

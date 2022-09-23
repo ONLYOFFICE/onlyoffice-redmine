@@ -73,7 +73,7 @@
 
     <script type="text/javascript" language="javascript">
         var container = document.getElementById("attach_files_link").parentElement;
-        addOnlyOfficeCreateButton(container);
+        ONLYOFFICE.Buttons.addOnlyOfficeCreateButton(container);
     </script>
 
     <style>
@@ -95,7 +95,7 @@
 
   <script type="text/javascript" language="javascript">
       if (<%= view_permission || edit_permission%>) {
-          addOnlyOfficeButton(<%= raw FileUtility.get_all_available_formats %>, <%= raw attachments_disk_filenames %>, <%= raw is_convert %>, <%= @document.id %>, "Document");
+          ONLYOFFICE.Buttons.addOnlyOfficeButton(<%= raw FileUtility.get_all_available_formats %>, <%= raw attachments_disk_filenames %>, <%= raw is_convert %>, <%= @document.id %>, "Document");
           var onlyofficeButtons = document.getElementsByClassName("onlyoffice-editor-button");
           for (var i = 0; i < onlyofficeButtons.length; i++) {
               if (<%= view_permission %>) {

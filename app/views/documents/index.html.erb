@@ -40,7 +40,7 @@
 
     <%= javascript_include_tag "onlyofficeMenu", :plugin => "onlyoffice_redmine" %>
     <script type="text/javascript" language="javascript">
-        addOnlyOfficeCreateButton(document.getElementsByClassName("contextual")[0]);
+        ONLYOFFICE.Buttons.addOnlyOfficeCreateButton(document.getElementsByClassName("contextual")[0]);
     </script>
 
     <% end %>

@@ -50,7 +50,7 @@
 
   <script type="text/javascript" language="javascript">
       if (<%= view_permission || edit_permission%>) {
-          addOnlyOfficeButton(<%= raw FileUtility.get_all_available_formats %>, <%= raw attachments_disk_filenames %>, <%= raw is_convert %>, <%= @issue.id %>, "Issue");
+          ONLYOFFICE.Buttons.addOnlyOfficeButton(<%= raw FileUtility.get_all_available_formats %>, <%= raw attachments_disk_filenames %>, <%= raw is_convert %>, <%= @issue.id %>, "Issue");
           var onlyofficeButtons = document.getElementsByClassName("onlyoffice-editor-button");
           for (var i = 0; i < onlyofficeButtons.length; i++) {
               if (<%= view_permission %>) {

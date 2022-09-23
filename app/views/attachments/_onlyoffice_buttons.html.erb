@@ -35,11 +35,11 @@
 <script type="text/javascript" language="javascript">
   var text = "<%= edit_permission ? l(:edit_in_onlyoffice) : l(:open_in_onlyoffice) %>";
   var image = 'url(/plugin_assets/onlyoffice_redmine/images/onlyoffice.ico)';
-  createConvertButton(true, text, image);
+  ONLYOFFICE.Buttons.createConvertButton(true, text, image);
 
   <% if is_conversion %>
     text = "<%= l(:onlyoffice_convert_download_file_as) %>";
     image = 'url(/plugin_assets/onlyoffice_redmine/images/download_as.svg)';
-    createConvertButton(false, text, image);
+    ONLYOFFICE.Buttons.createConvertButton(false, text, image);
   <% end %>
 </script>
