@@ -152,7 +152,7 @@ class CallbackHelper
       begin
         old_digest = attachment.digest
         old_diskfile = attachment.diskfile
-        callback_date = DateTime.parse(callback_json['history']['changes'][0]['created'])
+        callback_date = DateTime.now
 
         new_date = callback_date.year.to_s[2,4] + callback_date.month.to_s + callback_date.day.to_s
         new_time = callback_date.hour.to_s + callback_date.minute.to_s + callback_date.second.to_s
