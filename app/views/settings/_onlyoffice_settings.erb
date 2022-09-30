@@ -105,6 +105,11 @@
         notice.children[0].innerText = message;
     };
 
+    var fixUrl = function(url) {
+      if (!url) return url;
+      return url.trim().endsWith('/') ? url : url + '/';
+    }
+
     var checkSettings = function () {
         var scriptCallback = function () {
             var resultScript = typeof DocsAPI !== "undefined";
@@ -134,12 +139,13 @@
         $("#onlyoffice-error-notification")[0].style.display = "none";
 
         var cert = $("#settings_check_cert")[0].checked;
-        var editor_url = $("#settings_oo_address")[0].value;
-        if (editor_url.replace(/\s/g, '').length == 0) {
+        var editor_url = fixUrl($("#settings_oo_address")[0].value);
+        var editor_inner_url = fixUrl($("#settings_inner_editor")[0].value);
+        var redmine_url = fixUrl($("#settings_inner_server")[0].value);
+        if (!editor_url.length) {
           $('#settings form')[0].submit();
-          return
+          return;
         }
-        editor_url += editor_url.charAt(editor_url.length - 1) === '/' ? '' : '/';
         var secret = $("#settings_jwtsecret")[0].value;
         if ($('#settings_editor_demo')[0].checked) {
           editor_url = `<%= Config.get_config("oo_address", true) %>`;
@@ -147,6 +153,8 @@
         }
         var data = {
             url: editor_url,
+            editor_inner_url: editor_inner_url,
+            redmine_url: redmine_url,
             secret: secret,
             cert: cert,
             demo: $('#settings_editor_demo')[0].checked

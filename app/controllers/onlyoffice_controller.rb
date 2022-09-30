@@ -33,7 +33,7 @@ class OnlyofficeController < OnlyofficeBaseController
   end
 
   def check_settings
-    render plain: is_valid_settings(params[:url], params[:secret], params[:cert], params[:demo])
+    render plain: is_valid_settings(params[:url], params[:editor_inner_url], params[:redmine_url], params[:secret], params[:cert], params[:demo])
   end
 
   def download
@@ -214,15 +214,17 @@ class OnlyofficeController < OnlyofficeBaseController
     content_type
   end
 
-  def is_valid_settings(url, secret = nil, direct_cert, direct_demo)
+  def is_valid_settings(url, editor_inner_url, redmine_url, secret = nil, direct_cert, direct_demo)
     JwtHelper.init
     DocumentHelper.init(request.base_url)
     
     editor_base_url = url
+    use_editor_inner = !editor_inner_url.to_s.strip.empty?
+    use_redmine_inner = !redmine_url.to_s.strip.empty?
     is_command = ""
 
     attachment = OnlyofficeConvertController.crete_file(nil, "OnlyOfficeCheakConvertService", "docx")
-    url_file = DocumentHelper.get_download_url(attachment.id, User.current.id)
+    url_file = DocumentHelper.get_download_url(attachment.id, User.current.id, use_redmine_inner ? redmine_url : nil)
     title = attachment.filename[..attachment.disk_filename.index(".")] + 'docx'
 
     key = DocumentHelper.get_key(attachment)
@@ -240,11 +242,14 @@ class OnlyofficeController < OnlyofficeBaseController
         Setting.plugin_onlyoffice_redmine["demo_date_start"] = Time.now.to_s
       end
       res_health = CallbackHelper.do_request(editor_base_url + "healthcheck", true)
+      if (use_editor_inner)
+        res_health = CallbackHelper.do_request(editor_inner_url + "healthcheck", true)
+      end
 
-      res_command = CallbackHelper.command_request("version",  nil, editor_base_url, secret)
+      res_command = CallbackHelper.command_request("version",  nil, use_editor_inner ? editor_inner_url : editor_base_url, secret)
       is_command += res_command["version"]
 
-      res_convert = ServiceConverter.get_converted_uri(editor_base_url, title, url_file, "docx", "docx", key,  secret)
+      res_convert = ServiceConverter.get_converted_uri(use_editor_inner ? editor_inner_url : editor_base_url, title, url_file, "docx", "docx", key,  secret)
       is_convert = res_convert[0]
       converted_file_url = res_convert[1]
     rescue => ex

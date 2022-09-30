@@ -30,21 +30,21 @@ class DocumentHelper
       end
     end
 
-    def get_download_url(id, user_id)
+    def get_download_url(id, user_id, url = nil)
       payload = {
         :attachment_id => id,
         :type => "download",
         :userid => user_id
       }
-      return @@base_url + "/onlyoffice/download/#{id}?key=#{JwtHelper.encode(payload, Setting.plugin_onlyoffice_redmine["onlyoffice_key"])}"
+      return (url.to_s.empty? ? @@base_url : url) + "/onlyoffice/download/#{id}?key=#{JwtHelper.encode(payload, Setting.plugin_onlyoffice_redmine["onlyoffice_key"])}"
     end
 
-    def get_callback_url(id, user)
+    def get_callback_url(id, user, url = nil)
       payload = {
         :attachment_id => id,
         :type => "callback"
       }
-      url = @@base_url + "/onlyoffice/callback/#{id}/#{user.rss_key}?key=#{JwtHelper.encode(payload, Setting.plugin_onlyoffice_redmine["onlyoffice_key"])}"
+      url = (url.to_s.empty? ? @@base_url : url) + "/onlyoffice/callback/#{id}/#{user.rss_key}?key=#{JwtHelper.encode(payload, Setting.plugin_onlyoffice_redmine["onlyoffice_key"])}"
     end
 
     def get_document_type(file_name)
