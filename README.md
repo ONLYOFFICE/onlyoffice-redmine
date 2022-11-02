@@ -70,7 +70,7 @@ Configure the plugin via the Redmine interface. Go to **Administration -> Plugin
   The URL and port of the installed ONLYOFFICE Document Server.
 
 - **Secret key**:
-  Enables JWT to protect your documents from unauthorized access (further information can be found [here](https://api.onlyoffice.com/editors/signature/)).
+  Starting from version 7.2, JWT is enabled by default and the secret key is generated automatically to restrict the access to ONLYOFFICE Docs and for security reasons and data integrity. Specify your own secret key on the Redmine configuration page. In the ONLYOFFICE Docs [config file](https://api.onlyoffice.com/editors/signature/), specify the same secret key and enable the validation.
 
 You can also configure the **Editor customization settings**:
 
