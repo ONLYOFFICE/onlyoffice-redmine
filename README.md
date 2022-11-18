@@ -122,7 +122,7 @@ Opening files for viewing is available for user roles with the **View Wiki** per
 
 The uploaded files in this module are available for viewing and editing.
 
-File editing is available for user roles with the **Edit news** permission.
+File editing is available for user roles with the **Manage news** permission.
 
 Opening files for viewing is available for user roles with the **View news** permission.
 
