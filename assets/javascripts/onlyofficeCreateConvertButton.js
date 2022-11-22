@@ -10,7 +10,6 @@
         button.className = "onlyoffice-editor-button icon";
         button.style.backgroundImage = image;
         button.style.backgroundSize = "16px";
-        button.style.margin = "0 6px";
         button.style.cursor = "pointer";
 
         if (is_edit) {

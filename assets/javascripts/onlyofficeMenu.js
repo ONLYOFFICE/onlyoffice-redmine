@@ -74,7 +74,7 @@
         button.className = forEditor ? "onlyoffice-editor-button icon-only" : "onlyoffice-editor-button-convert icon-only";
         button.style.backgroundImage = forEditor ? 'url(/plugin_assets/onlyoffice_redmine/images/onlyoffice.ico)' : 'url(/plugin_assets/onlyoffice_redmine/images/conversion.svg)';
         button.style.backgroundSize = "16px";
-        button.style.margin = forEditor ? "0 6px" : "0 6px 0 0";
+        button.style.margin = "0 6px 0 0";
         return button;
     }
 
