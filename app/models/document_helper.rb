@@ -113,20 +113,7 @@ class DocumentHelper
     end
 
     def go_back_url(attachment)
-      case attachment.container_type
-      when "Project"
-      then return @@base_url + "projects/#{attachment.project.id}/files"
-      when "Issue"
-      then return @@base_url + "issues/#{attachment.container.id}"
-      when "News"
-      then return @@base_url + "news/#{attachment.container.id}"
-      when "Document"
-      then return @@base_url + "documents/#{attachment.container.id}"
-      when "WikiPage"
-      then return @@base_url + "projects/#{attachment.project.id}/wiki"
-      else
-        return @@base_url + "projects/#{attachment.project.id}"
-      end
+      return nil
     end
 
     def is_editable(attachment)

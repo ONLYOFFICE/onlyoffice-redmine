@@ -71,11 +71,30 @@ class OnlyofficeController < OnlyofficeBaseController
     DocumentHelper.init(request.base_url)
     @user = User.current
     @editor_config = DocumentHelper.get_attachment_config(@user, @attachment, I18n.locale,  params[:action_data])
+    @editor_config[:editorConfig][:customization][:goback][:url] = go_back_url(@attachment)
     case @editor_config[:document][:fileType]
     when 'docxf', 'oform'
       @favicon = @editor_config[:document][:fileType]
     else
       @favicon = @editor_config[:documentType]
+    end
+  end
+
+  def go_back_url(attachment)
+    if !document.container
+      return nil
+
+    case attachment.container
+    when Message
+      url_for(attachment.container.event_url)
+    when Project
+      project_files_url(attachment.container)
+    when Version
+      project_files_url(attachment.container.project)
+    when WikiPage
+      project_wiki_page_url attachment.container.wiki.project, attachment.container.title
+    else
+      url_for(attachment.container)
     end
   end
 
