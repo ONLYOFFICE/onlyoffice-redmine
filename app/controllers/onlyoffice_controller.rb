@@ -83,6 +83,7 @@ class OnlyofficeController < OnlyofficeBaseController
   def go_back_url(attachment)
     if !document.container
       return nil
+    end
 
     case attachment.container
     when Message
