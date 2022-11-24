@@ -1,6 +1,7 @@
 # Change Log
 
 
+## 2.0.0
 ## Added
 - documents conversion
 - Added connection to a demo document server
