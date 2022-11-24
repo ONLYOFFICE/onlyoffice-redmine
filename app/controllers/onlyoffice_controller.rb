@@ -1,5 +1,5 @@
 #
-# (c) Copyright Ascensio System SIA 2021
+# (c) Copyright Ascensio System SIA 2022
 # http://www.onlyoffice.com
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,11 +18,23 @@
 require_dependency "attachment"
 require_dependency "user"
 
-class OnlyofficeController < AccountController
+class OnlyofficeController < OnlyofficeBaseController
 
   skip_before_action :verify_authenticity_token, :only => [ :callback ]
   before_action :find_attachment, :only => [ :download, :editor, :callback, :save_as ]
   before_action :file_readable, :read_authorize, :only => [ :editor ]
+
+  class << self
+
+    def checking_activity_onlyoffice
+      return FileUtility.get_editor_internal_url.present?
+    end
+
+  end
+
+  def check_settings
+    render plain: is_valid_settings(params[:url], params[:editor_inner_url], params[:redmine_url], params[:secret], params[:cert], params[:demo])
+  end
 
   def download
     file_readable
@@ -31,9 +43,9 @@ class OnlyofficeController < AccountController
       render_403
     end
 
-    attachment_id = JSON.parse(JWTHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["attachment_id"]
-    type = JSON.parse(JWTHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["type"]
-    user_id = JSON.parse(JWTHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["userid"]
+    attachment_id = JSON.parse(JwtHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["attachment_id"]
+    type = JSON.parse(JwtHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["type"]
+    user_id = JSON.parse(JwtHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["userid"]
 
     user = User.find(user_id)
     read_authorize(user)
@@ -55,15 +67,35 @@ class OnlyofficeController < AccountController
   end
 
   def editor
-    JWTHelper.init
+    JwtHelper.init
     DocumentHelper.init(request.base_url)
     @user = User.current
     @editor_config = DocumentHelper.get_attachment_config(@user, @attachment, I18n.locale,  params[:action_data])
+    @editor_config[:editorConfig][:customization][:goback][:url] = go_back_url(@attachment)
     case @editor_config[:document][:fileType]
     when 'docxf', 'oform'
       @favicon = @editor_config[:document][:fileType]
     else
       @favicon = @editor_config[:documentType]
+    end
+  end
+
+  def go_back_url(attachment)
+    if !attachment.container
+      return nil
+    end
+
+    case attachment.container
+    when Message
+      url_for(attachment.container.event_url)
+    when Project
+      project_files_url(attachment.container)
+    when Version
+      project_files_url(attachment.container.project)
+    when WikiPage
+      project_wiki_page_url attachment.container.wiki.project, attachment.container.title
+    else
+      url_for(attachment.container)
     end
   end
 
@@ -73,8 +105,8 @@ class OnlyofficeController < AccountController
       render_403
     end
 
-    type = JSON.parse(JWTHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["type"]
-    attachment_id = JSON.parse(JWTHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["attachment_id"]
+    type = JSON.parse(JwtHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["type"]
+    attachment_id = JSON.parse(JwtHelper.decode(params[:key], Setting.plugin_onlyoffice_redmine["onlyoffice_key"]))["attachment_id"]
 
     if !type.eql?("callback")
       logger.error("Not callback token type.")
@@ -137,6 +169,7 @@ class OnlyofficeController < AccountController
         saved = CallbackHelper.process_save(data, @attachment)
         render plain: '{"error":' + saved.to_s + '}'
       rescue => ex
+        logger.error(ex.full_message)
         render plain: '{"error":1, "message": "' + ex.message + '"}'
       end
       return
@@ -190,30 +223,6 @@ class OnlyofficeController < AccountController
 
   private
 
-  def find_attachment
-    @attachment = Attachment.find(params[:id])
-    # Show 404 if the filename in the url is wrong
-    raise ActiveRecord::RecordNotFound if params[:filename] && params[:filename] != @attachment.filename
-
-    @project = @attachment.project
-  rescue ActiveRecord::RecordNotFound
-    render_404
-  end
-
-  # Checks that the file exists and is readable
-  def file_readable
-    if @attachment.readable?
-      true
-    else
-      logger.error "Cannot send attachment, #{@attachment.diskfile} does not exist or is unreadable."
-      render_404
-    end
-  end
-
-  def read_authorize(user=User.current)
-    @attachment.visible?(user) ? true : deny_access
-  end
-
   def detect_content_type(attachment)
     content_type = attachment.content_type
     if content_type.blank? || content_type == "application/octet-stream"
@@ -223,6 +232,61 @@ class OnlyofficeController < AccountController
     end
 
     content_type
+  end
+
+  def is_valid_settings(url, editor_inner_url, redmine_url, secret = nil, direct_cert, direct_demo)
+    JwtHelper.init
+    DocumentHelper.init(request.base_url)
+    
+    editor_base_url = url
+    use_editor_inner = !editor_inner_url.to_s.strip.empty?
+    use_redmine_inner = !redmine_url.to_s.strip.empty?
+    is_command = ""
+
+    attachment = OnlyofficeConvertController.crete_file(nil, "OnlyOfficeCheakConvertService", "docx")
+    url_file = DocumentHelper.get_download_url(attachment.id, User.current.id, use_redmine_inner ? redmine_url : nil)
+    title = attachment.filename[..attachment.disk_filename.index(".")] + 'docx'
+
+    key = DocumentHelper.get_key(attachment)
+    is_convert = 0
+    converted_file_url = nil
+    demo_before_update = Setting.plugin_onlyoffice_redmine["editor_demo"]
+    cert_before_update = Setting.plugin_onlyoffice_redmine["check_cert"]
+
+    begin
+      Setting.plugin_onlyoffice_redmine["editor_demo"] = direct_demo ? "on" : ""
+      Setting.plugin_onlyoffice_redmine["check_cert"] = direct_cert ? "on" : ""
+
+      demo_date = Setting.plugin_onlyoffice_redmine["demo_date_start"]
+      if direct_demo && (demo_date.nil? || demo_date.eql?(''))
+        Setting.plugin_onlyoffice_redmine["demo_date_start"] = Time.now.to_s
+      end
+      res_health = CallbackHelper.do_request(editor_base_url + "healthcheck", true)
+      if (use_editor_inner)
+        res_health = CallbackHelper.do_request(editor_inner_url + "healthcheck", true)
+      end
+
+      res_command = CallbackHelper.command_request("version",  nil, use_editor_inner ? editor_inner_url : editor_base_url, secret)
+      is_command += res_command["version"]
+
+      res_convert = ServiceConverter.get_converted_uri(use_editor_inner ? editor_inner_url : editor_base_url, title, url_file, "docx", "docx", key,  secret)
+      is_convert = res_convert[0]
+      converted_file_url = res_convert[1]
+    rescue => ex
+      logger.error(ex)
+      Setting.plugin_onlyoffice_redmine["editor_demo"] = demo_before_update
+      Setting.plugin_onlyoffice_redmine["check_cert"] = cert_before_update
+      attachment.destroy
+      return false
+    end
+
+    attachment.destroy
+
+    if is_command.empty? || (is_convert != 100 && !converted_file_url.nil?)
+      return false
+    end
+
+    return true
   end
 
 end

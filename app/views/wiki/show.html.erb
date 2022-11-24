@@ -1,5 +1,5 @@
 <%#
-# (c) Copyright Ascensio System SIA 2021
+# (c) Copyright Ascensio System SIA 2022
 # http://www.onlyoffice.com
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,40 +16,53 @@
 %>
 
 <%= render :parent %>
-<%= javascript_include_tag "onlyofficeMenu", :plugin => "onlyoffice_redmine" %>
+<% if OnlyofficeController.checking_activity_onlyoffice %>
 
-<%
-  view_permission = false
-  edit_permission = false
-  user_roles = User.current.roles_for_project(@project)
-  user_roles.each do |role|
-    if role.permissions.include? :view_wiki_pages
-      view_permission = true
+  <%= javascript_include_tag "onlyofficeMenu", :plugin => "onlyoffice_redmine" %>
+
+  <%
+    view_permission = false
+    edit_permission = false
+    user_roles = User.current.roles_for_project(@project)
+    user_roles.each do |role|
+      if role.permissions.include? :view_wiki_pages
+        view_permission = true
+      end
+      if role.permissions.include? :edit_wiki_pages
+        edit_permission = true
+      end
     end
-    if role.permissions.include? :edit_wiki_pages
-      edit_permission = true
+    project_is_not_readonly = @project.status != 5
+    view_permission = view_permission || User.current.admin
+    edit_permission = (edit_permission || User.current.admin) && project_is_not_readonly
+    is_editable_array = []
+    attachments_disk_filenames = []
+    is_convert = []
+    @page.attachments.each do |attachment|
+      is_editable_array = is_editable_array + [DocumentHelper.is_editable(attachment)]
+      attachments_disk_filenames = attachments_disk_filenames + [attachment.disk_filename]
+      ext = DocumentHelper.file_ext(attachment.disk_filename, true)
+      is_convert = is_convert + [FormatUtility.format_supported(ext).length != 0]
     end
-  end
+  %>
 
-  is_editable_array = []
-  attachments_disk_filenames = []
-  @page.attachments.each do |attachment|
-    is_editable_array = is_editable_array + [DocumentHelper.is_editable(attachment)]
-    attachments_disk_filenames = attachments_disk_filenames + [attachment.disk_filename]
-  end
-%>
+  <script type="text/javascript" language="javascript">
+      if (<%= view_permission || edit_permission%>) {
+          ONLYOFFICE.Buttons.addOnlyOfficeButton(<%= raw FileUtility.get_all_available_formats %>, <%= raw attachments_disk_filenames %>, <%= raw is_convert %>, <%= @page.id %>, "WikiPage");
+          var onlyofficeButtons = document.getElementsByClassName("onlyoffice-editor-button");
+          for (var i = 0; i < onlyofficeButtons.length; i++) {
+              if (<%= view_permission %>) {
+                  onlyofficeButtons[i].title = "<%= l(:open_in_onlyoffice) %>";
+              }
+              if (<%= is_editable_array %>[parseInt(onlyofficeButtons[i].id.replace("onlyoffice-button-", ""))] && <%= edit_permission %>) {
+                  onlyofficeButtons[i].title = "<%= l(:edit_in_onlyoffice) %>";
+              }
+          }
 
-<script type="text/javascript" language="javascript">
-    if (<%= view_permission || edit_permission%>) {
-        addOnlyOfficeButton(<%= raw FileUtility.get_all_available_formats %>, <%= raw attachments_disk_filenames %>);
-        var onlyofficeButtons = document.getElementsByClassName("onlyoffice-editor-button");
-        for (var i = 0; i < onlyofficeButtons.length; i++) {
-            if (<%= view_permission %>) {
-                onlyofficeButtons[i].title = "<%= l(:open_in_onlyoffice) %>";
-            }
-            if (<%= is_editable_array %>[parseInt(onlyofficeButtons[i].id.replace("onlyoffice-button-", ""))] && <%= edit_permission %>) {
-                onlyofficeButtons[i].title = "<%= l(:edit_in_onlyoffice) %>";
-            }
-        }
-    }
-</script>
+          var onlyofficeButtonsConvert = document.getElementsByClassName("onlyoffice-editor-button-convert");
+          for (var i = 0; i < onlyofficeButtonsConvert.length; i++) {
+              onlyofficeButtonsConvert[i].title = "<%= l(:onlyoffice_convert_dropdown) %>";
+          }
+      }
+  </script>
+<% end %>

@@ -1,5 +1,5 @@
 #
-# (c) Copyright Ascensio System SIA 2021
+# (c) Copyright Ascensio System SIA 2022
 # http://www.onlyoffice.com
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,9 +23,15 @@ get 'onlyoffice/editor/:id/:action_data', :to => 'onlyoffice#editor', :id => /\d
 post 'onlyoffice/callback/:id/:rss', :to => 'onlyoffice#callback', :id => /\d+/, :rss => /.*/
 post 'onlyoffice/save_as/:id', :to => 'onlyoffice#save_as', :id => /\d+/, :as => 'onlyoffice_save_as'
 
+post 'onlyoffice/check/settings', :to => 'onlyoffice#check_settings', :as => 'onlyoffice_check_settings'
 
 get 'onlyoffice_create/new/:ext/:project_id', :to => 'onlyoffice_create#new', :as => 'onlyoffice_create_new'
 
 post 'onlyoffice_create/new/:ext/:project_id', :to => 'onlyoffice_create#create', :as => 'onlyoffice_create'
 
 post 'onlyoffice_create/attachment/:document_id/:project_id', :to => 'onlyoffice_create#new_doc_attachment', :as => 'onlyoffice_create_new_doc_attachment'
+
+#   convert file
+get 'onlyoffice/conversion/:page_id/:page_type/:id', :to => 'onlyoffice_convert#convert_page', :id => /\d+/, :page_id => /\d+/
+
+post 'onlyoffice/conversion/:page_id/:page_type', :to => 'onlyoffice_convert#convert', :as => 'onlyoffice_convert', :page_id => /\d+/

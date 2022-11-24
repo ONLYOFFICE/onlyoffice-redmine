@@ -20,17 +20,16 @@ jobs:
         run: |
           cd ${{ github.workspace }}
           git submodule update --init --recursive
-          mkdir -p ./deploy/onlyoffice-redmine
-          rsync -av --exclude='deploy' ./ ./deploy/onlyoffice-redmine
-          cd ./deploy/onlyoffice-redmine
+          mkdir -p ./deploy/onlyoffice_redmine
+          rsync -av --exclude='deploy' ./ ./deploy/onlyoffice_redmine
+          cd ./deploy/onlyoffice_redmine
           rm -rf ./.github/
           rm -rf ./.git/
           rm ./.gitmodules
           cd ./assets/document-templates
-          rm -r az-Latn-AZ bg-BG cs-CZ el-GR en-GB ko-KR lv-LV nl-NL pl-PL sk-SK sv-SE tr-TR uk-UA vi-VN
           rm .git
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: onlyoffice-redmine
+          name: onlyoffice_redmine
           path: deploy
