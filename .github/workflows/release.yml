@@ -23,21 +23,20 @@ jobs:
         run: |
           cd ${{ github.workspace }}
           git submodule update --init --recursive
-          mkdir -p ./onlyoffice-redmine
-          rsync -av --exclude='onlyoffice-redmine' ./ ./onlyoffice-redmine
-          cd ./onlyoffice-redmine
+          mkdir -p ./onlyoffice_redmine
+          rsync -av --exclude='onlyoffice_redmine' ./ ./onlyoffice_redmine
+          cd ./onlyoffice_redmine
           rm -rf ./.github/
           rm -rf ./.git/
           rm ./.gitmodules
           cd ./assets/document-templates
-          rm -r az-Latn-AZ bg-BG cs-CZ el-GR en-GB ko-KR lv-LV nl-NL pl-PL sk-SK sv-SE tr-TR uk-UA vi-VN
           rm .git
       - name: Build Artifact
-        run: zip -r onlyoffice-redmine.zip onlyoffice-redmine/
+        run: zip -r onlyoffice_redmine.zip onlyoffice_redmine/
       - name: Create Release
         uses: ncipollo/release-action@v1
         id: create_release
         with:
-          artifacts: "onlyoffice-redmine.zip"
+          artifacts: "onlyoffice_redmine.zip"
           bodyFile: RELEASE.md
           tag: v${{ steps.info.outputs.version }}
