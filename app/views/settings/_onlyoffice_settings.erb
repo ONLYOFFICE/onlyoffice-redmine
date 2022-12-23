@@ -45,6 +45,10 @@
     <%= content_tag(:label, l(:onlyoffice_settings_jwtsecret)) %>
     <%= text_field_tag 'settings[jwtsecret]', settings['jwtsecret'] %>
   </p>
+  <p>
+    <%= content_tag(:label, l(:onlyoffice_settings_jwtheader)) %>
+    <%= text_field_tag 'settings[jwtheader]', settings['jwtheader'] %>
+  </p>
   <label class="block">
     <%= check_box_tag 'settings[check_cert]', settings['check_cert'], settings['check_cert'].eql?('on') %>
     <%= l(:onlyoffice_settings_check_cert) %>
@@ -147,6 +151,7 @@
           return;
         }
         var secret = $("#settings_jwtsecret")[0].value;
+        var jwtheader = $("#settings_jwtheader")[0].value;
         if ($('#settings_editor_demo')[0].checked) {
           editor_url = `<%= Config.get_config("oo_address", true) %>`;
           secret = '<%= Config.get_config("jwtsecret", true) %>';
@@ -156,6 +161,7 @@
             editor_inner_url: editor_inner_url,
             redmine_url: redmine_url,
             secret: secret,
+            jwtheader: jwtheader,
             cert: cert,
             demo: $('#settings_editor_demo')[0].checked
         };
@@ -187,6 +193,7 @@
         $("#settings_inner_editor").prop('disabled', value);
         $("#settings_inner_server").prop('disabled', value);
         $("#settings_jwtsecret").prop('disabled', value);
+        $("#settings_jwtheader").prop('disabled', value);
     };
 
     $(document).ready(function () {

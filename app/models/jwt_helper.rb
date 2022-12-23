@@ -22,8 +22,10 @@ class JwtHelper
   class << self
     def init
         @jwt_secret = Config.get_config("jwtsecret")
-        demo_header = Config.get_config("jwtHeader")
-        @jwt_header = demo_header.nil? ? "Authorization" : demo_header
+        @jwt_header = Config.get_config("jwtheader")
+        if @jwt_header.nil?
+          @jwt_header = "Authorization"
+        end
     end
 
     def jwt_header

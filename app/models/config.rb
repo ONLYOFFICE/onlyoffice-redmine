@@ -1,7 +1,7 @@
 class Config
     @trial_data = { 
                 "oo_address" => "https://onlinedocs.onlyoffice.com/", 
-                "jwtHeader" => "AuthorizationJWT",
+                "jwtheader" => "AuthorizationJWT",
                 "jwtsecret" => "sn2puSUF7muF5Jas",
                 "trial" => 30
             }

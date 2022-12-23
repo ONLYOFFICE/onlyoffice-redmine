@@ -28,6 +28,7 @@ Redmine::Plugin.register :onlyoffice_redmine do
 
   settings default: {'oo_address' => 'http://localhost/',
                      'jwtsecret' => '',
+                     'jwtheader' => 'Authorization',
                      'editor_demo' => '',
                      'editor_chat' => 'on',
                      'editor_help' => 'on',
