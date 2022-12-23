@@ -1,5 +1,8 @@
 # Change Log
 
+## 2.0.1
+## Added
+- jwt header configuration
 
 ## 2.0.0
 ## Added
