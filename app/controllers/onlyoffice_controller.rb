@@ -33,7 +33,7 @@ class OnlyofficeController < OnlyofficeBaseController
   end
 
   def check_settings
-    render plain: is_valid_settings(params[:url], params[:editor_inner_url], params[:redmine_url], params[:secret], params[:cert], params[:demo])
+    render plain: is_valid_settings(params)
   end
 
   def download
@@ -234,11 +234,16 @@ class OnlyofficeController < OnlyofficeBaseController
     content_type
   end
 
-  def is_valid_settings(url, editor_inner_url, redmine_url, secret = nil, direct_cert, direct_demo)
+  def is_valid_settings(params)
     JwtHelper.init
     DocumentHelper.init(request.base_url)
     
-    editor_base_url = url
+    editor_base_url = params[:url]
+    editor_inner_url = params[:editor_inner_url]
+    redmine_url = params[:redmine_url]
+
+    secret = params[:secret]
+
     use_editor_inner = !editor_inner_url.to_s.strip.empty?
     use_redmine_inner = !redmine_url.to_s.strip.empty?
     is_command = ""
@@ -253,9 +258,11 @@ class OnlyofficeController < OnlyofficeBaseController
     demo_before_update = Setting.plugin_onlyoffice_redmine["editor_demo"]
     cert_before_update = Setting.plugin_onlyoffice_redmine["check_cert"]
 
+    direct_demo = params[:demo]
+
     begin
       Setting.plugin_onlyoffice_redmine["editor_demo"] = direct_demo ? "on" : ""
-      Setting.plugin_onlyoffice_redmine["check_cert"] = direct_cert ? "on" : ""
+      Setting.plugin_onlyoffice_redmine["check_cert"] = params[:cert] ? "on" : ""
 
       demo_date = Setting.plugin_onlyoffice_redmine["demo_date_start"]
       if direct_demo && (demo_date.nil? || demo_date.eql?(''))
