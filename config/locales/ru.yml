@@ -3,6 +3,7 @@ ru:
   edit_in_onlyoffice: "Редактировать в ONLYOFFICE"
   onlyoffice_settings_doc_url: "Адрес службы редактирования документов (оставьте пустым для отключения плагина)"
   onlyoffice_settings_jwtsecret: "Секретный ключ (оставьте пустым для отключения)"
+  onlyoffice_settings_jwtheader: "Заголовок авторизации"
   onlyoffice_settings_forcesave: "Включить Force Save"
   onlyoffice_settings_file_type: "Открыть файл на редактирование (из-за ограничений формата данные могут быть утеряны при сохранении в форматы из списка ниже)"
   onlyoffice_additional_settings: "Дополнительные настройки сервера"
