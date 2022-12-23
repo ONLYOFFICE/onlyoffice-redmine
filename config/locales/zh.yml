@@ -3,6 +3,7 @@ zh:
   edit_in_onlyoffice: "在ONLYOFFICE中编辑"
   onlyoffice_settings_doc_url: "文件编辑服务地址 (留空以停用该插件)"
   onlyoffice_settings_jwtsecret: "秘钥(留空为关闭)"
+  onlyoffice_settings_jwtheader: ""
   onlyoffice_settings_forcesave: "启用强制保存"
   onlyoffice_settings_file_type: "默认的文件编辑器 (由于文件格式限制，保存为下列格式时，数据可能会缺失)"
   onlyoffice_additional_settings: "更多设置"
