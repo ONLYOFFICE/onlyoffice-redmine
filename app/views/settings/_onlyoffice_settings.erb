@@ -184,6 +184,8 @@
 
     var fieldsDisable = function (value) {
         $("#settings_oo_address").prop('disabled', value);
+        $("#settings_inner_editor").prop('disabled', value);
+        $("#settings_inner_server").prop('disabled', value);
         $("#settings_jwtsecret").prop('disabled', value);
     };
 
