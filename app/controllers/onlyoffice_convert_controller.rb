@@ -42,7 +42,7 @@ class OnlyofficeConvertController < OnlyofficeBaseController
               render plain: '{ "url": "' + @@res_convert[1].to_s + '" }'
             else
               @page, back_page = get_page(params[:page_id], params[:page_type], @attachment)
-              new_attachment = OnlyofficeConvertController.crete_file(@@res_convert[1], file_name, next_type)
+        new_attachment = OnlyofficeConvertController.create_file(@@res_convert[1], file_name, next_type)
               @page.attachments << new_attachment
               if @page.save
                 flash[:notice] = l(:notice_successful_create)
@@ -81,7 +81,7 @@ class OnlyofficeConvertController < OnlyofficeBaseController
 
     class << self
 
-        def crete_file(url = nil, file_name, ext)
+    def create_file(url = nil, file_name, ext)
             if !url.nil?
               res = CallbackHelper.do_request(url)
               data = res.body

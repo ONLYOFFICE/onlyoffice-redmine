@@ -23,28 +23,32 @@ class DocumentHelper
   class << self
 
     def init (url)
-      @@base_url = FileUtility.get_redmine_internal_url(url)
+    @@base_url = Config.get_redmine_url(url)
 
       if Setting.plugin_onlyoffice_redmine["onlyoffice_key"].eql?(nil)
         Setting.plugin_onlyoffice_redmine["onlyoffice_key"] = Token.generate_token_value
       end
     end
 
-    def get_download_url(id, user_id, url = nil)
+  def get_download_url(id, user_id)
       payload = {
         :attachment_id => id,
         :type => "download",
         :userid => user_id
       }
-      return (url.to_s.empty? ? @@base_url : url) + "/onlyoffice/download/#{id}?key=#{JwtHelper.encode(payload, Setting.plugin_onlyoffice_redmine["onlyoffice_key"])}"
+    return @@base_url + "onlyoffice/download/#{id}?key=#{JwtHelper.encode(payload, Setting.plugin_onlyoffice_redmine["onlyoffice_key"])}"
     end
 
-    def get_callback_url(id, user, url = nil)
+  def get_download_test_settings_url()
+    return @@base_url + "onlyoffice/download_test/"
+  end
+
+  def get_callback_url(id, user)
       payload = {
         :attachment_id => id,
         :type => "callback"
       }
-      url = (url.to_s.empty? ? @@base_url : url) + "/onlyoffice/callback/#{id}/#{user.rss_key}?key=#{JwtHelper.encode(payload, Setting.plugin_onlyoffice_redmine["onlyoffice_key"])}"
+    url = @@base_url + "onlyoffice/callback/#{id}/#{user.rss_key}?key=#{JwtHelper.encode(payload, Setting.plugin_onlyoffice_redmine["onlyoffice_key"])}"
     end
 
     def get_document_type(file_name)
