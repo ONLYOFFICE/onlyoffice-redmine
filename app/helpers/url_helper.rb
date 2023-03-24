@@ -27,6 +27,17 @@ class UrlHelper
             return stripped.end_with?("/") ? stripped : stripped + "/"
         end
 
+        def replace_doc_editor_url_to_internal(url)
+            inner_url = Config.get_docserver_url()
+            public_url = Config.get_docserver_url(false)
+
+            if inner_url.nil? || inner_url.empty? || inner_url.eql?(public_url)
+                return url
+            end
+
+            return url.sub(publicUrl, innerUrl)
+        end
+
     end
 
 end

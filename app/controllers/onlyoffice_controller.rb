@@ -27,7 +27,8 @@ class OnlyofficeController < OnlyofficeBaseController
   class << self
 
     def checking_activity_onlyoffice
-      return FileUtility.get_editor_internal_url.present?
+      url = Config.get_docserver_url
+      return !url.nil? && !url.empty?
     end
 
   end
