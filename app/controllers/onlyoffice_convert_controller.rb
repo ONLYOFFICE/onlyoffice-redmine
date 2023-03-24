@@ -26,7 +26,7 @@ class OnlyofficeConvertController < OnlyofficeBaseController
         current_type = params[:onlyoffice_convert_current_type]
         next_type = params[:onlyoffice_convert_end_type]
 
-        editor_base_url = Config.get_config("oo_address")
+        editor_base_url = Config.get_docserver_url()
 
         title = file_name + "." + next_type
 

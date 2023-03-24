@@ -33,22 +33,29 @@ class JwtHelper
     return @jwt_secret && !@jwt_secret.empty? ? true : false
   end
 
-  def encode(payload)
+  def encode(payload, secret = nil)
+    if secret.nil? || secret.empty?
+      secret = @jwt_secret
+    end
+
     header = { :alg => "HS256", :typ => "JWT" }
     enc_header = Base64.urlsafe_encode64(header.to_json).remove("=")
     enc_payload = Base64.urlsafe_encode64(payload.to_json).remove("=")
-    hash = Base64.urlsafe_encode64(calc_hash(enc_header, enc_payload)).remove("=")
+    hash = Base64.urlsafe_encode64(calc_hash(enc_header, enc_payload, secret)).remove("=")
 
     return "#{enc_header}.#{enc_payload}.#{hash}"
   end
 
-  def decode(token)
-    if !is_enabled
-      return ""
+  def decode(token, secret = nil)
+    if secret.nil? || secret.empty?
+      if !is_enabled
+        return ""
+      end
+      secret = @jwt_secret
     end
 
     split = token.split(".")
-    hash = Base64.urlsafe_encode64(calc_hash(split[0], split[1])).remove("=")
+    hash = Base64.urlsafe_encode64(calc_hash(split[0], split[1], secret)).remove("=")
 
     if !hash.eql?(split[2])
     return ""
@@ -58,8 +65,8 @@ class JwtHelper
 
   private
 
-  def calc_hash(header, payload)
-    return OpenSSL::HMAC.digest("SHA256", @jwt_secret, "#{header}.#{payload}")
+  def calc_hash(header, payload, secret)
+    return OpenSSL::HMAC.digest("SHA256", secret, "#{header}.#{payload}")
   end
 
   end

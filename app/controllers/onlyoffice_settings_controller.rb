@@ -37,13 +37,27 @@ class OnlyofficeSettingsController < SettingsController
         setting["inner_editor"] = UrlHelper.fix_url(setting["inner_editor"])
         setting["inner_server"] = UrlHelper.fix_url(setting["inner_server"])
 
-        Setting.send "plugin_#{@plugin.id}=", setting
-
         response = {
             :success => true,
             :message => l(:notice_successful_update)
         }
+
         begin
+            if setting["editor_demo"].eql?("on")
+                if Config.is_demo_ended()
+                    Setting.plugin_onlyoffice_redmine["editor_demo"] = "off"
+                    raise l(:onlyoffice_editor_trial_period_ended)
+                end
+
+                start = Setting.plugin_onlyoffice_redmine["demo_date_start"]
+
+                if start.nil? || start.empty?
+                    Setting.plugin_onlyoffice_redmine["demo_date_start"] = Time.now.to_s
+                end
+            end
+
+            Setting.send "plugin_#{@plugin.id}=", setting
+        
             is_valid_settings()
         rescue => ex
             response[:success] = false
@@ -56,9 +70,6 @@ class OnlyofficeSettingsController < SettingsController
     def is_valid_settings
         JwtHelper.init
         DocumentHelper.init(request.base_url)
-        
-        # check demo
-        # Setting.plugin_onlyoffice_redmine["demo_date_start"] = Time.now.to_s
 
         logger.info("Checking settings")
 

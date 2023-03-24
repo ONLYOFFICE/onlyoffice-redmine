@@ -1,6 +1,8 @@
 class Config
   @trial_data = { 
-    "oo_address" => "https://onlinedocs.onlyoffice.com/", 
+    "oo_address" => "https://onlinedocs.onlyoffice.com/",
+    "inner_editor" => "",
+    "inner_server" => "",
     "jwtheader" => "AuthorizationJWT",
     "jwtsecret" => "sn2puSUF7muF5Jas",
     "trial" => 30
@@ -8,33 +10,28 @@ class Config
 
   class << self
 
-    def get_config(key, for_settings = false)
-      get = (Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") && istrialended) || for_settings ? @trial_data[key] : Setting.plugin_onlyoffice_redmine[key]
-      return UrlHelper.fix_url(get)
-    end
-
     def get_docserver_url(internal = true)
       url = nil
       if internal
-        url = Setting.plugin_onlyoffice_redmine["inner_editor"]
+        url = get_config("inner_editor")
       end
       if url.nil? || url.empty?
-        url = Setting.plugin_onlyoffice_redmine["oo_address"]
+        url = get_config("oo_address")
       end
       return UrlHelper.fix_url(url)
     end
 
     def get_redmine_url(redmine_url)
-      url = Setting.plugin_onlyoffice_redmine["inner_server"]
+      url = get_config("inner_server")
       return UrlHelper.fix_url(url.present? ? url : redmine_url)
     end
 
     def get_jwt_secret()
-      return Setting.plugin_onlyoffice_redmine["jwtsecret"]
+      return get_config("jwtsecret")
     end
 
     def get_jwt_header()
-      header = Setting.plugin_onlyoffice_redmine["jwtheader"]
+      header = get_config("jwtheader")
       if header.nil? || header.empty?
         header = "Authorization"
       end
@@ -42,17 +39,28 @@ class Config
       return header
     end
 
-    def istrialended
-      demo_date = Setting.plugin_onlyoffice_redmine["demo_date_start"]
-      if !demo_date.nil? && !demo_date.eql?("")
-        if Time.now < Time.parse(demo_date) + (@trial_data['trial']*24*60*60)
+    def is_demo()
+      return Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") && !is_demo_ended()
+    end
+
+    def is_demo_ended()
+      demo_start = Setting.plugin_onlyoffice_redmine["demo_date_start"]
+      if !demo_start.nil? && !demo_start.empty? && Time.now > Time.parse(demo_start) + (@trial_data['trial']*24*60*60)
           return true
-        else
-          return false
-        end
       end
       return false
     end
 
+    private 
+
+    def get_config(key)
+      if is_demo() && !is_demo_ended()
+        return @trial_data[key]
+      end
+  
+      return Setting.plugin_onlyoffice_redmine[key]
+    end
+
   end
+
 end

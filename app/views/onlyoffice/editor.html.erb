@@ -16,7 +16,7 @@
 %>
 
 <%= stylesheet_link_tag "editor", :plugin => "onlyoffice_redmine" %>
-<% editor_base_url = Config.get_config("oo_address") %>
+<% editor_base_url = Config.get_docserver_url(false) %>
 
 <div id="onlyoffice-container">
   <div class="flash error" style="display: none"><%= l(:onlyoffice_editor_cannot_be_reached) %></div>
@@ -25,15 +25,16 @@
 <script src="<%= editor_base_url %>web-apps/apps/api/documents/api.js"></script>
 
 <script type="text/javascript" language="javascript">
-
+(function() {
     var docEditor;
+    var error_notice = document.getElementById("onlyoffice-container").children[0];
 
     var innerAlert = function (message) {
         if (console && console.log) console.log(message);
     };
     var onAppReady = function () {
         innerAlert("Document editor ready");
-        if (<%= Setting.plugin_onlyoffice_redmine["editor_demo"].eql?("on") %>) {
+        if (<%= Config.is_demo() %>) {
             docEditor.showMessage("<%= l(:onlyoffice_editor_demo_enabled) %>");
         }
     };
@@ -56,8 +57,14 @@
     };
 
     var connectEditor = function () {
+        if (<%= Config.is_demo_ended() %>) {
+            error_notice.style.display = "block";
+            error_notice.innerText = "<%= l(:onlyoffice_editor_trial_period_ended) %>";
+            return;
+        }
+
         if (typeof DocsAPI === "undefined") {
-            document.getElementById("onlyoffice-container").children[0].style.display = "block";
+            error_notice.style.display = "block";
             return;
         }
 
@@ -98,4 +105,5 @@
         window.attachEvent("load", connectEditor);
     }
 
+})();
 </script>

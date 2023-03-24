@@ -160,7 +160,7 @@ class OnlyofficeController < OnlyofficeBaseController
       return
     end
 
-  data = CallbackHelper.read_body(request, logger)
+  data = CallbackHelper.read_body(request)
     if data == nil || data.empty?
       render plain: '{"error":1, "message": "Callback data is null or empty"}'
       return

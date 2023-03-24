@@ -20,6 +20,9 @@ class UrlHelper
     class << self
         
         def fix_url(url)
+            if (url.nil?)
+                return url
+            end
             stripped = url.strip
             if (stripped.empty?)
                 return stripped
