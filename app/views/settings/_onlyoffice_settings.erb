@@ -159,8 +159,11 @@
         scriptAddress.onload = scriptCallback;
         scriptAddress.onerror = scriptCallback;
 
-    var editor_url = fixUrl(document.getElementById("settings_oo_address").value);
-        scriptAddress.src = editor_url + "web-apps/apps/api/documents/api.js";
+      var editor_url = fixUrl(document.getElementById("settings_oo_address").value);
+      if (document.getElementById("settings_editor_demo").checked) {
+        editor_url = "https://onlinedocs.onlyoffice.com/";
+      }
+      scriptAddress.src = editor_url + "web-apps/apps/api/documents/api.js";
     };
 
   var checkSettingsRemote = function() {
