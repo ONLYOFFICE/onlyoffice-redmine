@@ -60,10 +60,10 @@ class CallbackHelper
     end
 
     def save_from_uri(directory, filename, download_url)
-      res = do_request(FileUtility.replace_doc_edito_url_to_internal(download_url))
+    res = do_request(UrlHelper.replace_doc_editor_url_to_internal(download_url))
       data = res.body
 
-      uri = URI.parse(FileUtility.replace_doc_edito_url_to_internal(download_url))
+    uri = URI.parse(UrlHelper.replace_doc_editor_url_to_internal(download_url))
       http = Net::HTTP.new(uri.host, uri.port)
       check_cert(uri.to_s, http)
 
@@ -78,7 +78,7 @@ class CallbackHelper
     end
 
     def do_request(url, force = false)
-      uri = URI.parse(force ? url : FileUtility.replace_doc_edito_url_to_internal(url))
+    uri = URI.parse(force ? url : UrlHelper.replace_doc_editor_url_to_internal(url))
       http = Net::HTTP.new(uri.host, uri.port)
 
       check_cert(uri.to_s, http)
@@ -90,8 +90,8 @@ class CallbackHelper
 
     # send the command request
 
-    def command_request(method, key = nil, url = nil, secret = nil)
-      editor_base_url = url.nil? ? Config.get_config("oo_address") : url
+  def command_request(method, key = nil)
+    editor_base_url = Config.get_docserver_url()
       document_command_url = editor_base_url + @@commandUrl
 
       # create a payload object with the method and key
@@ -116,11 +116,10 @@ class CallbackHelper
         req = Net::HTTP::Post.new(uri.request_uri)  # create the post request
         req.add_field("Content-Type", "application/json")  # set headers
         JwtHelper.init
-        if !secret.nil? || JwtHelper.is_enabled
-          payload["token"] = JwtHelper.encode(payload, secret)  # get token and save it to the payload
-          demo_header = Config.get_config("jwtHeader")
-          jwtHeader = demo_header.nil? ? JwtHelper.jwt_header : demo_header  # get signature authorization header
-          req.add_field(jwtHeader, "Bearer #{JwtHelper.encode({ :payload => payload }, secret)}")  # set it to the request with the Bearer prefix
+    if JwtHelper.is_enabled
+      payload["token"] = JwtHelper.encode(payload)  # get token and save it to the payload
+      jwt_header = JwtHelper.jwt_header # get signature authorization header
+      req.add_field(jwt_header, "Bearer #{JwtHelper.encode({ :payload => payload })}")  # set it to the request with the Bearer prefix
         end
 
         req.body = payload.to_json   # convert the payload object into the json format
@@ -142,7 +141,7 @@ class CallbackHelper
     end
 
     def process_save(callback_json, attachment)
-      download_uri = FileUtility.replace_doc_edito_url_to_internal(callback_json['url'])
+    download_uri = UrlHelper.replace_doc_editor_url_to_internal(callback_json['url'])
       if (download_uri.eql?(nil))
         saved = 1
         return saved

@@ -3,6 +3,7 @@ fr:
   edit_in_onlyoffice: "Modifier dans ONLYOFFICE"
   onlyoffice_settings_doc_url: "Adresse du service de modification de documents (laissez vide pour désactiver le plugin)"
   onlyoffice_settings_jwtsecret: "Clé secrète (laisser vide pour désactiver)"
+  onlyoffice_settings_jwtheader: "En-tête d'autorisation"
   onlyoffice_settings_forcesave: "Activer Sauvegarde Force"
   onlyoffice_settings_file_type: "Ouvrir le fichier pour édition (en raison de restrictions de format, des données peuvent être perdues lors de l'enregistrement dans les formats de la liste ci-dessous)"
   onlyoffice_additional_settings: "Paramètres avancés du serveur"

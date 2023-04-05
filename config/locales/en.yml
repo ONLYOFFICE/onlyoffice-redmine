@@ -3,6 +3,7 @@ en:
   edit_in_onlyoffice: "Edit in ONLYOFFICE"
   onlyoffice_settings_doc_url: "Document Editing Service address (leave blank to disable the plugin)"
   onlyoffice_settings_jwtsecret: "Secret key (leave blank to disable)"
+  onlyoffice_settings_jwtheader: "Authorization header"
   onlyoffice_settings_forcesave: "Enable Force Save"
   onlyoffice_settings_file_type: "Open the file for editing (due to format restrictions, the data might be lost when saving to the formats from the list below)"
   onlyoffice_additional_settings: "Advanced server settings"

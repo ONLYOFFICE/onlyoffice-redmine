@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Get Info 
         run: |
-          echo "::set-output name=version::$(awk '/version /' init.rb | awk -F"'" '$0=$2')"
+          echo "version=$(awk '/version /' init.rb | awk -F"'" '$0=$2')" >> $GITHUB_OUTPUT
         id: info
       - name: Generate Changelog
         run: |
@@ -34,22 +34,9 @@ jobs:
       - name: Build Artifact
         run: zip -r onlyoffice_redmine.zip onlyoffice_redmine/
       - name: Create Release
-        uses: actions/create-release@v1
+        uses: ncipollo/release-action@v1
         id: create_release
         with:
-          draft: false
-          prerelease: false
-          release_name: v${{ steps.info.outputs.version }}
-          tag_name: v${{ steps.info.outputs.version }}
-          body_path: ./RELEASE.md
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-      - name: Upload Release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: onlyoffice_redmine.zip
-          asset_name: onlyoffice_redmine.zip
-          asset_content_type: application/zip
+          artifacts: "onlyoffice_redmine.zip"
+          bodyFile: RELEASE.md
+          tag: v${{ steps.info.outputs.version }}

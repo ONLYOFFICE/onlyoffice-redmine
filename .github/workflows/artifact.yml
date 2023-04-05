@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Get Info 
         run: |
-          echo "::set-output name=version::$(awk '/version /' init.rb | awk -F"'" '$0=$2')"
+          echo "version=$(awk '/version /' init.rb | awk -F"'" '$0=$2')" >> $GITHUB_OUTPUT
         id: info
       - name: Pack Plugin
         run: |
@@ -29,7 +29,7 @@ jobs:
           cd ./assets/document-templates
           rm .git
       - name: Upload Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: onlyoffice_redmine
           path: deploy

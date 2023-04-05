@@ -22,7 +22,7 @@ class ServiceConverter
 
     class << self
         # get the url of the converted file
-    def get_converted_uri(doc_server_url, title, document_uri, from_ext, to_ext, document_revision_id, secret = nil)
+  def get_converted_uri(doc_server_url, title, document_uri, from_ext, to_ext, document_revision_id)
 
         payload = {  # write all the conversion parameters to the payload
           :async => false,
@@ -46,11 +46,10 @@ class ServiceConverter
           req.add_field("Accept", "application/json")  # set headers
           req.add_field("Content-Type", "application/json")
           JwtHelper.init
-          if !secret.nil? || JwtHelper.is_enabled
-            payload["token"] = JwtHelper.encode(payload, secret)  # get token and save it to the payload
-            demo_header = Config.get_config("jwtHeader")
-            jwtHeader = demo_header.nil? ? JwtHelper.jwt_header : demo_header  # get signature authorization header
-            req.add_field(jwtHeader, "Bearer #{JwtHelper.encode({ :payload => payload }, secret)}")  # set it to the request with the Bearer prefix
+      if JwtHelper.is_enabled
+        payload["token"] = JwtHelper.encode(payload)  # get token and save it to the payload
+        jwt_header = JwtHelper.jwt_header # get signature authorization header
+        req.add_field(jwt_header, "Bearer #{JwtHelper.encode({ :payload => payload })}")  # set it to the request with the Bearer prefix
           end
 
           req.body = payload.to_json
