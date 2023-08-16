@@ -67,6 +67,7 @@ GEM
     marcel (1.0.2)
     method_source (1.0.0)
     mini_mime (1.1.5)
+    mini_portile2 (2.8.4)
     minitest (5.19.0)
     net-imap (0.3.7)
       date
@@ -78,7 +79,14 @@ GEM
     net-smtp (0.3.3)
       net-protocol
     nio4r (2.5.9)
+    nokogiri (1.15.4)
+      mini_portile2 (~> 2.8.2)
+      racc (~> 1.4)
     nokogiri (1.15.4-arm64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.15.4-x64-mingw-ucrt)
+      racc (~> 1.4)
+    nokogiri (1.15.4-x86_64-linux)
       racc (~> 1.4)
     parallel (1.23.0)
     parser (3.2.2.3)
@@ -158,6 +166,9 @@ GEM
 
 PLATFORMS
   arm64-darwin-22
+  ruby
+  x64-mingw-ucrt
+  x86_64-linux
 
 DEPENDENCIES
   rails (= 5.2.8.1)
