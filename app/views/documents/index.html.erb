@@ -30,10 +30,9 @@
         </span>
         <div class="drdn-content">
             <div class="drdn-items">
-                <%= link_to l(:onlyoffice_create_docx), onlyoffice_create_new_path('docx', @project), :class => 'icon onlyoffice-create docx' %>
-                <%= link_to l(:onlyoffice_create_xlsx), onlyoffice_create_new_path('xlsx', @project), :class => 'icon onlyoffice-create xlsx' %>
-                <%= link_to l(:onlyoffice_create_pptx), onlyoffice_create_new_path('pptx', @project), :class => 'icon onlyoffice-create pptx' %>
-                <%= link_to l(:onlyoffice_create_docxf), onlyoffice_create_new_path('docxf', @project), :class => 'icon onlyoffice-create docxf' %>
+              <% FileUtility.format_manager.creatable.each do |format| %>
+                <%= link_to l("onlyoffice_create_#{format.name}"), onlyoffice_create_new_path(format.name, @project), :class => "icon onlyoffice-create #{format.name}" %>
+              <% end %>
             </div>
         </div>
     </span>

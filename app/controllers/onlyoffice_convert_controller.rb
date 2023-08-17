@@ -7,7 +7,7 @@ class OnlyofficeConvertController < OnlyofficeBaseController
 
         @file_name = DocumentHelper.file_name_without_ext(@attachment.filename)
         @ext = DocumentHelper.file_ext(@attachment.disk_filename, true)
-        @formats = FormatUtility.format_supported(@ext)
+        @formats = FileUtility.format_supported(@ext)
 
         render :action => 'index'
     end

@@ -39,10 +39,10 @@
     attachments_disk_filenames = []
     is_convert = []
     @news.attachments.each do |attachment|
-      is_editable_array = is_editable_array + [DocumentHelper.is_editable(attachment)]
+      is_editable_array = is_editable_array + [FileUtility.is_editable(attachment)]
       attachments_disk_filenames = attachments_disk_filenames + [attachment.disk_filename]
       ext = DocumentHelper.file_ext(attachment.disk_filename, true)
-      is_convert = is_convert + [FormatUtility.format_supported(ext).length != 0]
+      is_convert = is_convert + [FileUtility.format_supported(ext).length != 0]
     end
   %>
 

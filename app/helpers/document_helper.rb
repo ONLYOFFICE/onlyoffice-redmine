@@ -18,7 +18,6 @@
 class DocumentHelper
 
   @@base_url = nil
-  @@editable_types = %w[.docx .docxf .oform .xlsx .pptx]
 
   class << self
 
@@ -49,10 +48,6 @@ class DocumentHelper
         :type => "callback"
       }
     url = @@base_url + "onlyoffice/callback/#{id}/#{user.rss_key}?key=#{JwtHelper.encode(payload, Setting.plugin_onlyoffice_redmine["onlyoffice_key"])}"
-    end
-
-    def get_document_type(file_name)
-      doc_type = FileUtility.get_file_type(file_name)
     end
 
     def file_name_without_ext(file_name)
@@ -120,11 +115,6 @@ class DocumentHelper
       return nil
     end
 
-    def is_editable(attachment)
-      editable = @@editable_types.include?(file_ext(attachment.disk_filename))
-      return editable
-    end
-
     def get_attachment_config(user, attachment, lang, action_data)
       ext = file_ext(attachment.disk_filename, true)
       project_is_not_readonly = attachment.project.status != 5
@@ -135,20 +125,20 @@ class DocumentHelper
       end
       config = {
         :type => "desktop",
-        :documentType => get_document_type(attachment.disk_filename),
+        :documentType => FileUtility.get_file_type(attachment.disk_filename),
         :document => {
           :title => attachment.filename,
           :url => get_download_url(attachment.id, user.id),
           :fileType => ext,
           :key => get_key(attachment),
           :permissions => {
-            :edit => permission_to_edit && is_editable(attachment),
-            :fillForms => permission_to_edit && is_editable(attachment) && ext.eql?("oform")
+            :edit => permission_to_edit && FileUtility.is_editable(attachment),
+            :fillForms => permission_to_edit && FileUtility.is_editable(attachment) && ext.eql?("oform")
           }
         },
         :editorConfig => {
           :actionLink => action_data ? JSON.parse(action_data) : nil,
-          :mode => (permission_to_edit && is_editable(attachment)) ? "edit" : "view",
+          :mode => (permission_to_edit && FileUtility.is_editable(attachment)) ? "edit" : "view",
           :lang => lang ? lang : "en",
           :callbackUrl => get_callback_url(attachment.id, user),
           :user => {

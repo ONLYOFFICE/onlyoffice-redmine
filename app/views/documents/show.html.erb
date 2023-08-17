@@ -40,10 +40,10 @@
     attachments_disk_filenames = []
     is_convert = []
     @document.attachments.each do |attachment|
-      is_editable_array = is_editable_array + [DocumentHelper.is_editable(attachment)]
+      is_editable_array = is_editable_array + [FileUtility.is_editable(attachment)]
       attachments_disk_filenames = attachments_disk_filenames + [attachment.disk_filename]
       ext = DocumentHelper.file_ext(attachment.disk_filename, true)
-      is_convert = is_convert + [FormatUtility.format_supported(ext).length != 0]
+      is_convert = is_convert + [FileUtility.format_supported(ext).length != 0]
     end
   %>
 
@@ -59,10 +59,9 @@
       </span>
       <div class="drdn-content">
         <%= form_tag(onlyoffice_create_new_doc_attachment_path(@document, @project), :multipart => true, :class => "drdn-items") do %>
-          <%= submit_tag(l(:onlyoffice_create_docx),:class => 'icon onlyoffice-create docx', :name => 'docType') %>
-          <%= submit_tag(l(:onlyoffice_create_xlsx),:class => 'icon onlyoffice-create xlsx', :name => 'docType') %>
-          <%= submit_tag(l(:onlyoffice_create_pptx),:class => 'icon onlyoffice-create pptx', :name => 'docType') %>
-          <%= submit_tag(l(:onlyoffice_create_docxf),:class => 'icon onlyoffice-create docxf', :name => 'docType') %>
+          <% FileUtility.format_manager.creatable.each do |format| %>
+            <%= submit_tag(l("onlyoffice_create_#{format.name}"), :class => "icon onlyoffice-create #{format.name}", :name => "docType") %>
+          <% end %>
         <% end %>
       </div>
     </span>

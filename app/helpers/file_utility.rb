@@ -15,60 +15,83 @@
 # limitations under the License.
 #
 
+# typed: true
+# frozen_string_literal: true
+
+require_relative "../../lib/onlyoffice"
+
 class FileUtility
-  @@exts_document = %w(.doc .docx .docm .dot .dotx .dotm .docxf .oform .odt .fodt .ott .rtf .txt .html .htm .mht .xml .pdf .djvu .fb2 .epub .xps)
-  @@exts_spreadsheet = %w(.xls .xlsx .xlsm .xlt .xltx .xltm .ods .fods .ots .csv)
-  @@exts_presentation = %w(.pps .ppsx .ppsm .ppt .pptx .pptm .pot .potx .potm .odp .fodp .otp)
-
-  @@exts_new_docs = %w(.docx .xlsx .pptx .docxf)
-
-  @@exts_mimetypes = {
-    :docx => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    :xlsx => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    :pptx => "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-    :docxf => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-  }
+  @@resource_manager = OnlyOffice::Resource::Manager.new
+  @@format_manager = OnlyOffice::Format::Manager.new(
+    resource_manager: @@resource_manager
+  )
 
   class << self
+    def format_manager
+      @@format_manager
+    end
 
     def get_all_available_formats
-      return @@exts_document.to_a + @@exts_spreadsheet.to_a + @@exts_presentation
+      format_manager = T.let(@@format_manager, OnlyOffice::Format::Managering)
+      formats =
+        format_manager.documents +
+        format_manager.presentations +
+        format_manager.spreadsheets
+      formats.map(&:extension)
     end
 
     def get_file_type(file_name)
-      ext = File.extname(file_name).downcase
-      if @@exts_document.include? ext
-        return 'word'
-      end
-      if @@exts_spreadsheet.include? ext
-        return 'cell'
-      end
-      if @@exts_presentation.include? ext
-        return 'slide'
-      end
+      format_manager = T.let(@@format_manager, OnlyOffice::Format::Managering)
+      extension = File.extname(file_name).downcase
+      format = format_manager.define(extension)
+      return format_manager.default.type unless format
+      format.type
     end
 
     def is_openable(attachment)
-      ext = File.extname(attachment.disk_filename).downcase
-      if (@@exts_document.include? ext) || (@@exts_spreadsheet.include? ext) || (@@exts_presentation.include? ext)
-        return true
-      end
-      return false
+      format_manager = T.let(@@format_manager, OnlyOffice::Format::Managering)
+      extension = File.extname(attachment.disk_filename).downcase
+      format = format_manager.define(extension)
+      return false unless format
+      format_manager.documents.include?(format) ||
+        format_manager.presentations.include?(format) ||
+        format_manager.spreadsheets.include?(format)
+    end
+
+    def is_editable(attachment)
+      format_manager = T.let(@@format_manager, OnlyOffice::Format::Managering)
+      extension = File.extname(attachment.disk_filename).downcase
+
+      format = format_manager.define(extension)
+      return false unless format
+
+      # Add fillable for backward compatibility.
+      format_manager.editable.include?(format) ||
+        format_manager.fillable.include?(format)
     end
 
     def can_create(ext)
-      if (@@exts_new_docs.include? '.' + ext.downcase)
-        return true
-      end
-      return false
+      format_manager = T.let(@@format_manager, OnlyOffice::Format::Managering)
+      extension = ".#{ext.downcase}"
+      format = format_manager.define(extension)
+      return false unless format
+      format_manager.creatable.include?(format)
     end
 
     def get_mimetype(ext)
-      if (@@exts_mimetypes.key?(ext))
-        return @@exts_mimetypes[ext.to_sym]
-      else
-        return @@exts_mimetypes[:docx]
-      end
+      format_manager = T.let(@@format_manager, OnlyOffice::Format::Managering)
+      extension = ext.downcase
+      format = format_manager.define(extension)
+      return format_manager.default.mime.first unless format
+      format.mime.first
+    end
+
+    def format_supported(ext)
+      format_manager = T.let(@@format_manager, OnlyOffice::Format::Managering)
+      extension = ".#{ext.downcase}"
+      format = format_manager.define(extension)
+      return [] unless format&.convertible?
+      format.convert
     end
 
   end
