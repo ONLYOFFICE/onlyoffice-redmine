@@ -1,8 +1,10 @@
 de:
   open_in_onlyoffice: "In ONLYOFFICE öffnen"
   edit_in_onlyoffice: "Mit ONLYOFFICE bearbeiten"
-  onlyoffice_settings_doc_url: "Adresse des Dokumentenbearbeitungsservices (leer lassen, um das Plugin zu deaktivieren)"
-  onlyoffice_settings_jwtsecret: "Geheimer Schlüssel (freilassen, um zu deaktivieren)"
+  onlyoffice_settings_doc_url: "Adresse des Dokumentenbearbeitungsservices"
+  onlyoffice_settings_doc_url_note: "Leer lassen, um das Plugin zu deaktivieren"
+  onlyoffice_settings_jwtsecret: "Geheimer Schlüssel"
+  onlyoffice_settings_jwtsecret_note: "Freilassen, um zu deaktivieren"
   onlyoffice_settings_jwtheader: "Authorization-Header"
   onlyoffice_settings_forcesave: "Force Save aktivieren"
   onlyoffice_settings_file_type: "Öffne die Datei zum Bearbeiten (aufgrund von Formateinschränkungen können die Daten beim Speichern in den Formaten aus der folgenden Liste verloren gehen)"

@@ -15,74 +15,102 @@
 # limitations under the License.
 %>
 
-<p>
-  <%= content_tag(:label, l(:onlyoffice_settings_doc_url)) %>
-  <%= text_field_tag 'settings[oo_address]', settings['oo_address'], :placeholder => "http://docserver/" %>
-</p>
+<style>
+.onlyoffice-settings div.settings {
+  margin-bottom: 1em;
+  padding-left: 1em;
+  padding-right: 1em;
+}
 
-<fieldset>
-  <legend>
-    <span><%= l(:onlyoffice_additional_settings) %></span>
-  </legend>
-  <p>
-    <%= content_tag(:label, l(:onlyoffice_additional_settings_editor)) %>
-    <%= text_field_tag 'settings[inner_editor]', settings['inner_editor'], :placeholder => "http://docserver/" %>
-  </p>
-  <p>
-    <%= content_tag(:label, l(:onlyoffice_additional_settings_server)) %>
-    <%= text_field_tag 'settings[inner_server]', settings['inner_server'], :placeholder => "http://redmine/" %>
-  </p>
-  <label class="block">
-    <%= check_box_tag 'settings[editor_demo]', 'on', settings['editor_demo'].eql?('on') %>
-    <%= l(:onlyoffice_settings_editor_demo) %>
-  </label>
-</fieldset>
-<fieldset>
-  <legend>
-    <span><%= l(:onlyoffice_settings_security) %></span>
-  </legend>
-  <p>
-    <%= content_tag(:label, l(:onlyoffice_settings_jwtsecret)) %>
-    <%= text_field_tag 'settings[jwtsecret]', settings['jwtsecret'] %>
-  </p>
-  <p>
-    <%= content_tag(:label, l(:onlyoffice_settings_jwtheader)) %>
-    <%= text_field_tag 'settings[jwtheader]', settings['jwtheader'] %>
-  </p>
-  <label class="block">
-    <%= check_box_tag 'settings[check_cert]', 'on', settings['check_cert'].eql?('on') %>
-    <%= l(:onlyoffice_settings_check_cert) %>
-  </label>
-</fieldset>
-<fieldset>
-  <legend>
-    <span><%= l(:onlyoffice_settings_editor_view) %></span>
-  </legend>
-  <label class="block">
-    <%= check_box_tag 'settings[editor_chat]', 'on', settings['editor_chat'].eql?('on') %>
-    <%= l(:onlyoffice_settings_editor_view_chat) %>
-  </label>
-  <label class="block">
-    <%= check_box_tag 'settings[editor_compact_header]', 'on', settings['editor_compact_header'].eql?('on') %>
-    <%= l(:onlyoffice_settings_editor_view_header) %>
-  </label>
-  <label class="block">
-    <%= check_box_tag 'settings[editor_feedback]', 'on', settings['editor_feedback'].eql?('on') %>
-    <%= l(:onlyoffice_settings_editor_view_feedback) %>
-  </label>
-  <label class="block">
-    <%= check_box_tag 'settings[editor_help]', 'on', settings['editor_help'].eql?('on') %>
-    <%= l(:onlyoffice_settings_editor_view_help) %>
-  </label>
-  <label class="block">
-    <%= check_box_tag 'settings[editor_toolbar_no_tabs]', 'on', settings['editor_toolbar_no_tabs'].eql?('on') %>
-    <%= l(:onlyoffice_settings_editor_view_toolbar) %>
-  </label>
-</fieldset>
+.onlyoffice-settings fieldset.settings {
+  margin-bottom: 1em;
+  padding: 1em;
+}
 
+.onlyoffice-settings input[type="text"] {
+  max-width: calc(100% - 4px);
+  width: 100%;
+}
+</style>
+<div class="onlyoffice-settings">
+  <div class="box tabular settings">
+    <p>
+      <%= content_tag(:label, l(:onlyoffice_settings_doc_url)) %>
+      <%= text_field_tag 'settings[oo_address]', settings['oo_address'], :placeholder => "http://docserver/" %>
+      <em class="info"><%= l(:onlyoffice_settings_doc_url_note) %></em>
+    </p>
+  </div>
+  <fieldset class="box tabular settings">
+    <legend>
+      <span><%= l(:onlyoffice_additional_settings) %></span>
+    </legend>
+    <p>
+      <%= content_tag(:label, l(:onlyoffice_additional_settings_editor)) %>
+      <%= text_field_tag 'settings[inner_editor]', settings['inner_editor'], :placeholder => "http://docserver/" %>
+    </p>
+    <p>
+      <%= content_tag(:label, l(:onlyoffice_additional_settings_server)) %>
+      <%= text_field_tag 'settings[inner_server]', settings['inner_server'], :placeholder => "http://redmine/" %>
+    </p>
+    <label class="block">
+      <%= check_box_tag 'settings[editor_demo]', 'on', settings['editor_demo'].eql?('on') %>
+      <%= l(:onlyoffice_settings_editor_demo) %>
+    </label>
+  </fieldset>
+  <fieldset class="box tabular settings">
+    <legend>
+      <span><%= l(:onlyoffice_settings_security) %></span>
+    </legend>
+    <p>
+      <%= content_tag(:label, l(:onlyoffice_settings_jwtsecret)) %>
+      <%= text_field_tag 'settings[jwtsecret]', settings['jwtsecret'] %>
+      <em class="info"><%= l(:onlyoffice_settings_jwtsecret_note) %></em>
+    </p>
+    <p>
+      <%= content_tag(:label, l(:onlyoffice_settings_jwtheader)) %>
+      <%= text_field_tag 'settings[jwtheader]', settings['jwtheader'] %>
+    </p>
+    <label class="block">
+      <%= check_box_tag 'settings[check_cert]', 'on', settings['check_cert'].eql?('on') %>
+      <%= l(:onlyoffice_settings_check_cert) %>
+    </label>
+  </fieldset>
+  <fieldset class="box tabular settings">
+    <legend>
+      <span><%= l(:onlyoffice_settings_editor_view) %></span>
+    </legend>
+    <label class="block">
+      <%= check_box_tag 'settings[editor_chat]', 'on', settings['editor_chat'].eql?('on') %>
+      <%= l(:onlyoffice_settings_editor_view_chat) %>
+    </label>
+    <label class="block">
+      <%= check_box_tag 'settings[editor_compact_header]', 'on', settings['editor_compact_header'].eql?('on') %>
+      <%= l(:onlyoffice_settings_editor_view_header) %>
+    </label>
+    <label class="block">
+      <%= check_box_tag 'settings[editor_feedback]', 'on', settings['editor_feedback'].eql?('on') %>
+      <%= l(:onlyoffice_settings_editor_view_feedback) %>
+    </label>
+    <label class="block">
+      <%= check_box_tag 'settings[editor_help]', 'on', settings['editor_help'].eql?('on') %>
+      <%= l(:onlyoffice_settings_editor_view_help) %>
+    </label>
+    <label class="block">
+      <%= check_box_tag 'settings[editor_toolbar_no_tabs]', 'on', settings['editor_toolbar_no_tabs'].eql?('on') %>
+      <%= l(:onlyoffice_settings_editor_view_toolbar) %>
+    </label>
+  </fieldset>
+</div>
 <div id="onlyoffice-notification" class="flash" style="display: none"></div>
-
 <script type="text/javascript" language="javascript">
+(function () {
+  // https://github.com/redmine/redmine/blob/5.0.5/app/views/settings/plugin.html.erb#L5
+  var box = document.querySelector("#settings > form > div.box.tabular.settings")
+  if (box) {
+    box.removeAttribute("class")
+  }
+})();
+
 (function() {
 
   var notice = document.getElementById("onlyoffice-notification");
