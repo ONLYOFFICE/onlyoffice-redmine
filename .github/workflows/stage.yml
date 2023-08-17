@@ -1,0 +1,26 @@
+name: Stage
+
+on:
+  pull_request:
+    types: [opened, reopened]
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  stage:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Update Submodules
+      run: make submodule
+
+    - name: Build Plugin
+      run: make build
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: onlyoffice_redmine
+        path: .build
