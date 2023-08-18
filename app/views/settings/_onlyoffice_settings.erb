@@ -16,6 +16,17 @@
 %>
 
 <style>
+.onlyoffice-settings {
+  column-gap: 32px;
+  display: grid;
+}
+
+@media screen and (min-width: 0px) and (max-width: 1089px) {
+  .onlyoffice-settings {
+    display: block;
+  }
+}
+
 .onlyoffice-settings div.settings {
   margin-bottom: 1em;
   padding-left: 1em;
@@ -31,75 +42,228 @@
   max-width: calc(100% - 4px);
   width: 100%;
 }
+
+.onlyoffice-settings__main {
+  gird-column: 1;
+  grid-row: 1;
+}
+
+.onlyoffice-settings__server {
+  gird-column: 1;
+  grid-row: 2;
+}
+
+.onlyoffice-settings__security {
+  gird-column: 1;
+  grid-row: 3;
+}
+
+.onlyoffice-settings__editor {
+  gird-column: 1;
+  grid-row: 4;
+}
+
+.onlyoffice-settings__banner {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+
+@media screen and (min-width: 0px) and (max-width: 1089px) {
+  .onlyoffice-settings__banner {
+    margin-bottom: 1em;
+  }
+}
+
+.onlyoffice-banner {
+  background-color: #FFFFFF;
+  border-radius: 3px;
+  border: 1px solid #E4E4E4;
+  box-sizing: border-box;
+  display: flex;
+  max-width: 269px;
+  overflow: hidden;
+  position: relative;
+}
+
+.onlyoffice-banner::before {
+  background-image: url(/plugin_assets/onlyoffice_redmine/images/docs-cloud-background.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  content: "";
+  height: 108%;
+  left: -2%;
+  position: absolute;
+  top: -2%;
+  width: 104%;
+}
+
+.onlyoffice-banner__inner {
+  display: grid;
+  gap: 10px 13px;
+  grid-template-columns: min-content 1fr;
+  padding: 10px 16px 16px 16px;
+  z-index: 1;
+}
+
+.onlyoffice-banner__logo {
+  background-image: url(/plugin_assets/onlyoffice_redmine/images/docs-cloud-logo.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  grid-column: 1;
+  grid-row: 1;
+  height: 65px;
+  width: 65px;
+}
+
+.onlyoffice-banner__heading {
+  align-self: end;
+  border: none;
+  color: #505050;
+  font-family: Verdana, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0;
+  padding: 0 30px 0 0;
+}
+
+.onlyoffice-banner__description {
+  color: #555F65;
+  font-size: 12px;
+  grid-column: 1 / span 2;
+  grid-row: 2;
+  margin: 0;
+}
+
+.onlyoffice-banner-go {
+  color: #505050;
+  font-size: 13px;
+  font-weight: 700;
+  grid-column: 1 / span 2;
+  grid-row: 3;
+}
+
+.onlyoffice-banner-go:link,
+.onlyoffice-banner-go:visited {
+  color: #505050;
+}
+
+.onlyoffice-banner-go:active,
+.onlyoffice-banner-go:focus-visible,
+.onlyoffice-banner-go:hover {
+  color: #505050;
+  text-decoration: none;
+}
+
+.onlyoffice-banner-go__contents {
+  border-bottom: 1px dashed #505050;
+}
+
+.onlyoffice-banner-go:focus-visible > .onlyoffice-banner-go__contents,
+.onlyoffice-banner-go:hover > .onlyoffice-banner-go__contents {
+  border-bottom: none;
+}
+
+.onlyoffice-banner-go__pointer {
+  fill: #505050;
+  margin-left: 6px;
+}
 </style>
 <div class="onlyoffice-settings">
-  <div class="box tabular settings">
-    <p>
-      <%= content_tag(:label, l(:onlyoffice_settings_doc_url)) %>
-      <%= text_field_tag 'settings[oo_address]', settings['oo_address'], :placeholder => "http://docserver/" %>
-      <em class="info"><%= l(:onlyoffice_settings_doc_url_note) %></em>
-    </p>
+  <div class="onlyoffice-settings__main">
+    <div class="box tabular settings">
+      <p>
+        <%= content_tag(:label, l(:onlyoffice_settings_doc_url)) %>
+        <%= text_field_tag 'settings[oo_address]', settings['oo_address'], :placeholder => "http://docserver/" %>
+        <em class="info"><%= l(:onlyoffice_settings_doc_url_note) %></em>
+      </p>
+    </div>
   </div>
-  <fieldset class="box tabular settings">
-    <legend>
-      <span><%= l(:onlyoffice_additional_settings) %></span>
-    </legend>
-    <p>
-      <%= content_tag(:label, l(:onlyoffice_additional_settings_editor)) %>
-      <%= text_field_tag 'settings[inner_editor]', settings['inner_editor'], :placeholder => "http://docserver/" %>
-    </p>
-    <p>
-      <%= content_tag(:label, l(:onlyoffice_additional_settings_server)) %>
-      <%= text_field_tag 'settings[inner_server]', settings['inner_server'], :placeholder => "http://redmine/" %>
-    </p>
-    <label class="block">
-      <%= check_box_tag 'settings[editor_demo]', 'on', settings['editor_demo'].eql?('on') %>
-      <%= l(:onlyoffice_settings_editor_demo) %>
-    </label>
-  </fieldset>
-  <fieldset class="box tabular settings">
-    <legend>
-      <span><%= l(:onlyoffice_settings_security) %></span>
-    </legend>
-    <p>
-      <%= content_tag(:label, l(:onlyoffice_settings_jwtsecret)) %>
-      <%= text_field_tag 'settings[jwtsecret]', settings['jwtsecret'] %>
-      <em class="info"><%= l(:onlyoffice_settings_jwtsecret_note) %></em>
-    </p>
-    <p>
-      <%= content_tag(:label, l(:onlyoffice_settings_jwtheader)) %>
-      <%= text_field_tag 'settings[jwtheader]', settings['jwtheader'] %>
-    </p>
-    <label class="block">
-      <%= check_box_tag 'settings[check_cert]', 'on', settings['check_cert'].eql?('on') %>
-      <%= l(:onlyoffice_settings_check_cert) %>
-    </label>
-  </fieldset>
-  <fieldset class="box tabular settings">
-    <legend>
-      <span><%= l(:onlyoffice_settings_editor_view) %></span>
-    </legend>
-    <label class="block">
-      <%= check_box_tag 'settings[editor_chat]', 'on', settings['editor_chat'].eql?('on') %>
-      <%= l(:onlyoffice_settings_editor_view_chat) %>
-    </label>
-    <label class="block">
-      <%= check_box_tag 'settings[editor_compact_header]', 'on', settings['editor_compact_header'].eql?('on') %>
-      <%= l(:onlyoffice_settings_editor_view_header) %>
-    </label>
-    <label class="block">
-      <%= check_box_tag 'settings[editor_feedback]', 'on', settings['editor_feedback'].eql?('on') %>
-      <%= l(:onlyoffice_settings_editor_view_feedback) %>
-    </label>
-    <label class="block">
-      <%= check_box_tag 'settings[editor_help]', 'on', settings['editor_help'].eql?('on') %>
-      <%= l(:onlyoffice_settings_editor_view_help) %>
-    </label>
-    <label class="block">
-      <%= check_box_tag 'settings[editor_toolbar_no_tabs]', 'on', settings['editor_toolbar_no_tabs'].eql?('on') %>
-      <%= l(:onlyoffice_settings_editor_view_toolbar) %>
-    </label>
-  </fieldset>
+  <div class="onlyoffice-settings__server">
+    <fieldset class="box tabular settings">
+      <legend>
+        <span><%= l(:onlyoffice_additional_settings) %></span>
+      </legend>
+      <p>
+        <%= content_tag(:label, l(:onlyoffice_additional_settings_editor)) %>
+        <%= text_field_tag 'settings[inner_editor]', settings['inner_editor'], :placeholder => "http://docserver/" %>
+      </p>
+      <p>
+        <%= content_tag(:label, l(:onlyoffice_additional_settings_server)) %>
+        <%= text_field_tag 'settings[inner_server]', settings['inner_server'], :placeholder => "http://redmine/" %>
+      </p>
+      <label class="block">
+        <%= check_box_tag 'settings[editor_demo]', 'on', settings['editor_demo'].eql?('on') %>
+        <%= l(:onlyoffice_settings_editor_demo) %>
+      </label>
+    </fieldset>
+  </div>
+  <div class="onlyoffice-settings__security">
+    <fieldset class="box tabular settings">
+      <legend>
+        <span><%= l(:onlyoffice_settings_security) %></span>
+      </legend>
+      <p>
+        <%= content_tag(:label, l(:onlyoffice_settings_jwtsecret)) %>
+        <%= text_field_tag 'settings[jwtsecret]', settings['jwtsecret'] %>
+        <em class="info"><%= l(:onlyoffice_settings_jwtsecret_note) %></em>
+      </p>
+      <p>
+        <%= content_tag(:label, l(:onlyoffice_settings_jwtheader)) %>
+        <%= text_field_tag 'settings[jwtheader]', settings['jwtheader'] %>
+      </p>
+      <label class="block">
+        <%= check_box_tag 'settings[check_cert]', 'on', settings['check_cert'].eql?('on') %>
+        <%= l(:onlyoffice_settings_check_cert) %>
+      </label>
+    </fieldset>
+  </div>
+  <div class="onlyoffice-settings__editor">
+    <fieldset class="box tabular settings">
+      <legend>
+        <span><%= l(:onlyoffice_settings_editor_view) %></span>
+      </legend>
+      <label class="block">
+        <%= check_box_tag 'settings[editor_chat]', 'on', settings['editor_chat'].eql?('on') %>
+        <%= l(:onlyoffice_settings_editor_view_chat) %>
+      </label>
+      <label class="block">
+        <%= check_box_tag 'settings[editor_compact_header]', 'on', settings['editor_compact_header'].eql?('on') %>
+        <%= l(:onlyoffice_settings_editor_view_header) %>
+      </label>
+      <label class="block">
+        <%= check_box_tag 'settings[editor_feedback]', 'on', settings['editor_feedback'].eql?('on') %>
+        <%= l(:onlyoffice_settings_editor_view_feedback) %>
+      </label>
+      <label class="block">
+        <%= check_box_tag 'settings[editor_help]', 'on', settings['editor_help'].eql?('on') %>
+        <%= l(:onlyoffice_settings_editor_view_help) %>
+      </label>
+      <label class="block">
+        <%= check_box_tag 'settings[editor_toolbar_no_tabs]', 'on', settings['editor_toolbar_no_tabs'].eql?('on') %>
+        <%= l(:onlyoffice_settings_editor_view_toolbar) %>
+      </label>
+    </fieldset>
+  </div>
+  <div class="onlyoffice-settings__banner">
+    <div class="onlyoffice-banner">
+      <div class="onlyoffice-banner__inner">
+        <span class="onlyoffice-banner__logo"></span>
+        <h4 class="onlyoffice-banner__heading"><%= l(:onlyoffice_settings_banner_heading) %></h4>
+        <p class="onlyoffice-banner__description"><%= l(:onlyoffice_settings_banner_description) %></p>
+        <a class="onlyoffice-banner-go" href="https://www.onlyoffice.com/docs-registration.aspx">
+          <span class="onlyoffice-banner-go__contents"><%= l(:onlyoffice_settings_banner_go) %></span>
+          <span class="onlyoffice-banner-go__pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="9" viewBox="0 0 10 9" aria-hidden="true">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M9.35355 4.14645C9.54882 4.34172 9.54882 4.6583 9.35355 4.85356L5.85355 8.35356L5.14645 7.64645L7.79289 5.00001L0.5 5.00001L0.5 4.00001L7.79289 4.00001L5.14645 1.35356L5.85355 0.646454L9.35355 4.14645Z" />
+            </svg>
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
 </div>
 <div id="onlyoffice-notification" class="flash" style="display: none"></div>
 <script type="text/javascript" language="javascript">
