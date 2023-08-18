@@ -1,5 +1,9 @@
 # Change Log
 
+##
+## Added
+- Link to docs cloud
+
 ## 2.1.0
 ## Added
 - jwt header configuration
