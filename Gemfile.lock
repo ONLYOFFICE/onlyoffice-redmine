@@ -161,7 +161,7 @@ PLATFORMS
 
 DEPENDENCIES
   rails (= 5.2.8.1)
-  render_parent (>= 0.0.4)
+  render_parent (~> 0.1.0)
   rubocop (~> 1.56)
   rubocop-rails (~> 2.20)
 

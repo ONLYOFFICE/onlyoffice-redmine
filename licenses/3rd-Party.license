@@ -8,7 +8,7 @@ rails         - Rails is a web-application framework that includes everything ne
 License:        MIT
 License File:   rails.license
 
-render-parent - Helper, which renders template with the same name as current but higher on the view path. (https://github.com/anteo/render-parent/blob/master/LICENSE.txt)
+render-parent - Helper, which renders template with the same name as current but higher on the view path. (https://github.com/anteo/render-parent/blob/v0.1.0/LICENSE.txt)
 License:        MIT
 License File:   render-parent.license
 
