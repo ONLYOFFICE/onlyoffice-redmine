@@ -16,6 +16,18 @@ rubocop-rails - A RuboCop extension focused on enforcing Rails best practices an
 License:        MIT
 License File:   rubocop-rails.license
 
+rubocop-sorbet - A collection of RuboCop rules for Sorbet. (https://github.com/Shopify/rubocop-sorbet/blob/v0.7.2/LICENSE.txt)
+License:        MIT
+License File:   rubocop-sorbet.license
+
 rubocop       - A Ruby static code analyzer and formatter, based on the community Ruby style guide. (https://github.com/rubocop/rubocop/blob/v1.56.0/LICENSE.txt)
 License:        MIT
 License File:   rubocop.license
+
+sorbet        - A fast, powerful type checker designed for Ruby. (https://github.com/sorbet/sorbet/blob/0.5.10969.20230815160207-3fec62a78/LICENSE)
+License:        Apache License 2.0
+License File:   sorbet.license
+
+tapioca       - The swiss army knife of RBI generation. (https://github.com/Shopify/tapioca/blob/v0.11.8/LICENSE.txt)
+License:        MIT
+License File:   tapioca.license
