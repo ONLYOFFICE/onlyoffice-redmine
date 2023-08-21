@@ -1,5 +1,6 @@
 source "https://rubygems.org"
 
+gem "i18n", "~> 1.8.2"
 gem "rails", "= 5.2.8.1"
 gem "render_parent", "~> 0.1.0"
 gem "sorbet-runtime", "~> 0.5.10969"
