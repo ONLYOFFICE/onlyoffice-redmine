@@ -1,3 +1,8 @@
+# Please ensure that the dependencies are kept at the same versions as the
+# Redmine team.
+#
+# https://github.com/redmine/redmine/blob/master/Gemfile
+
 source "https://rubygems.org"
 
 gem "i18n", "~> 1.8.2"
