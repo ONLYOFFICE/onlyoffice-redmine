@@ -17,14 +17,11 @@
 # typed: true
 # frozen_string_literal: true
 
+require "json"
 require "pathname"
 require "sorbet-runtime"
 
 module OnlyOffice; end
 
 require_relative "only_office/resource"
-
-module OnlyOffice::Format; end
-require_relative "only_office/format/format"
-require_relative "only_office/format/managering"
-require_relative "only_office/format/manager"
+require_relative "only_office/format"
