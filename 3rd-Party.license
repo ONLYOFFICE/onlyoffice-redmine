@@ -11,3 +11,11 @@ License File:   rails.license
 render-parent - Helper, which renders template with the same name as current but higher on the view path. (https://github.com/anteo/render-parent/blob/master/LICENSE.txt)
 License:        MIT
 License File:   render-parent.license
+
+rubocop-rails - A RuboCop extension focused on enforcing Rails best practices and coding conventions. (https://github.com/rubocop/rubocop-rails/blob/v2.20.0/LICENSE.txt)
+License:        MIT
+License File:   rubocop-rails.license
+
+rubocop       - A Ruby static code analyzer and formatter, based on the community Ruby style guide. (https://github.com/rubocop/rubocop/blob/v1.56.0/LICENSE.txt)
+License:        MIT
+License File:   rubocop.license
