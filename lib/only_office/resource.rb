@@ -17,14 +17,25 @@
 # typed: true
 # frozen_string_literal: true
 
-require "pathname"
-require "sorbet-runtime"
+module OnlyOffice::Resource; end
 
-module OnlyOffice; end
+module OnlyOffice::Resource::Managering
+  extend T::Sig
+  extend T::Helpers
+  interface!
 
-require_relative "only_office/resource"
+  sig { abstract.returns(Pathname) }
+  def directory; end
+end
 
-module OnlyOffice::Format; end
-require_relative "only_office/format/format"
-require_relative "only_office/format/managering"
-require_relative "only_office/format/manager"
+class OnlyOffice::Resource::Manager
+  extend T::Sig
+  include OnlyOffice::Resource::Managering
+
+  sig { override.returns(Pathname) }
+  def directory
+    current_directory = Pathname(T.must(__dir__))
+    directory = current_directory.join("..", "..", "resources")
+    directory.cleanpath
+  end
+end
