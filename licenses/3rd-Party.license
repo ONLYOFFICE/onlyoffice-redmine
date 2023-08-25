@@ -4,6 +4,10 @@ i18n          - Ruby internationalization and localization (i18n) solution. (htt
 License:        MIT
 License File    i18n.license
 
+minitest      - minitest provides a complete suite of testing facilities supporting TDD, BDD, mocking, and benchmarking. (https://github.com/minitest/minitest/blob/v5.19.0/README.rdoc#license-)
+License:        MIT
+License File:   minitest.license
+
 rails         - Rails is a web-application framework that includes everything needed to create database-backed web applications according to the Model-View-Controller (MVC) pattern. (https://github.com/rails/rails/blob/v5.2.8.1/MIT-LICENSE)
 License:        MIT
 License File:   rails.license
@@ -15,6 +19,10 @@ License File:   rake.license
 render-parent - Helper, which renders template with the same name as current but higher on the view path. (https://github.com/anteo/render-parent/blob/v0.1.0/LICENSE.txt)
 License:        MIT
 License File:   render-parent.license
+
+rubocop-minitest - Code style checking for Minitest files. (https://github.com/rubocop/rubocop-minitest/blob/v0.31.0/LICENSE.txt)
+License:        MIT
+License File:   rubocop-minitest.license
 
 rubocop-rails - A RuboCop extension focused on enforcing Rails best practices and coding conventions. (https://github.com/rubocop/rubocop-rails/blob/v2.20.0/LICENSE.txt)
 License:        MIT
