@@ -68,6 +68,7 @@ GEM
     marcel (1.0.2)
     method_source (1.0.0)
     mini_mime (1.1.5)
+    mini_portile2 (2.8.4)
     minitest (5.19.0)
     net-imap (0.3.7)
       date
@@ -80,6 +81,9 @@ GEM
       net-protocol
     netrc (0.11.0)
     nio4r (2.5.9)
+    nokogiri (1.15.4)
+      mini_portile2 (~> 2.8.2)
+      racc (~> 1.4)
     nokogiri (1.15.4-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.15.4-x64-mingw-ucrt)
@@ -150,6 +154,8 @@ GEM
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.33.0, < 2.0)
+    rubocop-rake (0.6.0)
+      rubocop (~> 1.0)
     rubocop-sorbet (0.7.3)
       rubocop (>= 0.90.0)
     ruby-progressbar (1.13.0)
@@ -209,9 +215,11 @@ PLATFORMS
 
 DEPENDENCIES
   rails (= 5.2.8.1)
+  rake (~> 13.0)
   render_parent (~> 0.1.0)
   rubocop (~> 1.56)
   rubocop-rails (~> 2.20)
+  rubocop-rake (~> 0.6.0)
   rubocop-sorbet (~> 0.7.2)
   sorbet (~> 0.5.10969)
   sorbet-runtime (~> 0.5.10969)

@@ -8,6 +8,10 @@ rails         - Rails is a web-application framework that includes everything ne
 License:        MIT
 License File:   rails.license
 
+rake          - A make-like build utility for Ruby. (https://github.com/ruby/rake/blob/v13.0.0/MIT-LICENSE)
+License:        MIT
+License File:   rake.license
+
 render-parent - Helper, which renders template with the same name as current but higher on the view path. (https://github.com/anteo/render-parent/blob/v0.1.0/LICENSE.txt)
 License:        MIT
 License File:   render-parent.license
@@ -15,6 +19,10 @@ License File:   render-parent.license
 rubocop-rails - A RuboCop extension focused on enforcing Rails best practices and coding conventions. (https://github.com/rubocop/rubocop-rails/blob/v2.20.0/LICENSE.txt)
 License:        MIT
 License File:   rubocop-rails.license
+
+rubocop-rake  - A RuboCop plugin for Rake. (https://github.com/rubocop/rubocop-rake/blob/v0.6.0/LICENSE)
+License:        MIT
+License File:   rubocop-rake.license
 
 rubocop-sorbet - A collection of RuboCop rules for Sorbet. (https://github.com/Shopify/rubocop-sorbet/blob/v0.7.2/LICENSE.txt)
 License:        MIT
