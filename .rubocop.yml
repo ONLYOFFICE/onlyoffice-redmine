@@ -1,0 +1,265 @@
+# TODO: Disallow any aliases, including Rails extensions.
+# It's not good to have 42 different ways to make the same thing.
+# https://github.com/rubocop/rubocop/issues/1065
+
+require:
+- rubocop-minitest
+- rubocop-rails
+- rubocop-rake
+- rubocop-sorbet
+
+AllCops:
+  NewCops: enable
+
+# Bundler
+
+# Using dependencies without specifying a version is like hanging a loaded gun
+# on the wall. You never know when it will shoot or what it will hurt.
+Bundler/GemVersion:
+  Enabled: true
+  EnforcedStyle: required
+
+# Layout
+
+# I don't think using pure border comments is a good idea for separating code
+# into sections. I believe it's better to use a comment with the full name of
+# the section. For example, instead of `#####` use `# Section Name`.
+# I don't fully understand comments with margins either, but we might be able to
+# use them for the license header.
+Layout/EmptyComment:
+  Enabled: true
+  AllowBorderComment: false
+  AllowMarginComment: true
+
+# This rule frequently goes against the conciseness of functions.
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
+
+# To prevent inconsistency and unnecessary merge conflicts, it's advisable to
+# use only one newline character.
+Layout/EndOfLine:
+  Enabled: true
+  EnforcedStyle: lf
+
+# For better consistency, it's recommended to wrap the first element in a
+# multiline definition on a new line.
+Layout/FirstArrayElementLineBreak:
+  Enabled: true
+  AllowMultilineFinalElement: false
+
+Layout/FirstHashElementLineBreak:
+  Enabled: true
+  AllowMultilineFinalElement: false
+
+Layout/FirstMethodArgumentLineBreak:
+  Enabled: true
+  AllowMultilineFinalElement: false
+
+Layout/FirstMethodParameterLineBreak:
+  Enabled: true
+  AllowMultilineFinalElement: false
+
+# Please try to respect the 80-character limit. It's fine if it goes up to 100
+# characters, but if it's more than that, consider simplifying the logic.
+Layout/LineLength:
+  Enabled: true
+  Max: 120
+
+Layout/MultilineArrayLineBreaks:
+  Enabled: true
+  AllowMultilineFinalElement: false
+
+# It's better to move blocks with logic to a new line while assigning, without
+# any exceptions.
+Layout/MultilineAssignmentLayout:
+  Enabled: true
+  EnforcedStyle: new_line
+  SupportedTypes: []
+
+Layout/MultilineHashKeyLineBreaks:
+  Enabled: true
+  AllowMultilineFinalElement: false
+
+Layout/MultilineMethodArgumentLineBreaks:
+  Enabled: true
+  AllowMultilineFinalElement: false
+
+Layout/MultilineMethodParameterLineBreaks:
+  Enabled: true
+  AllowMultilineFinalElement: false
+
+# One-liners are often much harder to understand than multi-lines ones.
+Layout/SingleLineBlockChain:
+  Enabled: true
+
+# Lint
+
+# This rule is enabled to prevent unexpected results from auto type conversion.
+Lint/NumberConversion:
+  Enabled: true
+
+# Metrics
+
+# Metric rules can sometimes be more noisy than helpful. Of course, there're
+# definitely some useful rules among them. However, I've a lot of faith in our
+# talented developers.
+Metrics:
+  Enabled: false
+
+# Naming
+
+# Inclusion is a good thing.
+Naming/InclusiveLanguage:
+  Enabled: true
+
+# Style
+
+# Writing a modifier as a group style forces methods to be grouped based on the
+# modifier itself, rather than their meaning. Sometimes, a section may contain
+# both public and private methods. Breaking the semantic order of methods just
+# to satisfy the linter doesn't seem like a good idea.
+Style/AccessModifierDeclarations:
+  Enabled: true
+  EnforcedStyle: inline
+
+# Grouped accessors are indeed uncommon and may require more attention when
+# working with them. Duplicating a declaration can be a better approach as it
+# ensures that everything is written in the same style.
+Style/AccessorGrouping:
+  Enabled: true
+  EnforcedStyle: separated
+
+# Difficult.
+Style/ArrayCoercion:
+  Enabled: true
+
+# Using compact definitions is much more convenient. To prevent the problems
+# that nesting tries to solve, use the full name of the namespace and cover the
+# code with tests.
+Style/ClassAndModuleChildren:
+  Enabled: true
+  EnforcedStyle: compact
+
+# Similar to the `Style/AccessModifierDeclarations`, it's more convenient to
+# think of individual elements rather than blocks.
+Style/ClassMethodsDefinitions:
+  Enabled: true
+
+# To maintain consistency, it's recommended not to use aliases.
+Style/CollectionMethods:
+  Enabled: true
+
+# TODO: Wait for the support for a multiline header.
+# https://github.com/rubocop/rubocop/issues/7189
+# Style/Copyright
+
+# A clearer separation of responsibilities is good.
+Style/DateTime:
+  Enabled: true
+
+# Documentation is wonderful, but it's not always necessary. It's not a good
+# idea to write an inconsistent description just to avoid getting a warning from
+# the linter.
+Style/Documentation:
+  Enabled: false
+
+# There's really no need to sacrifice overall consistency just to save three
+# keystrokes.
+Style/EndlessMethod:
+  Enabled: true
+  EnforcedStyle: disallow
+
+# It's okay.
+Style/FrozenStringLiteralComment:
+  Enabled: true
+  EnforcedStyle: always
+  Exclude:
+  - "Gemfile"
+
+# Sometimes even a short condition written in one line is difficult to read.
+Style/IfUnlessModifier:
+  Enabled: false
+
+# Inline comments can be difficult to read and can take up a significant amount
+# of space in the code line.
+Style/InlineComment:
+  Enabled: true
+
+# There is no difference between the lambda syntaxes, so I would prefer a more
+# explicit way.
+Style/Lambda:
+  Enabled: true
+  EnforcedStyle: lambda
+
+# A very interesting and in its own way radical functionality. Just let all
+# functions with parameters, without exception, need braces.
+Style/MethodCallWithArgsParentheses:
+  Enabled: true
+  AllowedMethods: []
+  AllowedPatterns: []
+
+# Calling a method on the do-end block isn't what I expect.
+Style/MethodCalledOnDoEndBlock:
+  Enabled: true
+
+# Having a default case is a good practice for a switch-case statement. It helps
+# prevent missing any unprocessed values.
+Style/MissingElse:
+  Enabled: true
+  EnforcedStyle: case
+
+# Repeating comparisons aren't a problem at all. On the contrary, they're easier
+# to understand than functional methods.
+Style/MultipleComparison:
+  Enabled: false
+
+# Having more explicit access to function parameters always makes the code
+# easier to read.
+Style/NumberedParameters:
+  Enabled: true
+  EnforcedStyle: disallow
+
+# Using parentheses in multiline conditions is both convenient and intuitive.
+Style/ParenthesesAroundCondition:
+  Enabled: true
+  AllowInMultilineConditions: true
+
+# A good rule that can be turned off in special cases.
+Style/StringHashKeys:
+  Enabled: true
+
+# There's no need to split strings into different types that support
+# interpolation and those that don't. Just use double quotes all the time,
+# they're easier to read and don't affect performance.
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: double_quotes
+
+# The percentage syntax can be quite confusing and misleading every time.
+Style/SymbolArray:
+  Enabled: true
+  EnforcedStyle: brackets
+
+Style/WordArray:
+  Enabled: true
+  EnforcedStyle: brackets
+
+# Minitest
+
+Minitest:
+  Include:
+  - test/**/*.rb
+
+Minitest/EmptyLineBeforeAssertionMethods:
+  Enabled: false
+
+# Prefix, postfix, just use the same name as the module that should be tested.
+# In any case, tests are separated from the source code.
+Minitest/TestFileName:
+  Enabled: false
+
+# Rails
+
+Rails:
+  Include:
+  - app/**/*.rb
