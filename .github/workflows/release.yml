@@ -28,7 +28,8 @@ jobs:
           cd ./onlyoffice_redmine
           rm -rf ./.github/
           rm -rf ./.git/
-          rm ./.gitmodules
+          rm ./.gitmodules ./Gemfile ./Gemfile.lock
+          mv ./Gemfile.prod ./Gemfile
           cd ./assets/document-templates
           rm .git
       - name: Build Artifact
