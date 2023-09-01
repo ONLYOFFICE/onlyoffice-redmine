@@ -1,6 +1,6 @@
 Redmine ONLYOFFICE integration plugin uses code from the following 3rd party projects.
 
-i18n          - Internationalization (i18n) library for Ruby. (https://github.com/ruby-i18n/i18n/blob/v1.8.2/MIT-LICENSE)
+i18n          - Internationalization (i18n) library for Ruby. (https://github.com/ruby-i18n/i18n/blob/v1.10.0/MIT-LICENSE)
 License:        MIT
 License File    i18n.license
 
