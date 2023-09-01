@@ -1,7 +1,7 @@
 # Please ensure that the dependencies are kept at the same versions as the
 # Redmine team.
 #
-# https://github.com/redmine/redmine/blob/master/Gemfile
+# https://github.com/redmine/redmine/blob/5.0.0/Gemfile
 
 source "https://rubygems.org"
 
