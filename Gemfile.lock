@@ -87,6 +87,7 @@ GEM
     mini_mime (1.1.5)
     mini_portile2 (2.8.4)
     minitest (5.19.0)
+    mustache (1.1.1)
     net-imap (0.3.7)
       date
       net-protocol
@@ -237,6 +238,7 @@ PLATFORMS
 DEPENDENCIES
   i18n (~> 1.10.0)
   minitest (~> 5.19)
+  mustache (~> 1.1.1)
   rails (= 6.1.4.7)
   rake (~> 13.0)
   render_parent (~> 0.1.0)
