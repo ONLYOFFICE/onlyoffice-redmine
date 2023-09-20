@@ -38,7 +38,7 @@ class UrlHelper
                 return url
             end
 
-            return url.sub(publicUrl, innerUrl)
+            return url.sub(public_url, inner_url)
         end
 
     end
