@@ -15,7 +15,5 @@
 # limitations under the License.
 %>
 
-<%= render :parent %>
-<% if OnlyofficeController.checking_activity_onlyoffice %>
-  <%= render :partial => 'attachments/onlyoffice_buttons', :locals => {:file_id => @attachment.id} %>
-<% end %>
+<%= render(:parent) %>
+<%= Views::Attachments::Show.inline(helpers: self, attachment: @attachment) %>

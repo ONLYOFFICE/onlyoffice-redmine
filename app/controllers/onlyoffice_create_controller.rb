@@ -6,8 +6,56 @@ class OnlyofficeCreateController < ApplicationController
   before_action :valid_doc_type, :only => [:new_doc_attachment]
 
   def new
-    @document = @project.documents.build
-    @document.safe_attributes = params[:document]
+    @document = Document.find(params[:document_id])
+
+    docx = Views::OnlyOfficeCreate::TypeOption.new(
+      label: I18n.t("onlyoffice_create_docx"),
+      value: I18n.t("onlyoffice_create_docx"),
+      selected: true,
+      action: helpers.onlyoffice_create_new_doc_attachment_2_path(
+        @project,
+        @document.id,
+        "docx"
+      )
+    )
+    xlsx = Views::OnlyOfficeCreate::TypeOption.new(
+      label: I18n.t("onlyoffice_create_xlsx"),
+      value: I18n.t("onlyoffice_create_xlsx"),
+      action: helpers.onlyoffice_create_new_doc_attachment_2_path(
+        @project,
+        @document.id,
+        "xlsx"
+      )
+    )
+    pptx = Views::OnlyOfficeCreate::TypeOption.new(
+      label: I18n.t("onlyoffice_create_pptx"),
+      value: I18n.t("onlyoffice_create_pptx"),
+      action: helpers.onlyoffice_create_new_doc_attachment_2_path(
+        @project,
+        @document.id,
+        "pptx"
+      )
+    )
+    docxf = Views::OnlyOfficeCreate::TypeOption.new(
+      label: I18n.t("onlyoffice_create_docxf"),
+      value: I18n.t("onlyoffice_create_docxf"),
+      action: helpers.onlyoffice_create_new_doc_attachment_2_path(
+        @project,
+        @document.id,
+        "ocxf"
+      )
+    )
+
+    view = Views::OnlyOfficeCreate::New.new(helpers:)
+    view.error_messages = helpers.error_messages_for(@document)
+    view.type_name = "docType"
+    view.type_options = [docx, xlsx, pptx, docxf]
+    # view.name_name = "title"
+    # view.name_value = docx.value
+    # view.description_name = "description"
+    view.cancel_url = document_path(@document)
+
+    render(inline: view.inline, layout: "base")
   end
 
   def create

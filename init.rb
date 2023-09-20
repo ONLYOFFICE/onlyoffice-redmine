@@ -17,6 +17,8 @@
 
 require 'redmine'
 
+require_relative "app/views/views"
+
 Redmine::Plugin.register :onlyoffice_redmine do
   name 'Redmine ONLYOFFICE integration plugin'
   author 'ONLYOFFICE'

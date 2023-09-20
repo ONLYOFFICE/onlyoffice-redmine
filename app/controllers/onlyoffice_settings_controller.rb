@@ -59,12 +59,14 @@ class OnlyofficeSettingsController < SettingsController
             Setting.send "plugin_#{@plugin.id}=", setting
         
             is_valid_settings()
+            flash[:notice] = l(:notice_successful_update)
         rescue => ex
             response[:success] = false
             response[:message] = ex.message
+            flash[:error] = ex.message
         end
 
-        render :json => response
+        redirect_to plugin_settings_path(@plugin)
     end
     
     def is_valid_settings
