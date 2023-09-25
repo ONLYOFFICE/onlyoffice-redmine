@@ -158,7 +158,7 @@ class CallbackHelper
 
         new_disk_directory = callback_date.year.to_s + "/" + ("%02d" % callback_date.month.to_s)
         new_absolute_directory = attachment.diskfile.split("files")[0] + "files/" + new_disk_directory
-        new_filename = new_date + new_time + "_" + attachment.disk_filename.split("_")[1]
+        new_filename = new_date + new_time + "_" + attachment.disk_filename.split("_", 2)[1]
 
         save_from_uri(new_absolute_directory, new_filename, download_uri)
 
