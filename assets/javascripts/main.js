@@ -880,7 +880,7 @@
    * @returns {string}
    */
   function shrugify(message) {
-    return message || "¯\_(ツ)_/¯"
+    return message || "Error occurred in the document service. Please contact admin"
   }
 
   // Main
