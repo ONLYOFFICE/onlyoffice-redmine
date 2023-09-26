@@ -18,20 +18,22 @@
 get 'onlyoffice/download/:id/:filename', :to => 'onlyoffice#download', :id => /\d+/, :filename => /.*/
 get 'onlyoffice/download/:id', :to => 'onlyoffice#download', :id => /\d+/
 get 'onlyoffice/download_test', :to => 'onlyoffice#download_test'
-get 'onlyoffice/editor/:id', :to => 'onlyoffice#editor', :id => /\d+/
+get 'onlyoffice/editor/:id', :to => 'onlyoffice#editor', :id => /\d+/, :as => 'onlyoffice_editor'
 get 'onlyoffice/editor/:id/:action_data', :to => 'onlyoffice#editor', :id => /\d+/, :action_data => /.*/
 
 post 'onlyoffice/callback/:id/:rss', :to => 'onlyoffice#callback', :id => /\d+/, :rss => /.*/
 post 'onlyoffice/save_as/:id', :to => 'onlyoffice#save_as', :id => /\d+/, :as => 'onlyoffice_save_as'
 
 get 'onlyoffice_create/new/:ext/:project_id', :to => 'onlyoffice_create#new', :as => 'onlyoffice_create_new'
+get 'onlyoffice_create/new/:project_id/:document_id/:ext', :to => 'onlyoffice_create#new', :as => 'onlyoffice_create_new_2'
 
 post 'onlyoffice_create/new/:ext/:project_id', :to => 'onlyoffice_create#create', :as => 'onlyoffice_create'
 
 post 'onlyoffice_create/attachment/:document_id/:project_id', :to => 'onlyoffice_create#new_doc_attachment', :as => 'onlyoffice_create_new_doc_attachment'
+post 'onlyoffice_create/attachment/:project_id/:document_id/:ext', :to => 'onlyoffice_create#new_doc_attachment', :as => 'onlyoffice_create_new_doc_attachment_2'
 
 #   convert file
-get 'onlyoffice/conversion/:page_id/:page_type/:id', :to => 'onlyoffice_convert#convert_page', :id => /\d+/, :page_id => /\d+/
+get 'onlyoffice/conversion/:page_id/:page_type/:id', :to => 'onlyoffice_convert#convert_page', :id => /\d+/, :page_id => /\d+/, :as => 'onlyoffice_convert_convert_page'
 
 post 'onlyoffice/conversion/:page_id/:page_type', :to => 'onlyoffice_convert#convert', :as => 'onlyoffice_convert', :page_id => /\d+/
 post 'onlyoffice/settings', :to => 'onlyoffice_settings#save', :as => 'onlyoffice_plugin_settings'

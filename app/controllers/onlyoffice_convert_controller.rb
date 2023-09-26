@@ -9,7 +9,69 @@ class OnlyofficeConvertController < OnlyofficeBaseController
         @ext = DocumentHelper.file_ext(@attachment.disk_filename, true)
         @formats = FormatUtility.format_supported(@ext)
 
-        render :action => 'index'
+        return render_403 unless \
+          @attachment.project &&
+          (@attachment.project.active? || @attachment.project.closed?) &&
+          @attachment.visible?
+
+        if @formats.empty?
+          # flash[:error] = "Conversion unsupported"
+          # render(layout: "base")
+          return render_403
+        end
+
+        view = Views::OnlyOfficeConvert::Index.new(helpers:)
+        view.input_basename = @attachment.filename
+        view.input_size = helpers.number_to_human_size(@attachment.filesize)
+        view.input_author = @attachment.author.to_s
+        view.input_create_on = helpers.format_time(@attachment.created_on)
+        view.type_name = "type"
+        view.type_save_value = "_unset_"
+        view.type_download_value = "download_as"
+        view.input_id_name = "id"
+        view.input_id_value = @attachment.id.to_s
+        view.page_id_name = "page_id"
+        view.page_id_value = params[:page_id].to_s
+        view.page_type_name = "page_type"
+        view.page_type_value = params[:page_type]
+        view.output_name_name = "field_name"
+        view.output_name_value = DocumentHelper.file_name_without_ext(@attachment.filename)
+        view.input_type_name = "onlyoffice_convert_current_type"
+        view.input_type_value = DocumentHelper.file_ext(@attachment.disk_filename, true)
+        view.output_type_name = "onlyoffice_convert_end_type"
+        view.output_type_options = FormatUtility.format_supported(view.input_type_value)
+        view.download_url = helpers.onlyoffice_convert_path(@attachment.id, @attachment.id)
+
+        return render(inline: view.inline, layout: "base") unless @page
+
+        save_url = helpers.onlyoffice_convert_path(@page.id)
+        view.cancel_url = back_url
+
+        if params[:page_type] == "Document"
+          allowed_to_add = User.current.allowed_to?(
+            {
+              controller: "documents",
+              action: "add_attachment"
+            },
+            @attachment.project
+          )
+          if allowed_to_add
+            view.save_url = save_url
+          end
+          return render(inline: view.inline, layout: "base")
+        end
+
+        if params[:page_type] == "Issue"
+          issue = Issue.find(@attachment.container_id)
+          if !issue.closed?
+            view.save_url = save_url
+          end
+          return render(inline: view.inline, layout: "base")
+        end
+
+        view.save_url = save_url
+
+        render(inline: view.inline, layout: "base")
     end
 
     def convert
@@ -39,25 +101,43 @@ class OnlyofficeConvertController < OnlyofficeBaseController
           @@res_convert = ServiceConverter.get_converted_uri(editor_base_url, title, url, current_type, next_type, key)
           if @@res_convert[0] == 100 && !@@res_convert[1].nil?
             if download_as
-              render plain: '{ "url": "' + @@res_convert[1].to_s + '" }'
+              response = {
+                message: I18n.t("notice_successful_create"),
+                url: @@res_convert[1].to_s
+              }
+              render(plain: response.to_json.to_s)
             else
               @page, back_page = get_page(params[:page_id], params[:page_type], @attachment)
         new_attachment = OnlyofficeConvertController.create_file(@@res_convert[1], file_name, next_type)
               @page.attachments << new_attachment
+              response = {
+                url: back_page.to_s
+              }
               if @page.save
+                response[:message] = I18n.t("notice_successful_create")
                 flash[:notice] = l(:notice_successful_create)
               else
+                response[:message] = I18n.t("onlyoffice_attachment_create_error")
+                response[:error] = I18n.t("onlyoffice_attachment_create_error")
                 flash[:error] = l(:onlyoffice_attachment_create_error)
               end
-              render plain: '{ "url": "' + back_page.to_s + '" }'
+              render(plain: response.to_json.to_s)
             end
           else
-            render plain: '{ "percent": "' + @@res_convert[0].to_s + '" }'
+            response = {
+              message: nil,
+              percent: @@res_convert[0].to_s
+            }
+            render(plain: response.to_json.to_s)
             return
           end
         rescue => ex
           logger.error(ex.full_message)
-          render plain: '{ "error": "' + ex.message + '" }'
+          response = {
+            message: I18n.t("onlyoffice_attachment_create_error"),
+            error: ex.message
+          }
+          render(plain: response.to_json.to_s)
           return
         end
     end

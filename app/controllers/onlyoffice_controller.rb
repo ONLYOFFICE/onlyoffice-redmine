@@ -117,6 +117,36 @@ class OnlyofficeController < OnlyofficeBaseController
     else
       @favicon = @editor_config[:documentType]
     end
+
+    if Config.is_demo_ended
+      flash[:error] = I18n.t("onlyoffice_editor_trial_period_ended")
+      render(layout: "base")
+      return
+    end
+
+    version_response = CallbackHelper.command_request("version", nil)
+    version = version_response["version"]
+    major = Integer(version.split(".")[0])
+    fillable_unsupported = \
+      (
+        @editor_config[:document][:fileType] == "docxf" ||
+        @editor_config[:document][:fileType] == "oform"
+      ) &&
+      major < 7
+    if fillable_unsupported
+      flash[:error] = I18n.t("onlyoffice_editor_forms_error_version")
+      render(layout: "base")
+      return
+    end
+
+    view = Views::OnlyOffice::Editor.new(helpers:)
+    view.document_server_api_url = "#{Config.get_docserver_url(false)}web-apps/apps/api/documents/api.js"
+    view.document_server_config = @editor_config.to_json
+    view.save_as_url = helpers.onlyoffice_save_as_path(@attachment.id)
+    view.format = @favicon
+    view.basename = @attachment.filename
+
+    render(inline: view.inline, layout: "base")
   end
 
   def go_back_url(attachment)
