@@ -1,0 +1,4 @@
+[submodule "lib2/resources/document-templates"]
+	path = lib2/resources/document-templates
+	url = https://github.com/ONLYOFFICE/document-templates
+	branch = main/new-small
