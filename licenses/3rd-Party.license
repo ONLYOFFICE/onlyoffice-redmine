@@ -4,6 +4,10 @@ i18n          - Internationalization (i18n) library for Ruby. (https://github.co
 License:        MIT
 License File    i18n.license
 
+jwt           - A ruby implementation of the RFC 7519 OAuth JSON Web Token (JWT) standard. (https://github.com/jwt/ruby-jwt/raw/v2.7.1/LICENSE)
+License:        MIT
+License File    jwt.license
+
 minitest      - minitest provides a complete suite of testing facilities supporting TDD, BDD, mocking, and benchmarking. (https://github.com/minitest/minitest/blob/v5.19.0/README.rdoc#license-)
 License:        MIT
 License File:   minitest.license

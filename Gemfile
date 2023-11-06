@@ -6,6 +6,7 @@
 source "https://rubygems.org"
 
 gem "i18n", "~> 1.10.0"
+gem "jwt", "~> 2.7.1"
 gem "mustache", "~> 1.1.1"
 gem "rails", "= 6.1.4.7"
 gem "render_parent", "~> 0.1.0"
