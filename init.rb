@@ -15,28 +15,34 @@
 # limitations under the License.
 #
 
-require 'redmine'
+# typed: false
+# frozen_string_literal: true
 
+require "redmine"
+require_relative "lib2/onlyoffice"
+require_relative "lib2/only_office"
 require_relative "app/views/views"
+require_relative "lib/only_office_redmine"
+require_relative "lib/only_office_redmine/settings"
 
-Redmine::Plugin.register :onlyoffice_redmine do
-  name 'Redmine ONLYOFFICE integration plugin'
-  author 'ONLYOFFICE'
-  description 'Redmine ONLYOFFICE integration plugin allows opening files uploaded to the Issues, Files, Documents, Wiki, or News modules for viewing and co-editing.'
-  version '2.1.0'
-  url 'https://github.com/ONLYOFFICE/onlyoffice-redmine'
-  author_url 'https://www.onlyoffice.com'
+logger = Rails.logger.dup
+logger.progname = OnlyOffice.logger.progname.dup
+OnlyOffice.logger = logger
 
+logger = Rails.logger.dup
+logger.progname = OnlyOfficeRedmine.logger.progname.dup
+OnlyOfficeRedmine.logger = logger
 
-  settings default: {'oo_address' => 'http://localhost/',
-                     'jwtsecret' => '',
-                     'jwtheader' => 'Authorization',
-                     'editor_demo' => '',
-                     'editor_chat' => 'on',
-                     'editor_help' => 'on',
-                     'editor_compact_header' => '',
-                     'editor_toolbar_no_tabs' => '',
-                     'editor_feedback' => 'on',
-                     'check_cert' => '',
-                     'demo_date_start' => '' }, partial: 'settings/onlyoffice_settings'
+Redmine::Plugin.register(OnlyOfficeRedmine::NAME.to_sym) do
+  name        "Redmine ONLYOFFICE integration plugin"
+  author      "ONLYOFFICE"
+  description "Redmine ONLYOFFICE integration plugin allows opening files uploaded to the Issues, Files, Documents, Wiki, or News modules for viewing and co-editing."
+  version     OnlyOfficeRedmine::VERSION
+  url         "https://github.com/ONLYOFFICE/onlyoffice-redmine"
+  author_url  "https://www.onlyoffice.com"
+
+  settings(
+    default: OnlyOfficeRedmine::InternalSettings.defaults.serialize,
+    partial: "settings/onlyoffice_settings"
+  )
 end
