@@ -17,20 +17,11 @@
 # typed: true
 # frozen_string_literal: true
 
-# [Redmine Reference: Controller](https://github.com/redmine/redmine/blob/5.0.0/app/controllers/issues_controller.rb#L95) \
-# [Redmine Reference: View](https://github.com/redmine/redmine/blob/5.0.0/app/views/issues/show.html.erb)
+# [Redmine Reference](https://github.com/redmine/redmine/blob/5.0.0/app/views/issues/show.html.erb)
 class Views::Issues::Show < Views::Mustache
   extend T::Sig
   include Blocks::Assets
   include Blocks::Attachments
 
   self.template_file = "#{template_path}/issues/show.mustache"
-
-  sig { params(helpers: T.untyped, issue: T.untyped).returns(String) }
-  def self.inline(helpers:, issue:)
-    view = new(helpers:)
-    view.setup_assets
-    view.setup_attachments(issue)
-    view.render.html_safe
-  end
 end

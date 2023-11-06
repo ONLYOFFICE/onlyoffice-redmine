@@ -28,8 +28,8 @@ module Blocks::Convert::Contextual
     @convert_url ||= nil
   end
 
-  sig { overridable.params(value: T.nilable(String)).void }
-  def convert_url=(value)
-    @convert_url = value
+  sig { overridable.params(url: T.nilable(String)).void }
+  def convert_url=(url)
+    @convert_url = url
   end
 end

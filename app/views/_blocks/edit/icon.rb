@@ -22,13 +22,8 @@ module Blocks::Edit::Icon
   extend T::Helpers
   abstract!
 
-  sig { overridable.returns(String) }
+  sig { returns(String) }
   def edit_label
-    @edit_label ||= I18n.t("edit_in_onlyoffice")
-  end
-
-  sig { overridable.params(value: String).void }
-  def edit_label=(value)
-    @edit_label = value
+    I18n.t("edit_in_onlyoffice")
   end
 end

@@ -43,6 +43,37 @@ class Views::Mustache < Mustache
     comment = Regexp.new("^\\s*?<!--[\\S\\s]*?-->\n{1,}")
     html.gsub(comment, "")
   end
+
+  sig { overridable.returns(String) }
+  def inline
+    render.html_safe
+  end
+end
+
+class Views::Action < T::Struct
+  prop :label, String, default: ""
+  prop :url,   String, default: ""
+end
+
+class Views::Input < T::Struct
+  prop :label,       String,     default: ""
+  prop :name,        String,     default: ""
+  prop :placeholder, String,     default: ""
+  prop :value,       String,     default: ""
+  prop :note,        String,     default: ""
+  prop :checked,     T::Boolean, default: false
+end
+
+class Views::Option < T::Struct
+  prop :label,    String,     default: ""
+  prop :value,    String,     default: ""
+  prop :selected, T::Boolean, default: false
+end
+
+class Views::Select < T::Struct
+  prop :label,   String,                  default: ""
+  prop :name,    String,                  default: ""
+  prop :options, T::Array[Views::Option], default: []
 end
 
 module Views::Attachments; end
@@ -61,13 +92,9 @@ module Views::News; end
 require_relative "news/show"
 
 module Views::OnlyOffice; end
+require_relative "onlyoffice/convert"
 require_relative "onlyoffice/editor"
-
-module Views::OnlyOfficeConvert; end
-require_relative "onlyoffice_convert/index"
-
-module Views::OnlyOfficeCreate; end
-require_relative "onlyoffice_create/new"
+require_relative "onlyoffice/new"
 
 module Views::Settings; end
 require_relative "settings/plugin"

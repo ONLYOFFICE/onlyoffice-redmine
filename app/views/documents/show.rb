@@ -17,8 +17,7 @@
 # typed: true
 # frozen_string_literal: true
 
-# [Redmine Reference: Controller](https://github.com/redmine/redmine/blob/5.0.0/app/controllers/documents_controller.rb#L49) \
-# [Redmine Reference: View](https://github.com/redmine/redmine/blob/5.0.0/app/views/documents/show.html.erb)
+# [Redmine Reference](https://github.com/redmine/redmine/blob/5.0.0/app/views/documents/show.html.erb)
 class Views::Documents::Show < Views::Mustache
   extend T::Sig
   include Blocks::Assets
@@ -26,34 +25,4 @@ class Views::Documents::Show < Views::Mustache
   include Blocks::New::Anchor
 
   self.template_file = "#{template_path}/documents/show.mustache"
-
-  sig { params(helpers: T.untyped, document: T.untyped).returns(String) }
-  def self.inline(helpers:, document:)
-    default = ""
-
-    return default unless \
-      OnlyofficeController.checking_activity_onlyoffice &&
-      document.project.active?
-
-    view = new(helpers:)
-    view.setup_assets
-    view.setup_attachments(document)
-
-    allowed_to_add = User.current.allowed_to?(
-      {
-        controller: "documents",
-        action: "add_attachment"
-      },
-      document.project
-    )
-    if allowed_to_add
-      view.new_url = helpers.onlyoffice_create_new_2_path(
-        document.project,
-        document.id,
-        "docx"
-      )
-    end
-
-    view.render.html_safe
-  end
 end

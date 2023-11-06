@@ -28,8 +28,8 @@ module Blocks::View::Contextual
     @view_url ||= nil
   end
 
-  sig { overridable.params(value: T.nilable(String)).void }
-  def view_url=(value)
-    @view_url = value
+  sig { overridable.params(url: T.nilable(String)).void }
+  def view_url=(url)
+    @view_url = url
   end
 end

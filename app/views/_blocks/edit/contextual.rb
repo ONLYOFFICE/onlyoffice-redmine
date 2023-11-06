@@ -28,8 +28,8 @@ module Blocks::Edit::Contextual
     @edit_url ||= nil
   end
 
-  sig { overridable.params(value: T.nilable(String)).void }
-  def edit_url=(value)
-    @edit_url = value
+  sig { overridable.params(url: T.nilable(String)).void }
+  def edit_url=(url)
+    @edit_url = url
   end
 end

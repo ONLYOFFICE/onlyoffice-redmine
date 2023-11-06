@@ -28,14 +28,14 @@ module Blocks::Helpers
   def helpers; end
 
   # [Ruby on Rails Reference](https://api.rubyonrails.org/v6.1.0/classes/ActionView/Helpers/FormTagHelper.html#method-i-form_tag)
-  sig { returns(T.untyped) }
-  def helpers_form_tag
+  sig { params(url: String, multipart: T::Boolean).returns(T.untyped) }
+  def helpers_form_tag(url = "#", multipart: true)
     lambda do |text|
-      portalled = helpers.form_tag("#", multipart: true) do
+      portalled = helpers.form_tag(url, multipart:) do
         text.html_safe
       end
-      instance = T.bind(self, Mustache)
-      instance.render(portalled)
+      T.bind(self, Mustache)
+      render(portalled)
     end
   end
 

@@ -18,9 +18,9 @@ limitations under the License.
   <div class="onlyoffice-settings__main">
     <div class="box tabular settings">
       <p>
-        <label for="onlyoffice-document-server-url">{{ document_server_url_label }}</label>
-        <input id="onlyoffice-document-server-url" name="{{ document_server_url_name }}" placeholder="{{ document_server_url_placeholder }}" type="text" value="{{ document_server_url_value }}" data-disabled-for-demo>
-        <em class="info">{{ document_server_url_note }}</em>
+        <label for="onlyoffice-document-server-url">{{ document_server_url.label }}</label>
+        <input id="onlyoffice-document-server-url" name="{{ document_server_url.name }}" type="text" value="{{ document_server_url.value }}" data-disabled-for-trial>
+        <em class="info">{{ document_server_url.note }}</em>
       </p>
     </div>
   </div>
@@ -28,16 +28,16 @@ limitations under the License.
     <fieldset class="box tabular settings">
       <legend>{{ advanced_legend }}</legend>
       <p>
-        <label for="onlyoffice-document-server-internal-url">{{ document_server_internal_url_label }}</label>
-        <input id="onlyoffice-document-server-internal-url" name="{{ document_server_internal_url_name }}" placeholder="{{ document_server_internal_url_placeholder }}" type="text" value="{{ document_server_internal_url_value }}" data-disabled-for-demo>
+        <label for="onlyoffice-document-server-internal-url">{{ document_server_internal_url.label }}</label>
+        <input id="onlyoffice-document-server-internal-url" name="{{ document_server_internal_url.name }}" type="text" value="{{ document_server_internal_url.value }}" data-disabled-for-trial>
       </p>
       <p>
-        <label for="onlyoffice-server-internal-url">{{ server_internal_url_label }}</label>
-        <input id="onlyoffice-server-internal-url" name="{{ server_internal_url_name }}" placeholder="{{ server_internal_url_placeholder }}" type="text" value="{{ server_internal_url_value }}" data-disabled-for-demo>
+        <label for="onlyoffice-plugin-internal-url">{{ plugin_internal_url.label }}</label>
+        <input id="onlyoffice-plugin-internal-url" name="{{ plugin_internal_url.name }}" type="text" value="{{ plugin_internal_url.value }}" data-disabled-for-trial>
       </p>
       <label class="block">
-        <input id="onlyoffice-demo-document-server-enabled" name="{{ demo_document_server_enabled_name }}" type="checkbox" value="{{ demo_document_server_enabled_value }}" {{# demo_document_server_enabled_checked }} checked {{/ demo_document_server_enabled_checked}}>
-        {{ demo_document_server_enabled_label }}
+        <input id="onlyoffice-trial-enabled" name="{{ trial_enabled.name }}" type="checkbox" value="{{ trial_enabled.value }}" {{# trial_enabled.checked }} checked {{/ trial_enabled.checked }}>
+        {{ trial_enabled.label }}
       </label>
     </fieldset>
   </div>
@@ -45,17 +45,17 @@ limitations under the License.
     <fieldset class="box tabular settings">
       <legend>{{ security_legend }}</legend>
       <p>
-        <label for="onlyoffice-jwt-secret">{{ jwt_secret_label }}</label>
-        <input id="onlyoffice-jwt-secret" name="{{ jwt_secret_name }}" type="text" value="{{ jwt_secret_value }}" data-disabled-for-demo>
-        <em class="info">{{ jwt_secret_note }}</em>
+        <label for="onlyoffice-jwt-secret">{{ jwt_secret.label }}</label>
+        <input id="onlyoffice-jwt-secret" name="{{ jwt_secret.name }}" type="text" value="{{ jwt_secret.value }}" data-disabled-for-trial>
+        <em class="info">{{ jwt_secret.note }}</em>
       </p>
       <p>
-        <label for="onlyoffice-jwt-header">{{ jwt_header_label }}</label>
-        <input id="onlyoffice-jwt-header" name="{{ jwt_header_name }}" type="text" value="{{ jwt_header_value }}" data-disabled-for-demo>
+        <label for="onlyoffice-jwt-http-header">{{ jwt_http_header.label }}</label>
+        <input id="onlyoffice-jwt-http-header" name="{{ jwt_http_header.name }}" type="text" value="{{ jwt_http_header.value }}" data-disabled-for-trial>
       </p>
       <label class="block">
-        <input name="{{ ssl_verify_mode_name }}" type="checkbox" value="{{ ssl_verify_mode_value }}" {{# ssl_verify_mode_checked }} checked {{/ ssl_verify_mode_checked }}>
-        {{ ssl_verify_mode_label }}
+        <input name="{{ ssl_verification_disabled.name }}" type="checkbox" value="{{ ssl_verification_disabled.value }}" {{# ssl_verification_disabled.checked }} checked {{/ ssl_verification_disabled.checked }}>
+        {{ ssl_verification_disabled.label }}
       </label>
     </fieldset>
   </div>
@@ -63,24 +63,24 @@ limitations under the License.
     <fieldset class="box tabular settings">
       <legend>{{ editor_legend }}</legend>
       <label class="block">
-        <input name="{{ editor_chat_visible_name }}" type="checkbox" value="{{ editor_chat_visible_value }}" {{# editor_chat_visible_checked }} checked {{/ editor_chat_visible_checked }}>
-        {{ editor_chat_visible_label }}
+        <input name="{{ editor_chat_enabled.name }}" type="checkbox" value="{{ editor_chat_enabled.value }}" {{# editor_chat_enabled.checked }} checked {{/ editor_chat_enabled.checked }}>
+        {{ editor_chat_enabled.label }}
       </label>
       <label class="block">
-        <input name="{{ editor_compact_header_visible_name }}" type="checkbox" value="{{ editor_compact_header_visible_value }}" {{# editor_compact_header_visible_checked }} checked {{/ editor_compact_header_visible_checked }}>
-        {{ editor_compact_header_visible_label }}
+        <input name="{{ editor_compact_header_enabled.name }}" type="checkbox" value="{{ editor_compact_header_enabled.value }}" {{# editor_compact_header_enabled.checked }} checked {{/ editor_compact_header_enabled.checked }}>
+        {{ editor_compact_header_enabled.label }}
       </label>
       <label class="block">
-        <input name="{{ editor_feedback_visible_name }}" type="checkbox" value="{{ editor_feedback_visible_value }}" {{# editor_feedback_visible_checked }} checked {{/ editor_feedback_visible_checked }}>
-        {{ editor_feedback_visible_label }}
+        <input name="{{ editor_feedback_enabled.name }}" type="checkbox" value="{{ editor_feedback_enabled.value }}" {{# editor_feedback_enabled.checked }} checked {{/ editor_feedback_enabled.checked }}>
+        {{ editor_feedback_enabled.label }}
       </label>
       <label class="block">
-        <input name="{{ editor_help_visible_name }}" type="checkbox" value="{{ editor_help_visible_value }}" {{# editor_help_visible_checked }} checked {{/ editor_help_visible_checked }}>
-        {{ editor_help_visible_label }}
+        <input name="{{ editor_help_enabled.name }}" type="checkbox" value="{{ editor_help_enabled.value }}" {{# editor_help_enabled.checked }} checked {{/ editor_help_enabled.checked }}>
+        {{ editor_help_enabled.label }}
       </label>
       <label class="block">
-        <input name="{{ editor_monochrome_toolbar_visible_name }}" type="checkbox" value="{{ editor_monochrome_toolbar_visible_value }}" {{# editor_monochrome_toolbar_visible_checked }} checked {{/ editor_monochrome_toolbar_visible_checked }}>
-        {{ editor_monochrome_toolbar_visible_label }}
+        <input name="{{ editor_toolbar_tabs_disabled.name }}" type="checkbox" value="{{ editor_toolbar_tabs_disabled.value }}" {{# editor_toolbar_tabs_disabled.checked }} checked {{/ editor_toolbar_tabs_disabled.checked }}>
+        {{ editor_toolbar_tabs_disabled.label }}
       </label>
     </fieldset>
   </div>
