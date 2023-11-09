@@ -17,9 +17,8 @@
 # typed: true
 # frozen_string_literal: true
 
-# [Redmine Reference: Controller](https://github.com/redmine/redmine/blob/5.0.0/app/controllers/attachments_controller.rb#L20) \
-# [Redmine Reference: File View](https://github.com/redmine/redmine/blob/5.0.0/app/views/attachments/file.html.erb) \
-# [Redmine Reference: Other View](https://github.com/redmine/redmine/blob/5.0.0/app/views/attachments/other.html.erb)
+# [Redmine Reference: File](https://github.com/redmine/redmine/blob/5.0.0/app/views/attachments/file.html.erb) \
+# [Redmine Reference: Other](https://github.com/redmine/redmine/blob/5.0.0/app/views/attachments/other.html.erb)
 class Views::Attachments::Show < Views::Mustache
   extend T::Sig
   include Blocks::Assets
@@ -28,23 +27,4 @@ class Views::Attachments::Show < Views::Mustache
   include Blocks::Convert::Contextual
 
   self.template_file = "#{template_path}/attachments/show.mustache"
-
-  sig { params(helpers: T.untyped, attachment: T.untyped).returns(String) }
-  def self.inline(helpers:, attachment:)
-    default = ""
-
-    return default unless OnlyofficeController.checking_activity_onlyoffice
-
-    attach = Blocks::Attachment.define(helpers, attachment)
-    return default unless attach.view_url || attach.edit_url || attach.convert_url
-
-    view = new(helpers:)
-    view.setup_assets
-
-    view.view_url = attach.view_url
-    view.edit_url = attach.edit_url
-    view.convert_url = attach.convert_url
-
-    view.render.html_safe
-  end
 end

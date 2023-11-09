@@ -15,4 +15,4 @@ limitations under the License.
 %>
 
 <%= render(:parent) %>
-<%= Views::News::Show.inline(helpers: self, news: @news) %>
+<%= OnlyOfficeAttachmentsController.show_news(self, @news) %>

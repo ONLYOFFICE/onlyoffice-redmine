@@ -73,6 +73,7 @@ GEM
     i18n (1.10.0)
       concurrent-ruby (~> 1.0)
     json (2.6.3)
+    jwt (2.7.1)
     language_server-protocol (3.17.0.3)
     loofah (2.21.3)
       crass (~> 1.0.2)
@@ -237,6 +238,7 @@ PLATFORMS
 
 DEPENDENCIES
   i18n (~> 1.10.0)
+  jwt (~> 2.7.1)
   minitest (~> 5.19)
   mustache (~> 1.1.1)
   rails (= 6.1.4.7)

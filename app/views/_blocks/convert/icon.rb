@@ -22,13 +22,8 @@ module Blocks::Convert::Icon
   extend T::Helpers
   abstract!
 
-  sig { overridable.returns(String) }
+  sig { returns(String) }
   def convert_label
-    @convert_label ||= I18n.t("onlyoffice_convert_dropdown")
-  end
-
-  sig { overridable.params(value: String).void }
-  def convert_label=(value)
-    @convert_label = value
+    I18n.t("onlyoffice_convert_dropdown")
   end
 end

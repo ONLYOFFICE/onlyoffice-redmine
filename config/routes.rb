@@ -15,25 +15,26 @@
 # limitations under the License.
 #
 
-get 'onlyoffice/download/:id/:filename', :to => 'onlyoffice#download', :id => /\d+/, :filename => /.*/
-get 'onlyoffice/download/:id', :to => 'onlyoffice#download', :id => /\d+/
-get 'onlyoffice/download_test', :to => 'onlyoffice#download_test'
-get 'onlyoffice/editor/:id', :to => 'onlyoffice#editor', :id => /\d+/, :as => 'onlyoffice_editor'
-get 'onlyoffice/editor/:id/:action_data', :to => 'onlyoffice#editor', :id => /\d+/, :action_data => /.*/
+# typed: false
+# frozen_string_literal: true
 
-post 'onlyoffice/callback/:id/:rss', :to => 'onlyoffice#callback', :id => /\d+/, :rss => /.*/
-post 'onlyoffice/save_as/:id', :to => 'onlyoffice#save_as', :id => /\d+/, :as => 'onlyoffice_save_as'
+# rubocop:disable Layout/LineLength
 
-get 'onlyoffice_create/new/:ext/:project_id', :to => 'onlyoffice_create#new', :as => 'onlyoffice_create_new'
-get 'onlyoffice_create/new/:project_id/:document_id/:ext', :to => 'onlyoffice_create#new', :as => 'onlyoffice_create_new_2'
+# Attachments
+get  "onlyoffice/containers/:container_type/:container_id/attachments/new", to: "only_office_attachments#new",         as: "onlyoffice_new_attachment"
+post "onlyoffice/containers/:container_type/:container_id/attachments/new", to: "only_office_attachments#create",      as: "onlyoffice_create_attachment"
+get  "onlyoffice/attachments/:attachment_id/view",                          to: "only_office_attachments#view",        as: "onlyoffice_view_attachment"
+get  "onlyoffice/attachments/:attachment_id/edit",                          to: "only_office_attachments#edit",        as: "onlyoffice_edit_attachment"
+get  "onlyoffice/attachments/:attachment_id/download",                      to: "only_office_attachments#download",    as: "onlyoffice_raw_download_attachment"
+get  "onlyoffice/attachments/:attachment_id/convert",                       to: "only_office_attachments#convert",     as: "onlyoffice_convert_attachment"
+post "onlyoffice/attachments/:attachment_id/save-as",                       to: "only_office_attachments#save_as",     as: "onlyoffice_save_as_attachment"
+post "onlyoffice/attachments/:attachment_id/download-as",                   to: "only_office_attachments#download_as", as: "onlyoffice_download_as_attachment"
+post "onlyoffice/attachments/:attachment_id/callback",                      to: "only_office_attachments#callback",    as: "onlyoffice_raw_callback_attachment"
 
-post 'onlyoffice_create/new/:ext/:project_id', :to => 'onlyoffice_create#create', :as => 'onlyoffice_create'
+# Ping
+get  "onlyoffice/ping", to: "only_office_ping#index", as: "onlyoffice_ping"
 
-post 'onlyoffice_create/attachment/:document_id/:project_id', :to => 'onlyoffice_create#new_doc_attachment', :as => 'onlyoffice_create_new_doc_attachment'
-post 'onlyoffice_create/attachment/:project_id/:document_id/:ext', :to => 'onlyoffice_create#new_doc_attachment', :as => 'onlyoffice_create_new_doc_attachment_2'
+# Settigns
+post "onlyoffice/settings", to: "only_office_settings#update", as: "onlyoffice_update_settings"
 
-#   convert file
-get 'onlyoffice/conversion/:page_id/:page_type/:id', :to => 'onlyoffice_convert#convert_page', :id => /\d+/, :page_id => /\d+/, :as => 'onlyoffice_convert_convert_page'
-
-post 'onlyoffice/conversion/:page_id/:page_type', :to => 'onlyoffice_convert#convert', :as => 'onlyoffice_convert', :page_id => /\d+/
-post 'onlyoffice/settings', :to => 'onlyoffice_settings#save', :as => 'onlyoffice_plugin_settings'
+# rubocop:enable Layout/LineLength

@@ -22,13 +22,8 @@ module Blocks::View::Icon
   extend T::Helpers
   abstract!
 
-  sig { overridable.returns(String) }
+  sig { returns(String) }
   def view_label
-    @view_label ||= I18n.t("open_in_onlyoffice")
-  end
-
-  sig { overridable.params(value: String).void }
-  def view_label=(value)
-    @view_label = value
+    I18n.t("open_in_onlyoffice")
   end
 end

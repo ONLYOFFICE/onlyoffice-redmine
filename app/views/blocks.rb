@@ -34,7 +34,6 @@ module Blocks::Convert; end
 require_relative "_blocks/convert/icon"
 require_relative "_blocks/convert/contextual"
 
-require_relative "_blocks/attachment"
 require_relative "_blocks/attachments"
 
 module Blocks::New; end

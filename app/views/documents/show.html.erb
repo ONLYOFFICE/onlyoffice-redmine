@@ -15,4 +15,4 @@ limitations under the License.
 %>
 
 <%= render(:parent) %>
-<%= Views::Documents::Show.inline(helpers: self, document: @document) %>
+<%= OnlyOfficeAttachmentsController.show_document(self, @document) %>

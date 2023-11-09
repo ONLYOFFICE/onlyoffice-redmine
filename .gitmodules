@@ -1,4 +1,8 @@
-[submodule "assets/document-templates"]
-	path = assets/document-templates
+[submodule "lib2/resources/document-templates"]
+	path = lib2/resources/document-templates
 	url = https://github.com/ONLYOFFICE/document-templates
 	branch = main/new-small
+[submodule "lib2/resources/document-formats"]
+	path = lib2/resources/document-formats
+	url = https://github.com/ONLYOFFICE/document-formats
+	branch = master

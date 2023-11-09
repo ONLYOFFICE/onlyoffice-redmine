@@ -15,4 +15,4 @@ limitations under the License.
 %>
 
 <%= render(:parent) %>
-<%= Views::Wiki::Show.inline(helpers: self, page: @page) %>
+<%= OnlyOfficeAttachmentsController.show_wiki_page(self, @page) %>

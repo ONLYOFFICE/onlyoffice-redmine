@@ -26,7 +26,8 @@ class Views::OnlyOffice::Editor < Views::Mustache
   sig { override.params(helpers: T.untyped).void }
   def initialize(helpers:)
     super(helpers:)
-    @document_server_api_url = ""
+    @document_server_api_base_url = ""
+    @document_server_api_path = "/web-apps/apps/api/documents/api.js"
     @document_server_config = {}.to_json
     @save_as_url = ""
     @format = ""
@@ -34,7 +35,7 @@ class Views::OnlyOffice::Editor < Views::Mustache
     @basename = ""
   end
 
-  sig { returns(String) }
+  sig { override.returns(String) }
   def inline
     erb = "#{raw_assets}#{document_server_api_raw}"
     html = render.html_safe
@@ -42,7 +43,16 @@ class Views::OnlyOffice::Editor < Views::Mustache
   end
 
   sig { returns(String) }
-  attr_accessor :document_server_api_url
+  attr_accessor :document_server_api_base_url
+
+  sig { returns(String) }
+  attr_accessor :document_server_api_path
+
+  sig { returns(String) }
+  def document_server_api_url
+    uri = URI.join(document_server_api_base_url, document_server_api_path)
+    uri.to_s
+  end
 
   sig { returns(String) }
   def document_server_api_script

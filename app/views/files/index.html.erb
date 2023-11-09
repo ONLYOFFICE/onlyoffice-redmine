@@ -15,4 +15,4 @@ limitations under the License.
 %>
 
 <%= render(:parent) %>
-<%= Views::Files::Index.inline(helpers: self, containers: @containers) %>
+<%= OnlyOfficeAttachmentsController.files(self, @containers) %>

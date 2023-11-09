@@ -58,8 +58,8 @@
       OnlyOfficeConvert.setup()
       return
     }
-    if (OnlyOfficeCreate.rendered()) {
-      OnlyOfficeCreate.setup()
+    if (OnlyOfficeNew.rendered()) {
+      OnlyOfficeNew.setup()
       return
     }
     if (Settings.rendered()) {
@@ -98,15 +98,14 @@
         this.inject(convert, contextual)
       }
 
-      const edit = document.querySelector("#onlyoffice-edit")
-      if (edit && (edit instanceof HTMLTemplateElement)) {
-        this.inject(edit, contextual)
-        return
-      }
-
       const view = document.querySelector("#onlyoffice-view")
       if (view && (view instanceof HTMLTemplateElement)) {
         this.inject(view, contextual)
+      }
+
+      const edit = document.querySelector("#onlyoffice-edit")
+      if (edit && (edit instanceof HTMLTemplateElement)) {
+        this.inject(edit, contextual)
       }
     },
 
@@ -248,14 +247,6 @@
   }
 
   /**
-   * @typedef {Object} ConvertResponse
-   * @property {string | null} message
-   * @property {string=} url
-   * @property {string=} percent
-   * @property {string=} error
-   */
-
-  /**
    * [Local Reference](../../app/views/onlyoffice/editor.rb)
    */
   const OnlyOfficeEditor = {
@@ -268,7 +259,10 @@
      * @returns {boolean}
      */
     rendered() {
-      return rendered("onlyoffice", "editor")
+      return (
+        rendered("only_office_attachments", "view") ||
+        rendered("only_office_attachments", "edit")
+      )
     },
 
     /**
@@ -336,14 +330,20 @@
   }
 
   /**
-   * [Local Reference](../../app/views/onlyoffice_convert/index.rb)
+   * @typedef {Object} ConvertResult
+   * @property {number=} percent
+   * @property {string=} url
+   */
+
+  /**
+   * [Local Reference](../../app/views/onlyoffice/convert.rb)
    */
   const OnlyOfficeConvert = {
     /**
      * @returns {boolean}
      */
     rendered() {
-      return rendered("onlyoffice_convert", "convert_page")
+      return rendered("only_office_attachments", "convert")
     },
 
     /**
@@ -351,7 +351,6 @@
      */
     setup() {
       this.setupForm()
-      Flash.setup()
     },
 
     /**
@@ -373,19 +372,10 @@
       const form = event.currentTarget
       if (!form || !(form instanceof HTMLFormElement)) return
 
-      if (
-        !event.submitter ||
-        !event.submitter.dataset.url ||
-        !event.submitter.dataset.type
-      ) return
+      if (!event.submitter || !event.submitter.dataset.url) return
 
-      const type = form.querySelector("#onlyoffice-type")
-      if (!type || !(type instanceof HTMLInputElement)) return
-
-      type.value = event.submitter.dataset.type
       const data = new FormData(form)
 
-      Flash.hide()
       this.disableSubmitters(form)
       Progress.reset(form)
       await this.subscribe(form, event.submitter.dataset.url, data)
@@ -400,34 +390,28 @@
     async subscribe(form, url, data) {
       const response = await fetch(url, {
         method: form.method,
-        body: data
+        body: data,
+        redirect: "manual"
       })
 
-      /** @type {ConvertResponse} */
-      const object = await response.json()
+      const type = response.headers.get("Content-Type")
+      if (type && type.includes("application/json")) {
+        /** @type ConvertResult */
+        const result = await response.json()
 
-      if (object.error) {
-        const message = shrugify(object.message)
-        Flash.error(message)
-        this.enableSubmitters(form)
-        Progress.reset(form)
-        return
+        if (result.percent != null) {
+          Progress.update(form, result.percent)
+          await wait(1000)
+          await this.subscribe(form, url, data)
+          return
+        }
+
+        if (result.url) {
+          download(result.url)
+        }
       }
 
-      if (object.url) {
-        const message = shrugify(object.message)
-        Flash.notice(message)
-        this.enableSubmitters(form)
-        Progress.reset(form)
-        download(object.url)
-        return
-      }
-
-      const done = Number(object.percent)
-      Progress.update(form, done)
-
-      await wait(1000)
-      await this.subscribe(form, url, data)
+      window.location.reload()
     },
 
     /**
@@ -461,11 +445,11 @@
   }
 
   /**
-   * [Local Reference](../../app/views/onlyoffice_create/new.rb)
+   * [Local Reference](../../app/views/onlyoffice/new.rb)
    */
-  const OnlyOfficeCreate = {
+  const OnlyOfficeNew = {
     /**
-     * @type {((this: OnlyOfficeCreate, event: SubmitEvent) => void) | undefined}
+     * @type {((this: OnlyOfficeNew, event: SubmitEvent) => void) | undefined}
      */
     listener: undefined,
 
@@ -537,7 +521,7 @@
 
       this.setupForm(settings.dataset.action)
       this.setupContainer(settings)
-      this.setupDemo(settings)
+      this.setupTrial(settings)
     },
 
     /**
@@ -570,25 +554,25 @@
      * @param {HTMLElement} settings
      * @returns {void}
      */
-    setupDemo(settings) {
-      const input = settings.querySelector("#onlyoffice-demo-document-server-enabled")
+    setupTrial(settings) {
+      const input = settings.querySelector("#onlyoffice-trial-enabled")
       if (!input || !(input instanceof HTMLInputElement) || !input.form) return
 
-      if (!input.checked) {
-        this.toggleDemo(input.form, false)
+      if (input.checked) {
+        this.toggleTrial(input.form, true)
       }
 
-      input.addEventListener("change", this.changeDemo.bind(this))
+      input.addEventListener("change", this.changeTrial.bind(this))
     },
 
     /**
      * @param {Event} event
      * @returns {void}
      */
-    changeDemo(event) {
+    changeTrial(event) {
       const input = event.target
       if (!input || !(input instanceof HTMLInputElement) || !input.form) return
-      this.toggleDemo(input.form, input.checked)
+      this.toggleTrial(input.form, input.checked)
     },
 
     /**
@@ -596,8 +580,8 @@
      * @param {boolean} disabled
      * @returns {void}
      */
-    toggleDemo(form, disabled) {
-      const inputs = form.querySelectorAll("input[data-disabled-for-demo]")
+    toggleTrial(form, disabled) {
+      const inputs = form.querySelectorAll("input[data-disabled-for-trial]")
       inputs.forEach((input) => {
         if (!(input instanceof HTMLInputElement)) return
         input.disabled = disabled
@@ -653,13 +637,12 @@
           this.inject(convert, convertURL, container)
         }
 
-        if (edit && edit instanceof HTMLTemplateElement && editURL) {
-          this.inject(edit, editURL, container)
-          return
-        }
-
         if (view && view instanceof HTMLTemplateElement && viewURL) {
           this.inject(view, viewURL, container)
+        }
+
+        if (edit && edit instanceof HTMLTemplateElement && editURL) {
+          this.inject(edit, editURL, container)
         }
       })
     },

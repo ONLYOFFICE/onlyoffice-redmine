@@ -22,23 +22,18 @@ module Blocks::New::Anchor
   extend T::Helpers
   abstract!
 
-  sig { overridable.returns(String) }
+  sig { returns(String) }
   def new_label
-    @new_label ||= I18n.t("onlyoffice_create_dropdown")
+    I18n.t("onlyoffice_create_dropdown")
   end
 
-  sig { overridable.params(value: String).void }
-  def new_label=(value)
-    @new_label = value
-  end
-
-  sig { overridable.returns(String) }
+  sig { overridable.returns(T.nilable(String)) }
   def new_url
-    @new_url ||= ""
+    @new_url ||= nil
   end
 
-  sig { overridable.params(value: String).void }
-  def new_url=(value)
-    @new_url = value
+  sig { overridable.params(url: T.nilable(String)).void }
+  def new_url=(url)
+    @new_url = url
   end
 end

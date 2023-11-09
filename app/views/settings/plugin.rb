@@ -26,271 +26,118 @@ class Views::Settings::Plugin < Views::Mustache
 
   self.template_file = "#{template_path}/settings/plugin.mustache"
 
-  sig { override.params(helpers: T.untyped).void }
-  def initialize(helpers:)
-    super(helpers:)
-    @helpers = helpers
-    @action = ""
-    @document_server_url_label = I18n.t("onlyoffice_settings_doc_url")
-    @document_server_url_note = I18n.t("onlyoffice_settings_doc_url_note")
-    @document_server_url_name = ""
-    @document_server_url_value = ""
-    @document_server_url_placeholder = ""
-    @advanced_legend = I18n.t("onlyoffice_additional_settings")
-    @document_server_internal_url_label = I18n.t("onlyoffice_additional_settings_server")
-    @document_server_internal_url_name = ""
-    @document_server_internal_url_value = ""
-    @document_server_internal_url_placeholder = ""
-    @server_internal_url_label = I18n.t("onlyoffice_additional_settings_server")
-    @server_internal_url_name = ""
-    @server_internal_url_value = ""
-    @server_internal_url_placeholder = ""
-    @demo_document_server_enabled_label = I18n.t("onlyoffice_settings_editor_demo")
-    @demo_document_server_enabled_name = ""
-    @demo_document_server_enabled_value = ""
-    @demo_document_server_enabled_checked = false
-    @security_legend = I18n.t("onlyoffice_settings_security")
-    @jwt_secret_label = I18n.t("onlyoffice_settings_jwtsecret")
-    @jwt_secret_note = I18n.t("onlyoffice_settings_jwtsecret_note")
-    @jwt_secret_name = ""
-    @jwt_secret_value = ""
-    @jwt_header_label = I18n.t("onlyoffice_settings_jwtheader")
-    @jwt_header_name = ""
-    @jwt_header_value = ""
-    @ssl_verify_mode_label = I18n.t("onlyoffice_settings_check_cert")
-    @ssl_verify_mode_name = ""
-    @ssl_verify_mode_value = ""
-    @ssl_verify_mode_checked = false
-    @editor_legend = I18n.t("onlyoffice_settings_editor_view")
-    @editor_chat_visible_label = I18n.t("onlyoffice_settings_editor_view_chat")
-    @editor_chat_visible_name = ""
-    @editor_chat_visible_value = ""
-    @editor_chat_visible_checked = false
-    @editor_compact_header_visible_label = I18n.t("onlyoffice_settings_editor_view_header")
-    @editor_compact_header_visible_name = ""
-    @editor_compact_header_visible_value = ""
-    @editor_compact_header_visible_checked = false
-    @editor_feedback_visible_label = I18n.t("onlyoffice_settings_editor_view_feedback")
-    @editor_feedback_visible_name = ""
-    @editor_feedback_visible_value = ""
-    @editor_feedback_visible_checked = false
-    @editor_help_visible_label = I18n.t("onlyoffice_settings_editor_view_help")
-    @editor_help_visible_name = ""
-    @editor_help_visible_value = ""
-    @editor_help_visible_checked = false
-    @editor_monochrome_toolbar_visible_label = I18n.t("onlyoffice_settings_editor_view_toolbar")
-    @editor_monochrome_toolbar_visible_name = ""
-    @editor_monochrome_toolbar_visible_value = ""
-    @editor_monochrome_toolbar_visible_checked = false
-  end
-
-  sig { params(helpers: T.untyped, settings: T.untyped).returns(String) }
-  def self.inline(helpers:, settings:)
-    view = new(helpers:)
-    view.setup_assets
-
-    view.action = helpers.onlyoffice_plugin_settings_path
-    view.document_server_url_name = "settings[oo_address]"
-    view.document_server_url_value = settings[:oo_address]
-    view.document_server_url_placeholder = "http://docserver/"
-    view.document_server_internal_url_name = "settings[inner_editor]"
-    view.document_server_internal_url_value = settings[:inner_editor]
-    view.document_server_internal_url_placeholder = "http://docserver/"
-    view.server_internal_url_name = "settings[inner_server]"
-    view.server_internal_url_value = settings[:inner_server]
-    view.server_internal_url_placeholder = "http://redmine/"
-    view.demo_document_server_enabled_name = "settings[editor_demo]"
-    view.demo_document_server_enabled_value = "on"
-    view.demo_document_server_enabled_checked = settings[:editor_demo].eql?(view.demo_document_server_enabled_value)
-    view.jwt_secret_name = "settings[jwtsecret]"
-    view.jwt_secret_value = settings[:jwtsecret]
-    view.jwt_header_name = "settings[jwtheader]"
-    view.jwt_header_value = settings[:jwtheader]
-    view.ssl_verify_mode_name = "settings[check_cert]"
-    view.ssl_verify_mode_value = "on"
-    view.ssl_verify_mode_checked = settings[:check_cert].eql?(view.ssl_verify_mode_value)
-    view.editor_chat_visible_name = "settings[editor_chat]"
-    view.editor_chat_visible_value = "on"
-    view.editor_chat_visible_checked = settings[:editor_chat].eql?(view.editor_chat_visible_value)
-    view.editor_compact_header_visible_name = "settings[editor_compact_header]"
-    view.editor_compact_header_visible_value = "on"
-    view.editor_compact_header_visible_checked = settings[:editor_compact_header].eql?(view.editor_compact_header_visible_value)
-    view.editor_feedback_visible_name = "settings[editor_feedback]"
-    view.editor_feedback_visible_value = "on"
-    view.editor_feedback_visible_checked = settings[:editor_feedback].eql?(view.editor_feedback_visible_value)
-    view.editor_help_visible_name = "settings[editor_help]"
-    view.editor_help_visible_value = "on"
-    view.editor_help_visible_checked = settings[:editor_help].eql?(view.editor_help_visible_value)
-    view.editor_monochrome_toolbar_visible_name = "settings[editor_toolbar_no_tabs]"
-    view.editor_monochrome_toolbar_visible_value = "on"
-    view.editor_monochrome_toolbar_visible_checked = settings[:editor_toolbar_no_tabs].eql?(view.editor_monochrome_toolbar_visible_value)
-
-    view.render.html_safe
-  end
-
-  # Action
-
   sig { returns(String) }
   attr_accessor :action
-
-  # Main
-
-  sig { returns(String) }
-  attr_accessor :document_server_url_label
-
-  sig { returns(String) }
-  attr_accessor :document_server_url_note
-
-  sig { returns(String) }
-  attr_accessor :document_server_url_name
-
-  sig { returns(String) }
-  attr_accessor :document_server_url_value
-
-  sig { returns(String) }
-  attr_accessor :document_server_url_placeholder
-
-  # Advanced
 
   sig { returns(String) }
   attr_accessor :advanced_legend
 
   sig { returns(String) }
-  attr_accessor :document_server_internal_url_label
-
-  sig { returns(String) }
-  attr_accessor :document_server_internal_url_name
-
-  sig { returns(String) }
-  attr_accessor :document_server_internal_url_value
-
-  sig { returns(String) }
-  attr_accessor :document_server_internal_url_placeholder
-
-  sig { returns(String) }
-  attr_accessor :server_internal_url_label
-
-  sig { returns(String) }
-  attr_accessor :server_internal_url_name
-
-  sig { returns(String) }
-  attr_accessor :server_internal_url_value
-
-  sig { returns(String) }
-  attr_accessor :server_internal_url_placeholder
-
-  sig { returns(String) }
-  attr_accessor :demo_document_server_enabled_label
-
-  sig { returns(String) }
-  attr_accessor :demo_document_server_enabled_name
-
-  sig { returns(String) }
-  attr_accessor :demo_document_server_enabled_value
-
-  sig { returns(T::Boolean) }
-  attr_accessor :demo_document_server_enabled_checked
-
-  # Security
-
-  sig { returns(String) }
   attr_accessor :security_legend
-
-  sig { returns(String) }
-  attr_accessor :jwt_secret_label
-
-  sig { returns(String) }
-  attr_accessor :jwt_secret_note
-
-  sig { returns(String) }
-  attr_accessor :jwt_secret_name
-
-  sig { returns(String) }
-  attr_accessor :jwt_secret_value
-
-  sig { returns(String) }
-  attr_accessor :jwt_header_label
-
-  sig { returns(String) }
-  attr_accessor :jwt_header_name
-
-  sig { returns(String) }
-  attr_accessor :jwt_header_value
-
-  sig { returns(String) }
-  attr_accessor :ssl_verify_mode_label
-
-  sig { returns(String) }
-  attr_accessor :ssl_verify_mode_name
-
-  sig { returns(String) }
-  attr_accessor :ssl_verify_mode_value
-
-  sig { returns(T::Boolean) }
-  attr_accessor :ssl_verify_mode_checked
-
-  # Editor
 
   sig { returns(String) }
   attr_accessor :editor_legend
 
-  sig { returns(String) }
-  attr_accessor :editor_chat_visible_label
+  sig { returns(Views::Input) }
+  attr_accessor :document_server_url
 
-  sig { returns(String) }
-  attr_accessor :editor_chat_visible_name
+  sig { returns(Views::Input) }
+  attr_accessor :document_server_internal_url
 
-  sig { returns(String) }
-  attr_accessor :editor_chat_visible_value
+  sig { returns(Views::Input) }
+  attr_accessor :plugin_internal_url
 
-  sig { returns(T::Boolean) }
-  attr_accessor :editor_chat_visible_checked
+  sig { returns(Views::Input) }
+  attr_accessor :trial_enabled
 
-  sig { returns(String) }
-  attr_accessor :editor_compact_header_visible_label
+  sig { returns(Views::Input) }
+  attr_accessor :jwt_secret
 
-  sig { returns(String) }
-  attr_accessor :editor_compact_header_visible_name
+  sig { returns(Views::Input) }
+  attr_accessor :jwt_http_header
 
-  sig { returns(String) }
-  attr_accessor :editor_compact_header_visible_value
+  sig { returns(Views::Input) }
+  attr_accessor :ssl_verification_disabled
 
-  sig { returns(T::Boolean) }
-  attr_accessor :editor_compact_header_visible_checked
+  sig { returns(Views::Input) }
+  attr_accessor :editor_chat_enabled
 
-  sig { returns(String) }
-  attr_accessor :editor_feedback_visible_label
+  sig { returns(Views::Input) }
+  attr_accessor :editor_compact_header_enabled
 
-  sig { returns(String) }
-  attr_accessor :editor_feedback_visible_name
+  sig { returns(Views::Input) }
+  attr_accessor :editor_feedback_enabled
 
-  sig { returns(String) }
-  attr_accessor :editor_feedback_visible_value
+  sig { returns(Views::Input) }
+  attr_accessor :editor_help_enabled
 
-  sig { returns(T::Boolean) }
-  attr_accessor :editor_feedback_visible_checked
+  sig { returns(Views::Input) }
+  attr_accessor :editor_toolbar_tabs_disabled
 
-  sig { returns(String) }
-  attr_accessor :editor_help_visible_label
+  sig { override.params(helpers: T.untyped).void }
+  def initialize(helpers:)
+    super(helpers:)
 
-  sig { returns(String) }
-  attr_accessor :editor_help_visible_name
+    action = ""
+    @action = T.let(action, String)
 
-  sig { returns(String) }
-  attr_accessor :editor_help_visible_value
+    advanced_legend = I18n.t("onlyoffice_additional_settings")
+    @advanced_legend = T.let(advanced_legend, String)
 
-  sig { returns(T::Boolean) }
-  attr_accessor :editor_help_visible_checked
+    security_legend = I18n.t("onlyoffice_settings_security")
+    @security_legend = T.let(security_legend, String)
 
-  sig { returns(String) }
-  attr_accessor :editor_monochrome_toolbar_visible_label
+    editor_legend = I18n.t("onlyoffice_settings_editor_view")
+    @editor_legend = T.let(editor_legend, String)
 
-  sig { returns(String) }
-  attr_accessor :editor_monochrome_toolbar_visible_name
+    document_server_url = Views::Input.new
+    document_server_url.label = I18n.t("onlyoffice_settings_doc_url")
+    document_server_url.note = I18n.t("onlyoffice_settings_doc_url_note")
+    @document_server_url = T.let(document_server_url, Views::Input)
 
-  sig { returns(String) }
-  attr_accessor :editor_monochrome_toolbar_visible_value
+    document_server_internal_url = Views::Input.new
+    document_server_internal_url.label = I18n.t("onlyoffice_additional_settings_editor")
+    @document_server_internal_url = T.let(document_server_internal_url, Views::Input)
 
-  sig { returns(T::Boolean) }
-  attr_accessor :editor_monochrome_toolbar_visible_checked
+    plugin_internal_url = Views::Input.new
+    plugin_internal_url.label = I18n.t("onlyoffice_additional_settings_server")
+    @plugin_internal_url = T.let(plugin_internal_url, Views::Input)
+
+    trial_enabled = Views::Input.new
+    trial_enabled.label = I18n.t("onlyoffice_settings_editor_demo")
+    @trial_enabled = T.let(trial_enabled, Views::Input)
+
+    jwt_secret = Views::Input.new
+    jwt_secret.label = I18n.t("onlyoffice_settings_jwtsecret")
+    jwt_secret.note = I18n.t("onlyoffice_settings_jwtsecret_note")
+    @jwt_secret = T.let(jwt_secret, Views::Input)
+
+    jwt_http_header = Views::Input.new
+    jwt_http_header.label = I18n.t("onlyoffice_settings_jwtheader")
+    @jwt_http_header = T.let(jwt_http_header, Views::Input)
+
+    ssl_verification_disabled = Views::Input.new
+    ssl_verification_disabled.label = I18n.t("onlyoffice_settings_check_cert")
+    @ssl_verification_disabled = T.let(ssl_verification_disabled, Views::Input)
+
+    editor_chat_enabled = Views::Input.new
+    editor_chat_enabled.label = I18n.t("onlyoffice_settings_editor_view_chat")
+    @editor_chat_enabled = T.let(editor_chat_enabled, Views::Input)
+
+    editor_compact_header_enabled = Views::Input.new
+    editor_compact_header_enabled.label = I18n.t("onlyoffice_settings_editor_view_header")
+    @editor_compact_header_enabled = T.let(editor_compact_header_enabled, Views::Input)
+
+    editor_feedback_enabled = Views::Input.new
+    editor_feedback_enabled.label = I18n.t("onlyoffice_settings_editor_view_feedback")
+    @editor_feedback_enabled = T.let(editor_feedback_enabled, Views::Input)
+
+    editor_help_enabled = Views::Input.new
+    editor_help_enabled.label = I18n.t("onlyoffice_settings_editor_view_help")
+    @editor_help_enabled = T.let(editor_help_enabled, Views::Input)
+
+    editor_toolbar_tabs_disabled = Views::Input.new
+    editor_toolbar_tabs_disabled.label = I18n.t("onlyoffice_settings_editor_view_toolbar")
+    @editor_toolbar_tabs_disabled = T.let(editor_toolbar_tabs_disabled, Views::Input)
+  end
 end
