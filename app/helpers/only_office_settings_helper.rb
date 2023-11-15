@@ -23,26 +23,6 @@ module OnlyOfficeSettingsHelper
   include Kernel
   abstract!
 
-  sig { params(error: OnlyOfficeRedmine::SettingsError).returns(T.untyped) }
-  private def handle_settings_error(error)
-    ac = T.cast(self, ApplicationController)
-
-    code, message =
-      case error
-      when OnlyOfficeRedmine::SettingsError.trial_expired
-        [402, I18n.t("onlyoffice_editor_trial_period_ended")]
-      when OnlyOfficeRedmine::SettingsError.validation_failed
-        [422, error.message]
-      else
-        [500, error.message]
-      end
-
-    ac.flash[:error] = message
-    ac.response.status = code
-
-    redirect_to_plugin_settings
-  end
-
   sig { returns(T.untyped) }
   private def redirect_to_plugin_settings
     ac = T.cast(self, ApplicationController)
