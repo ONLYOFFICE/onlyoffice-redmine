@@ -124,6 +124,11 @@ module OnlyOffice
 
     extend T::Sig
 
+    sig { params(hash: T.untyped, strict: T.untyped).returns(Config) }
+    def self.from_hash(hash, strict = nil)
+      super(hash, strict)
+    end
+
     sig { returns(T.untyped) }
     def safe_serialize
       jwt = self.jwt.with(secret: "***")
