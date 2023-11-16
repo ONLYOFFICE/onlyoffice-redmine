@@ -107,7 +107,7 @@ class OnlyOfficeSettingsController < ApplicationController
   end
 
   # ```http
-  # PATCH /onlyoffice/settings HTTP/1.1
+  # POST /onlyoffice/settings HTTP/1.1
   # Accept: text/html
   # Content-Type: application/x-www-form-urlencoded; charset=utf-8
   # Cookie: {{cookie}}
