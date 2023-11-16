@@ -36,12 +36,15 @@ class OnlyOfficeSettingsController < ApplicationController
     view.action = helpers.onlyoffice_update_settings_url
 
     view.document_server_url.name = "onlyoffice[document_server_url]"
+    view.document_server_url.placeholder = "http://document-server/"
     view.document_server_url.value = settings.document_server.url
 
     view.document_server_internal_url.name = "onlyoffice[document_server_internal_url]"
+    view.document_server_internal_url.placeholder = "http://document-server/"
     view.document_server_internal_url.value = settings.document_server.internal_url
 
     view.plugin_internal_url.name = "onlyoffice[plugin_internal_url]"
+    view.plugin_internal_url.placeholder = "http://redmine/"
     view.plugin_internal_url.value = settings.plugin.internal_url
 
     view.trial_enabled.name = "onlyoffice[trial_enabled]"
