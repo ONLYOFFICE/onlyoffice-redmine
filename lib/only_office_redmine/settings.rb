@@ -50,15 +50,6 @@ module OnlyOfficeRedmine
       new(config:)
     end
 
-    sig do
-      params(hash: T.untyped, strict: T.untyped)
-        .returns(OnlyOfficeRedmine::Settings)
-    end
-    def self.from_hash(hash, strict = nil)
-      config = OnlyOffice::Config.from_hash(hash, strict)
-      new(config:)
-    end
-
     sig { params(config: OnlyOffice::Config).void }
     def initialize(config:)
       @config = config
@@ -237,6 +228,7 @@ module OnlyOfficeRedmine
     sig { params(config: OnlyOffice::Config).returns(InternalSettings) }
     def self.from_config(config)
       internal = InternalSettings.new
+
       internal.conversion_timeout            = config.conversion.timeout.to_s
       internal.editor_chat_enabled           = map_bool(config.editor.chat_enabled)
       internal.editor_compact_header_enabled = map_bool(config.editor.compact_header_enabled)
@@ -246,17 +238,34 @@ module OnlyOfficeRedmine
       internal.editor_toolbar_tabs_disabled  = map_bool(config.editor.toolbar_tabs_disabled)
       internal.ssl_verification_disabled     = map_bool(config.ssl.verification_disabled)
 
-      if config.jwt.enabled
-        internal.jwt_secret = config.jwt.secret
-      end
+      internal.jwt_secret =
+        begin
+          if config.jwt.enabled
+            config.jwt.secret
+          else
+            ""
+          end
+        end
 
-      internal.jwt_algorithm                = config.jwt.algorithm
-      internal.jwt_http_header              = config.jwt.http_header
-      internal.document_server_url          = config.document_server.url
+      internal.jwt_algorithm = config.jwt.algorithm
+      internal.jwt_http_header = config.jwt.http_header
+
+      internal.document_server_url =
+        begin
+          if config.plugin.enabled
+            config.document_server.url
+          else
+            ""
+          end
+        end
+
       internal.document_server_internal_url = config.document_server.internal_url
-      internal.plugin_internal_url          = config.plugin.internal_url
-      internal.trial_enabled                = map_bool(config.trial.enabled)
-      internal.trial_enabled_at             = config.trial.enabled_at
+
+      internal.plugin_internal_url = config.plugin.internal_url
+
+      internal.trial_enabled = map_bool(config.trial.enabled)
+      internal.trial_enabled_at = config.trial.enabled_at
+
       internal
     end
 
@@ -264,9 +273,7 @@ module OnlyOfficeRedmine
     def to_config
       config = OnlyOffice::Config.new
 
-      if conversion_timeout != ""
-        config.conversion.timeout = Integer(conversion_timeout, 10)
-      end
+      config.conversion.timeout = Integer(conversion_timeout, 10)
 
       config.editor.chat_enabled           = self.class.unmap_bool(editor_chat_enabled)
       config.editor.compact_header_enabled = self.class.unmap_bool(editor_compact_header_enabled)
@@ -275,44 +282,29 @@ module OnlyOfficeRedmine
       config.editor.help_enabled           = self.class.unmap_bool(editor_help_enabled)
       config.editor.toolbar_tabs_disabled  = self.class.unmap_bool(editor_toolbar_tabs_disabled)
 
-      ssl_verification_disabled = self.class.unmap_bool(self.ssl_verification_disabled)
-      if ssl_verification_disabled
-        config.ssl.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      end
+      config.ssl.verify_mode =
+        begin
+          ssl_verification_disabled = self.class.unmap_bool(self.ssl_verification_disabled)
+          if ssl_verification_disabled
+            OpenSSL::SSL::VERIFY_NONE
+          else
+            OpenSSL::SSL::VERIFY_PEER
+          end
+        end
 
-      if jwt_secret == ""
-        config.jwt.enabled = false
-      else
-        config.jwt.secret = jwt_secret
-      end
+      config.jwt.enabled = jwt_secret != ""
+      config.jwt.secret = jwt_secret
+      config.jwt.algorithm = jwt_algorithm
+      config.jwt.http_header = jwt_http_header
 
-      if jwt_algorithm != ""
-        config.jwt.algorithm = jwt_algorithm
-      end
+      config.document_server.url = document_server_url
+      config.document_server.internal_url = document_server_internal_url
 
-      if jwt_http_header != ""
-        config.jwt.http_header = jwt_http_header
-      end
-
-      if document_server_url == ""
-        config.plugin.enabled = false
-      else
-        config.document_server.url = document_server_url
-      end
-
-      if document_server_internal_url != ""
-        config.document_server.internal_url = document_server_internal_url
-      end
-
-      if plugin_internal_url != ""
-        config.plugin.internal_url = plugin_internal_url
-      end
+      config.plugin.enabled = document_server_url != ""
+      config.plugin.internal_url = plugin_internal_url
 
       config.trial.enabled = self.class.unmap_bool(trial_enabled)
-
-      if trial_enabled_at != ""
-        config.trial.enabled_at = trial_enabled_at
-      end
+      config.trial.enabled_at = trial_enabled_at
 
       config
     end

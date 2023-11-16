@@ -92,18 +92,18 @@ class OnlyOfficeSettingsController < ApplicationController
   rescue_from   OnlyOfficeRedmine::SettingsError, with: :handle_settings_error
 
   class UpdatePayload < T::Struct
-    prop :editor_chat_enabled,           String,           default: "0"
-    prop :editor_compact_header_enabled, String,           default: "0"
-    prop :editor_feedback_enabled,       String,           default: "0"
-    prop :editor_help_enabled,           String,           default: "0"
-    prop :editor_toolbar_tabs_disabled,  String,           default: "0"
-    prop :ssl_verification_disabled,     String,           default: "0"
-    prop :jwt_secret,                    T.nilable(String)
-    prop :jwt_http_header,               T.nilable(String)
-    prop :document_server_url,           T.nilable(String)
-    prop :document_server_internal_url,  T.nilable(String)
-    prop :plugin_internal_url,           T.nilable(String)
-    prop :trial_enabled,                 String,           default: "0"
+    prop :editor_chat_enabled,           String, default: "0"
+    prop :editor_compact_header_enabled, String, default: "0"
+    prop :editor_feedback_enabled,       String, default: "0"
+    prop :editor_help_enabled,           String, default: "0"
+    prop :editor_toolbar_tabs_disabled,  String, default: "0"
+    prop :ssl_verification_disabled,     String, default: "0"
+    prop :jwt_secret,                    String, default: ""
+    prop :jwt_http_header,               String, default: ""
+    prop :document_server_url,           String, default: ""
+    prop :document_server_internal_url,  String, default: ""
+    prop :plugin_internal_url,           String, default: ""
+    prop :trial_enabled,                 String, default: "0"
   end
 
   # ```http
@@ -119,8 +119,7 @@ class OnlyOfficeSettingsController < ApplicationController
     raw_payload = params["onlyoffice"].permit!.to_h
     payload = UpdatePayload.from_hash(raw_payload)
 
-    settings = OnlyOfficeRedmine::Settings.current
-    patch = payload.to_settings(settings)
+    patch = payload.to_settings
     patch.plugin.url = helpers.home_url
 
     patch.save do |conversion|
@@ -143,105 +142,53 @@ class OnlyOfficeSettingsController < ApplicationController
       super(hash, strict)
     end
 
+    sig { returns(OnlyOfficeRedmine::Settings) }
+    def to_settings
+      current = OnlyOfficeRedmine::Settings.current
+      config = to_config(current)
+      OnlyOfficeRedmine::Settings.new(config:)
+    end
+
     sig do
-      params(settings: OnlyOfficeRedmine::Settings)
-        .returns(OnlyOfficeRedmine::Settings)
+      params(current: OnlyOfficeRedmine::Settings)
+        .returns(OnlyOffice::Config)
     end
-    def to_settings(settings)
-      a = settings.serialize
-      b = to_raw_config
-      c = a.deep_merge(b)
-      OnlyOfficeRedmine::Settings.from_hash(c)
-    end
+    private def to_config(current)
+      config = OnlyOffice::Config.new
 
-    sig { returns(T.untyped) }
-    private def to_raw_config
-      hash = {}
+      config.conversion.timeout = current.conversion.timeout
 
-      hash["editor"] =
-        begin
-          h = {}
-          h["chat_enabled"]           = OnlyOffice::STDLIB::String.to_b(editor_chat_enabled)
-          h["compact_header_enabled"] = OnlyOffice::STDLIB::String.to_b(editor_compact_header_enabled)
-          h["feedback_enabled"]       = OnlyOffice::STDLIB::String.to_b(editor_feedback_enabled)
-          h["help_enabled"]           = OnlyOffice::STDLIB::String.to_b(editor_help_enabled)
-          h["toolbar_tabs_disabled"]  = OnlyOffice::STDLIB::String.to_b(editor_toolbar_tabs_disabled)
-          h
+      config.editor.chat_enabled           = OnlyOffice::STDLIB::String.to_b(editor_chat_enabled)
+      config.editor.compact_header_enabled = OnlyOffice::STDLIB::String.to_b(editor_compact_header_enabled)
+      config.editor.feedback_enabled       = OnlyOffice::STDLIB::String.to_b(editor_feedback_enabled)
+      config.editor.help_enabled           = OnlyOffice::STDLIB::String.to_b(editor_help_enabled)
+      config.editor.toolbar_tabs_disabled  = OnlyOffice::STDLIB::String.to_b(editor_toolbar_tabs_disabled)
+
+      ssl_verification_disabled = OnlyOffice::STDLIB::String.to_b(self.ssl_verification_disabled)
+      config.ssl.verify_mode =
+        if ssl_verification_disabled
+          OpenSSL::SSL::VERIFY_NONE
+        else
+          OpenSSL::SSL::VERIFY_PEER
         end
 
-      hash["ssl"] =
-        begin
-          h = {}
+      config.jwt.enabled = jwt_secret != ""
+      config.jwt.secret = jwt_secret
+      config.jwt.algorithm = current.jwt.algorithm
+      config.jwt.http_header = jwt_http_header
 
-          ssl_verification_disabled = OnlyOffice::STDLIB::String.to_b(self.ssl_verification_disabled)
-          h["verify_mode"] =
-            if ssl_verification_disabled
-              OpenSSL::SSL::VERIFY_NONE
-            else
-              OpenSSL::SSL::VERIFY_PEER
-            end
+      config.document_server.url = document_server_url
+      config.document_server.internal_url = document_server_internal_url
 
-          h
-        end
+      config.plugin.enabled = document_server_internal_url != ""
+      config.plugin.url = current.plugin.url
+      config.plugin.internal_url = plugin_internal_url
 
-      hash["jwt"] =
-        begin
-          h = {}
+      config.trial.enabled = OnlyOffice::STDLIB::String.to_b(trial_enabled)
+      config.trial.enabled_at = current.trial.enabled_at
+      config.trial.period = current.trial.period
 
-          jwt_secret = self.jwt_secret
-          if jwt_secret
-            h["secret"] = jwt_secret
-            h["enabled"] = jwt_secret != ""
-          else
-            h["enabled"] = true
-          end
-
-          jwt_http_header = self.jwt_http_header
-          if jwt_http_header
-            h["http_header"] = jwt_http_header
-          end
-
-          h
-        end
-
-      hash["document_server"] =
-        begin
-          h = {}
-
-          document_server_url = self.document_server_url
-          if document_server_url
-            h["url"] = document_server_url
-          end
-
-          document_server_internal_url = self.document_server_internal_url
-          if document_server_internal_url
-            h["internal_url"] = document_server_internal_url
-          end
-
-          h
-        end
-
-      hash["plugin"] =
-        begin
-          h = {}
-
-          plugin_internal_url = self.plugin_internal_url
-          if plugin_internal_url
-            h["internal_url"] = plugin_internal_url
-          end
-
-          h["enabled"] = hash["document_server"]["url"] != ""
-          h
-        end
-
-      hash["trial"] =
-        begin
-          h = {}
-          h["enabled"] = OnlyOffice::STDLIB::String.to_b(trial_enabled)
-          h
-        end
-
-      hash
+      config
     end
   end
 end
