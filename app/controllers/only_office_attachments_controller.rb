@@ -423,8 +423,8 @@ class OnlyOfficeAttachmentsController < ApplicationController
       raise OnlyOfficeRedmine::Error.not_found
     end
 
-    unless attachment.editable?(user)
-      logger.error("User (#{user.id}) isn't allowed to edit the attachment (#{attachment.id})")
+    unless attachment.editable?(user) || attachment.fillable?(user)
+      logger.error("User (#{user.id}) isn't allowed to edit or fill the attachment (#{attachment.id})")
       raise OnlyOfficeRedmine::Error.forbidden
     end
 
@@ -867,8 +867,8 @@ class OnlyOfficeAttachmentsController < ApplicationController
       raise OnlyOfficeRedmine::Error.not_found
     end
 
-    unless attachment.editable?(user)
-      logger.error("User (#{user.id}) isn't allowed to edit the attachment (#{attachment.id})")
+    unless attachment.editable?(user) || attachment.fillable?(user)
+      logger.error("User (#{user.id}) isn't allowed to edit or fill the attachment (#{attachment.id})")
       raise OnlyOfficeRedmine::Error.forbidden
     end
 
