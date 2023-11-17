@@ -47,6 +47,9 @@ module OnlyOffice::Resources
 
     sig { void }
     def self.unread
+      unless defined?(@read)
+        return
+      end
       remove_instance_variable(:@read)
     end
 
