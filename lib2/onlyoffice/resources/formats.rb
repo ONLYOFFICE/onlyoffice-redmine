@@ -230,5 +230,14 @@ module OnlyOffice::Resources
     def extension
       ".#{name}"
     end
+
+    sig { void }
+    def allow_editing
+      unless actions.include?("lossy-edit")
+        return
+      end
+      actions.delete("lossy-edit")
+      actions.append("edit")
+    end
   end
 end

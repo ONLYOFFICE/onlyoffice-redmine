@@ -55,7 +55,7 @@ module OnlyOfficeRedmine::Resources
           unless format.name == name
             next
           end
-          format.allow_edit
+          format.allow_editing
         end
         all.add(format)
       end
