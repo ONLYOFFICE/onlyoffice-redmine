@@ -411,7 +411,13 @@
         }
       }
 
-      window.location.reload()
+      const cancel = form.querySelector("input[type='submit'] ~ a")
+      if (!cancel || !(cancel instanceof HTMLAnchorElement)) {
+        window.location.reload()
+        return
+      }
+
+      cancel.click()
     },
 
     /**

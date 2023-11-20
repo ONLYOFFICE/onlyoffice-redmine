@@ -723,8 +723,8 @@ class OnlyOfficeAttachmentsController < ApplicationController
       flash[:error] = I18n.t("onlyoffice_attachment_create_error")
     end
 
-    convert = helpers.onlyoffice_convert_attachment_url(attachment.id)
-    redirect_to(convert)
+    home = container.home_path(helpers)
+    redirect_to(home)
   end
 
   # ```http
@@ -813,8 +813,8 @@ class OnlyOfficeAttachmentsController < ApplicationController
       flash[:error] = I18n.t("onlyoffice_attachment_create_error")
     end
 
-    convert = helpers.onlyoffice_convert_attachment_url(attachment.id)
-    redirect_to(convert)
+    home = container.home_path(helpers)
+    redirect_to(home)
   end
 
   class DoAsPayload
