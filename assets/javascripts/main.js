@@ -273,8 +273,14 @@
       if (!editor || !(editor instanceof HTMLElement)) return
 
       if (!window.DocsAPI || !editor.dataset.documentServerConfig) {
-        const message = shrugify(editor.dataset.message)
-        Flash.error(message)
+        const error = document.querySelector(".flash.onlyoffice.error.hidden")
+        if (!error) return
+
+        // To display the error normally, we should remove our custom styles.
+        // See `main.css`.
+        document.body.dataset.editorError = ""
+
+        error.classList.remove("hidden")
         return
       }
 

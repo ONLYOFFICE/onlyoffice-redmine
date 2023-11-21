@@ -40,8 +40,8 @@ limitations under the License.
 
 /* OnlyOffice Editor */
 
-.controller-only_office_attachments.action-view #content,
-.controller-only_office_attachments.action-edit #content {
+.controller-only_office_attachments:not([data-editor-error]).action-view #content,
+.controller-only_office_attachments:not([data-editor-error]).action-edit #content {
   padding: 0;
 }
 
