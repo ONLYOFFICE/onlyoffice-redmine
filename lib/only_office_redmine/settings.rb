@@ -153,6 +153,17 @@ module OnlyOfficeRedmine
       patch = self
       logger.info("Patched settings: #{patch.safe_serialize}")
 
+      unless patch.plugin.enabled
+        logger.info("Disable plugin")
+        begin
+          patch.force_save
+        rescue StandardError => error
+          current.force_save
+          raise error
+        end
+        return
+      end
+
       if patch.trial.enabled
         if current.trial.started?
           if current.trial.expired?
