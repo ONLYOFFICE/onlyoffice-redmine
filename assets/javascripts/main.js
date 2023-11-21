@@ -870,14 +870,6 @@
     return "desktop"
   }
 
-  /**
-   * @param {string | null | undefined} message
-   * @returns {string}
-   */
-  function shrugify(message) {
-    return message || "Error occurred in the document service. Please contact admin"
-  }
-
   // Main
 
   main()
