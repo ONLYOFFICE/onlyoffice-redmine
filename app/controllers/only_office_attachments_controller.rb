@@ -226,7 +226,6 @@ class OnlyOfficeAttachmentsController < ApplicationController
   include OnlyOfficeErrorHelper
   include OnlyOfficePluginHelper::Regular
   include OnlyOfficeJWTHelper
-  include OnlyOfficeSettingsHelper
   include OnlyOfficeRouterHelper
   include OnlyOfficeViewHelper::Regular
 
