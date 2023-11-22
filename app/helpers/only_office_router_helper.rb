@@ -52,6 +52,27 @@ module OnlyOfficeRouterHelper
     params(attachment_id: Integer, payload: AttachmentPayload)
       .returns(String)
   end
+  private def onlyoffice_retrieve_attachment_url(attachment_id, payload)
+    uri = onlyoffice_retrieve_attachment_uri(attachment_id, payload)
+    uri.to_s
+  end
+
+  sig do
+    params(attachment_id: Integer, payload: AttachmentPayload)
+      .returns(URI::Generic)
+  end
+  private def onlyoffice_retrieve_attachment_uri(attachment_id, payload)
+    ac = T.cast(self, ApplicationController)
+    url = ac.helpers.onlyoffice_raw_retrieve_attachment_url(attachment_id)
+    uri = URI(url)
+    uri.query = URI.encode_www_form(payload.serialize)
+    uri
+  end
+
+  sig do
+    params(attachment_id: Integer, payload: AttachmentPayload)
+      .returns(String)
+  end
   private def onlyoffice_callback_attachment_url(attachment_id, payload)
     uri = onlyoffice_callback_attachment_uri(attachment_id, payload)
     uri.to_s
