@@ -84,6 +84,20 @@ limitations under the License.
       </label>
     </fieldset>
   </div>
+  <div class="onlyoffice-settings__formats">
+    <fieldset class="box settings">
+      <legend>{{ formats_legend }}</legend>
+      <p>{{ formats_editable.label }}</p>
+      <div class="onlyoffice-editable__controls">
+        {{# formats_editable.options }}
+        <label class="onlyoffice-editable__control">
+          <input name="{{ name }}" type="checkbox" value="{{ value }}" {{# selected }} checked {{/ selected }}>
+          {{ label }}
+        </label>
+        {{/ formats_editable.options }}
+      </div>
+    </fieldset>
+  </div>
   <div class="onlyoffice-settings__banner">
     {{> _blocks/banner }}
   </div>

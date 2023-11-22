@@ -66,6 +66,7 @@ end
 
 class Views::Option < T::Struct
   prop :label,    String,     default: ""
+  prop :name,     String,     default: ""
   prop :value,    String,     default: ""
   prop :selected, T::Boolean, default: false
 end

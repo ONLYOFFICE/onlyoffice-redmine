@@ -21,6 +21,8 @@ fr:
   onlyoffice_settings_editor_view_header: "Afficher l'en-tête plus compact"
   onlyoffice_settings_editor_view_feedback: "Afficher le bouton du menu 'Feedback & Support'"
   onlyoffice_settings_editor_view_toolbar: "Afficher un en-tête monochrome de la barre d'outils"
+  onlyoffice_settings_formats_legend: "Formats"
+  onlyoffice_settings_formats_editable_note: "Ouvrir le fichier pour édition (en raison de restrictions de format, des données peuvent être perdues lors de l'enregistrement dans les formats de la liste ci-dessous)"
   onlyoffice_settings_banner_heading: "ONLYOFFICE Docs Cloud"
   onlyoffice_settings_banner_description: "Lancez facilement les éditeurs dans le cloud sans téléchargement ni installation"
   onlyoffice_settings_banner_go: "Obtenir maintenant"

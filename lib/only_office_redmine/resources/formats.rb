@@ -32,6 +32,20 @@ module OnlyOfficeRedmine::Resources
     @mutex = T.let(Mutex.new, Mutex)
 
     sig { returns(Formats) }
+    def self.read!
+      unread
+      read
+    end
+
+    sig { void }
+    def self.unread
+      unless defined?(@read)
+        return
+      end
+      remove_instance_variable(:@read)
+    end
+
+    sig { returns(Formats) }
     def self.read
       @mutex.synchronize do
         unless defined?(@read)
@@ -44,14 +58,12 @@ module OnlyOfficeRedmine::Resources
     sig { returns(Formats) }
     private_class_method def self.load
       all = T.let(Set.new, All)
-
-      # TODO: move to the settings.
-      allowed = ["txt", "csv"]
-
+      settings = OnlyOfficeRedmine::Settings.current
       formats = OnlyOffice::Resources::Formats.read
+
       formats.all.each do |format|
         format = format.dup
-        allowed.each do |name|
+        settings.formats.editable.each do |name|
           unless format.name == name
             next
           end

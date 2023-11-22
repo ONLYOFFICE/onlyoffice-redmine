@@ -19,22 +19,23 @@
 
 module OnlyOfficeRedmine
   class InternalSettings < T::Struct
-    prop :conversion_timeout,            String, default: ""
-    prop :editor_chat_enabled,           String, default: "", name: "editor_chat"
-    prop :editor_compact_header_enabled, String, default: "", name: "editor_compact_header"
-    prop :editor_feedback_enabled,       String, default: "", name: "editor_feedback"
-    prop :editor_force_save_enabled,     String, default: "", name: "forcesave"
-    prop :editor_help_enabled,           String, default: "", name: "editor_help"
-    prop :editor_toolbar_tabs_disabled,  String, default: "", name: "editor_toolbar_no_tabs"
-    prop :ssl_verification_disabled,     String, default: "", name: "check_cert"
-    prop :jwt_secret,                    String, default: "", name: "jwtsecret"
-    prop :jwt_algorithm,                 String, default: ""
-    prop :jwt_http_header,               String, default: "", name: "jwtheader"
-    prop :document_server_url,           String, default: "", name: "oo_address"
-    prop :document_server_internal_url,  String, default: "", name: "inner_editor"
-    prop :plugin_internal_url,           String, default: "", name: "inner_server"
-    prop :trial_enabled,                 String, default: "", name: "editor_demo"
-    prop :trial_enabled_at,              String, default: "", name: "demo_date_start"
+    prop :conversion_timeout,            String,           default: ""
+    prop :editor_chat_enabled,           String,           default: "", name: "editor_chat"
+    prop :editor_compact_header_enabled, String,           default: "", name: "editor_compact_header"
+    prop :editor_feedback_enabled,       String,           default: "", name: "editor_feedback"
+    prop :editor_force_save_enabled,     String,           default: "", name: "forcesave"
+    prop :editor_help_enabled,           String,           default: "", name: "editor_help"
+    prop :editor_toolbar_tabs_disabled,  String,           default: "", name: "editor_toolbar_no_tabs"
+    prop :formats_editable,              T::Array[String], default: []
+    prop :ssl_verification_disabled,     String,           default: "", name: "check_cert"
+    prop :jwt_secret,                    String,           default: "", name: "jwtsecret"
+    prop :jwt_algorithm,                 String,           default: ""
+    prop :jwt_http_header,               String,           default: "", name: "jwtheader"
+    prop :document_server_url,           String,           default: "", name: "oo_address"
+    prop :document_server_internal_url,  String,           default: "", name: "inner_editor"
+    prop :plugin_internal_url,           String,           default: "", name: "inner_server"
+    prop :trial_enabled,                 String,           default: "", name: "editor_demo"
+    prop :trial_enabled_at,              String,           default: "", name: "demo_date_start"
   end
 
   class Settings
@@ -64,6 +65,11 @@ module OnlyOfficeRedmine
     sig { returns(OnlyOffice::Config::Editor) }
     def editor
       @config.editor
+    end
+
+    sig { returns(OnlyOffice::Config::Formats) }
+    def formats
+      @config.formats
     end
 
     sig { returns(OnlyOffice::Config::SSL) }
@@ -149,8 +155,10 @@ module OnlyOfficeRedmine
         logger.info("Disable plugin")
         begin
           patch.force_save
+          OnlyOfficeRedmine::Resources::Formats.read!
         rescue StandardError => error
           current.force_save
+          OnlyOfficeRedmine::Resources::Formats.read!
           raise error
         end
         return
@@ -197,8 +205,11 @@ module OnlyOfficeRedmine
           logger.error("#{result.description} (#{response.code} #{response.message})")
           raise SettingsError.validation_failed
         end
+
+        OnlyOfficeRedmine::Resources::Formats.read!
       rescue StandardError => error
         current.force_save
+        OnlyOfficeRedmine::Resources::Formats.read!
         raise error
       end
 
@@ -248,7 +259,10 @@ module OnlyOfficeRedmine
       internal.editor_force_save_enabled     = map_bool(config.editor.force_save_enabled)
       internal.editor_help_enabled           = map_bool(config.editor.help_enabled)
       internal.editor_toolbar_tabs_disabled  = map_bool(config.editor.toolbar_tabs_disabled)
-      internal.ssl_verification_disabled     = map_bool(config.ssl.verification_disabled)
+
+      internal.formats_editable = config.formats.editable
+
+      internal.ssl_verification_disabled = map_bool(config.ssl.verification_disabled)
 
       internal.jwt_secret =
         begin
@@ -293,6 +307,8 @@ module OnlyOfficeRedmine
       config.editor.force_save_enabled     = self.class.unmap_bool(editor_force_save_enabled)
       config.editor.help_enabled           = self.class.unmap_bool(editor_help_enabled)
       config.editor.toolbar_tabs_disabled  = self.class.unmap_bool(editor_toolbar_tabs_disabled)
+
+      config.formats.editable = formats_editable
 
       config.ssl.verify_mode =
         begin
@@ -339,13 +355,20 @@ module OnlyOfficeRedmine
     end
 
     @defaults = T.let(
+      # rubocop:disable Layout/MultilineArrayLineBreaks
       begin
         defaults = OnlyOffice::Config.defaults
         internal = from_config(defaults)
+        # For backward compatibility and a more planned transition to the 3.0.0.
+        internal.formats_editable = [
+          "csv", "docxf", "epub", "fb2", "html", "odp", "ods", "odt", "otp",
+          "ots", "ott",   "pdfa", "rtf", "txt"
+        ]
         # Don't trim the slash. The normalized empty path ends with a slash.
         internal.document_server_url = "http://localhost/"
         internal
       end,
+      # rubocop:enable Layout/MultilineArrayLineBreaks
       InternalSettings
     )
   end

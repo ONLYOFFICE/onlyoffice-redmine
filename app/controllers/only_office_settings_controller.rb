@@ -81,6 +81,20 @@ class OnlyOfficeSettingsController < ApplicationController
     view.editor_toolbar_tabs_disabled.value = "1"
     view.editor_toolbar_tabs_disabled.checked = settings.editor.toolbar_tabs_disabled
 
+    formats = OnlyOffice::Resources::Formats.read
+
+    view.formats_editable.options = formats.lossy_editable.map do |format|
+      selected = settings.formats.editable.include?(format.name)
+      Views::Option.new(
+        label: format.name,
+        name: "onlyoffice[formats_editable][]",
+        value: format.name,
+        selected:
+      )
+    end
+
+    OnlyOffice::Resources::Formats.unread
+
     view.inline
   end
 
@@ -94,18 +108,19 @@ class OnlyOfficeSettingsController < ApplicationController
   before_action :require_onlyoffice_plugin_to_be_exist
 
   class UpdatePayload < T::Struct
-    prop :editor_chat_enabled,           String, default: "0"
-    prop :editor_compact_header_enabled, String, default: "0"
-    prop :editor_feedback_enabled,       String, default: "0"
-    prop :editor_help_enabled,           String, default: "0"
-    prop :editor_toolbar_tabs_disabled,  String, default: "0"
-    prop :ssl_verification_disabled,     String, default: "0"
-    prop :jwt_secret,                    String, default: ""
-    prop :jwt_http_header,               String, default: ""
-    prop :document_server_url,           String, default: ""
-    prop :document_server_internal_url,  String, default: ""
-    prop :plugin_internal_url,           String, default: ""
-    prop :trial_enabled,                 String, default: "0"
+    prop :editor_chat_enabled,           String,           default: "0"
+    prop :editor_compact_header_enabled, String,           default: "0"
+    prop :editor_feedback_enabled,       String,           default: "0"
+    prop :editor_help_enabled,           String,           default: "0"
+    prop :editor_toolbar_tabs_disabled,  String,           default: "0"
+    prop :formats_editable,              T::Array[String], default: []
+    prop :ssl_verification_disabled,     String,           default: "0"
+    prop :jwt_secret,                    String,           default: ""
+    prop :jwt_http_header,               String,           default: ""
+    prop :document_server_url,           String,           default: ""
+    prop :document_server_internal_url,  String,           default: ""
+    prop :plugin_internal_url,           String,           default: ""
+    prop :trial_enabled,                 String,           default: "0"
   end
 
   # ```http
@@ -185,6 +200,8 @@ class OnlyOfficeSettingsController < ApplicationController
       config.editor.feedback_enabled       = OnlyOffice::STDLIB::String.to_b(editor_feedback_enabled)
       config.editor.help_enabled           = OnlyOffice::STDLIB::String.to_b(editor_help_enabled)
       config.editor.toolbar_tabs_disabled  = OnlyOffice::STDLIB::String.to_b(editor_toolbar_tabs_disabled)
+
+      config.formats.editable = formats_editable
 
       ssl_verification_disabled = OnlyOffice::STDLIB::String.to_b(self.ssl_verification_disabled)
       config.ssl.verify_mode =

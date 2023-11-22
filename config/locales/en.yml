@@ -21,6 +21,8 @@ en:
   onlyoffice_settings_editor_view_header: "Display the header more compact"
   onlyoffice_settings_editor_view_feedback: "Display Feedback & Support menu button"
   onlyoffice_settings_editor_view_toolbar: "Display monochrome toolbar header"
+  onlyoffice_settings_formats_legend: "Formats"
+  onlyoffice_settings_formats_editable_note: "Open the file for editing (due to format restrictions, the data might be lost when saving to the formats from the list below)"
   onlyoffice_settings_banner_heading: "ONLYOFFICE Docs Cloud"
   onlyoffice_settings_banner_description: "Easily launch the editors in the cloud without downloading and installation"
   onlyoffice_settings_banner_go: "Get Now"
