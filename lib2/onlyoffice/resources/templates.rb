@@ -42,11 +42,6 @@ module OnlyOffice::Resources
     extend T::Sig
     extend Resource
 
-    sig { params(language: String, format: String).returns(Pathname) }
-    def self.file(language, format)
-      directory.join("#{language}/new.#{format}")
-    end
-
     sig { override.returns(Pathname) }
     private_class_method def self.directory
       resources = super

@@ -274,11 +274,9 @@ class OnlyOfficeAttachmentsController < ApplicationController
   end
 
   # TODO: add additional options to create a new attachment.
-  # Allow to choose a language and if not, then take it from the I18t.
   class CreatePayload < T::Struct
     prop :name,        String, default: ""
     prop :description, String, default: ""
-    prop :language,    String, default: "en-US"
     prop :format_name, String, name: "format"
   end
 
@@ -313,7 +311,23 @@ class OnlyOfficeAttachmentsController < ApplicationController
       raise OnlyOfficeRedmine::Error.unsupported
     end
 
-    attachment = payload.attachment(user, format)
+    template = format.template
+    unless template
+      logger.error("The format (#{format.name}) doesn't have a template file")
+      raise OnlyOfficeRedmine::Error.unsupported
+    end
+
+    scheme = OnlyOffice::Resources::TemplatesLanguageScheme.iso639_1
+    blank = template.blank(I18n.locale.to_s, scheme)
+    file = File.binread(blank)
+
+    attachment = Attachment.create(
+      file:,
+      author: user.internal,
+      content_type: format.content_type,
+      filename: payload.filename(format),
+      description: payload.description
+    )
     container.attachments.append(attachment)
     saved = container.save
     unless saved
@@ -340,30 +354,6 @@ class OnlyOfficeAttachmentsController < ApplicationController
       formats.all.find do |format|
         format.name == @format_name
       end
-    end
-
-    sig do
-      params(user: OnlyOfficeRedmine::User, format: OnlyOffice::Resources::Format)
-        .returns(::Attachment)
-    end
-    def attachment(user, format)
-      file = self.file(format)
-      filename = self.filename(format)
-      content_type = format.content_type
-      description = @description
-      Attachment.create(
-        file:,
-        author: user.internal,
-        content_type:,
-        filename:,
-        description:
-      )
-    end
-
-    sig { params(format: OnlyOffice::Resources::Format).returns(String) }
-    def file(format)
-      file = OnlyOffice::Resources::Templates.file(@language, format.name)
-      File.binread(file)
     end
 
     sig { params(format: OnlyOffice::Resources::Format).returns(String) }
