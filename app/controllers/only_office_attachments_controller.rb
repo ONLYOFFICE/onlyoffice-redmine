@@ -74,7 +74,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
     view.attachments = setup_link_to_attachments(helpers, user, container)
 
     if container.addition_allowed?(user)
-      view.new_url = helpers.onlyoffice_create_attachment_path(
+      view.new_url = helpers.onlyoffice_new_attachment_path(
         container.type,
         container.id
       )
