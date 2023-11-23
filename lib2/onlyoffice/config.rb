@@ -165,6 +165,19 @@ module OnlyOffice
       config
     end
 
+    sig { returns(OnlyOffice::Config) }
+    def normalize
+      config = copy
+      config.normalize!
+      config
+    end
+
+    sig { void }
+    def normalize!
+      document_server.normalize!
+      plugin.normalize!
+    end
+
     sig { returns(Config) }
     private def copy
       self.class.new(
@@ -180,6 +193,48 @@ module OnlyOffice
 
     module InP
       include Kernel
+
+      sig { overridable.returns(InP) }
+      def normalize
+        inp = clone
+        inp.normalize!
+        inp
+      end
+
+      sig { void }
+      def normalize!
+        # The problem is that the URI normalizer returns a slash if the URL was
+        # actually a slash, and at the same time if the URL was just empty.
+        #
+        # ```ruby
+        # URI("/").normalize.to_s # "/"
+        # URI("").normalize.to_s  # "/" too
+        # ```
+        #
+        # To avoid side effects after normalization, an additional check is
+        # required to determine whether the slash was actually specified or
+        # whether it's a result of normalization.
+        #
+        # ```ruby
+        # inp.url == "" # true
+        # inp.normalize!
+        # inp.url == "" # false, it's "/"
+        # ```
+
+        uri = self.uri.normalize
+        if uri.to_s == "/" && url != "/"
+          self.url = ""
+        else
+          self.uri = uri
+        end
+
+        uri = internal_uri.normalize
+        if uri.to_s == "/" && internal_url != "/"
+          self.internal_url = ""
+        else
+          self.internal_uri = uri
+        end
+      end
 
       sig { params(uri: URI::Generic).returns(URI::Generic) }
       def resolve_internal_uri(uri)
@@ -235,6 +290,30 @@ module OnlyOffice
       def uri
         URI(url)
       end
+    end
+
+    class DocumentServer
+      extend T::Sig
+
+      # rubocop:disable Lint/UselessMethodDefinition
+      sig { override.returns(DocumentServer) }
+      def normalize
+        # This isn't a useless method, it overrides the return type.
+        super
+      end
+      # rubocop:enable Lint/UselessMethodDefinition
+    end
+
+    class Plugin
+      extend T::Sig
+
+      # rubocop:disable Lint/UselessMethodDefinition
+      sig { override.returns(Plugin) }
+      def normalize
+        # This isn't a useless method, it overrides the return type.
+        super
+      end
+      # rubocop:enable Lint/UselessMethodDefinition
     end
 
     class Trial
