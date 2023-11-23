@@ -47,14 +47,5 @@ module OnlyOffice::Resources
     def content_type
       mime.join(";")
     end
-
-    sig { void }
-    def allow_edit
-      unless actions.include?("lossy-edit")
-        return
-      end
-      actions.delete("lossy-edit")
-      actions.append("edit")
-    end
   end
 end
