@@ -163,7 +163,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
   #
   # [Redmine Reference](https://github.com/redmine/redmine/blob/5.0.0/app/controllers/news_controller.rb#L69)
   sig { params(helpers: T.untyped, news: ::News).returns(String) }
-  def self.show_new(helpers, news)
+  def self.show_news(helpers, news)
     unless onlyoffice_plugin_available?
       return ""
     end
