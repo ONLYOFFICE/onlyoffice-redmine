@@ -19,7 +19,7 @@ limitations under the License.
     <div class="box tabular settings">
       <p>
         <label for="onlyoffice-document-server-url">{{ document_server_url.label }}</label>
-        <input id="onlyoffice-document-server-url" name="{{ document_server_url.name }}" type="text" value="{{ document_server_url.value }}" data-disabled-for-trial>
+        <input id="onlyoffice-document-server-url" name="{{ document_server_url.name }}" placeholder="{{ document_server_url.placeholder }}" type="text" value="{{ document_server_url.value }}" data-disabled-for-trial>
         <em class="info">{{ document_server_url.note }}</em>
       </p>
     </div>
@@ -29,11 +29,11 @@ limitations under the License.
       <legend>{{ advanced_legend }}</legend>
       <p>
         <label for="onlyoffice-document-server-internal-url">{{ document_server_internal_url.label }}</label>
-        <input id="onlyoffice-document-server-internal-url" name="{{ document_server_internal_url.name }}" type="text" value="{{ document_server_internal_url.value }}" data-disabled-for-trial>
+        <input id="onlyoffice-document-server-internal-url" name="{{ document_server_internal_url.name }}" placeholder="{{ document_server_internal_url.placeholder }}" type="text" value="{{ document_server_internal_url.value }}" data-disabled-for-trial>
       </p>
       <p>
         <label for="onlyoffice-plugin-internal-url">{{ plugin_internal_url.label }}</label>
-        <input id="onlyoffice-plugin-internal-url" name="{{ plugin_internal_url.name }}" type="text" value="{{ plugin_internal_url.value }}" data-disabled-for-trial>
+        <input id="onlyoffice-plugin-internal-url" name="{{ plugin_internal_url.name }}" placeholder="{{ plugin_internal_url.placeholder }}" type="text" value="{{ plugin_internal_url.value }}" data-disabled-for-trial>
       </p>
       <label class="block">
         <input id="onlyoffice-trial-enabled" name="{{ trial_enabled.name }}" type="checkbox" value="{{ trial_enabled.value }}" {{# trial_enabled.checked }} checked {{/ trial_enabled.checked }}>
