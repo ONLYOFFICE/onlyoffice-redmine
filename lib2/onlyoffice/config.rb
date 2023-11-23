@@ -38,6 +38,10 @@ module OnlyOffice
       prop :toolbar_tabs_disabled,  T::Boolean, default: false
     end
 
+    class Formats < T::Struct
+      prop :editable, T::Array[String], default: ["csv", "txt"]
+    end
+
     class SSL < T::Struct
       prop :verify_mode, Integer, default: OpenSSL::SSL::VERIFY_PEER
     end
@@ -90,6 +94,7 @@ module OnlyOffice
 
     prop :conversion,      Conversion,     default: Conversion.new
     prop :editor,          Editor,         default: Editor.new
+    prop :formats,         Formats,        default: Formats.new
     prop :ssl,             SSL,            default: SSL.new
     prop :jwt,             JWT,            default: JWT.new
     prop :document_server, DocumentServer, default: DocumentServer.new
@@ -183,6 +188,7 @@ module OnlyOffice
       self.class.new(
         conversion: conversion.dup,
         editor: editor.dup,
+        formats: formats.dup,
         ssl: ssl.dup,
         jwt: jwt.clone,
         document_server: document_server.clone,
