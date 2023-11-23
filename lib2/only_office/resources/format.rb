@@ -21,6 +21,11 @@ module OnlyOffice::Resources
   class Format
     sig { returns(String) }
     def file_name
+      # The order makes sense, because while the `document`, `presentation`,
+      # `spreadsheet` work on the format type, the `form` works on the name.
+      if form?
+        return I18n.t("onlyoffice_create_docxf")
+      end
       if document?
         return I18n.t("onlyoffice_create_docx")
       end
@@ -31,6 +36,11 @@ module OnlyOffice::Resources
         return I18n.t("onlyoffice_create_xlsx")
       end
       I18n.t("field_filename")
+    end
+
+    sig { returns(T::Boolean) }
+    def form?
+      name == "docxf"
     end
 
     sig { returns(String) }
