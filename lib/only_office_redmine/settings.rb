@@ -338,7 +338,8 @@ module OnlyOfficeRedmine
       begin
         defaults = OnlyOffice::Config.defaults
         internal = from_config(defaults)
-        internal.document_server_url = "http://localhost"
+        # Don't trim the slash. The normalized empty path ends with a slash.
+        internal.document_server_url = "http://localhost/"
         internal
       end,
       InternalSettings
