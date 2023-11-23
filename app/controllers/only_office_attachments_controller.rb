@@ -873,8 +873,9 @@ class OnlyOfficeAttachmentsController < ApplicationController
       raise OnlyOfficeRedmine::Error.forbidden
     end
 
-    raw_callback = request.body.read
-    callback = OnlyOffice::APP::CallbackGeneric.from_hash(raw_callback)
+    callback_json = request.body.read
+    callback_hash = JSON.parse(callback_json)
+    callback = OnlyOffice::APP::CallbackGeneric.from_hash(callback_hash)
 
     begin
       # rubocop:disable Lint/DuplicateBranch
