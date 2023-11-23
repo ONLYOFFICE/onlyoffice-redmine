@@ -322,11 +322,8 @@ class OnlyOfficeAttachmentsController < ApplicationController
     end
 
     flash[:notice] = I18n.t("notice_successful_create")
-    new_attachment = helpers.onlyoffice_new_attachment_url(
-      params.container_type,
-      params.container_id
-    )
-    redirect_to(new_attachment)
+    home = container.home_path(helpers)
+    redirect_to(home)
   end
 
   class CreatePayload
