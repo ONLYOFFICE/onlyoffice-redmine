@@ -275,7 +275,6 @@ class OnlyOfficeAttachmentsController < ApplicationController
 
   # TODO: add additional options to create a new attachment.
   # Allow to choose a language and if not, then take it from the I18t.
-  # Allow to choose whether a new attachment should contain sample data or not.
   class CreatePayload < T::Struct
     prop :name,        String, default: ""
     prop :description, String, default: ""
