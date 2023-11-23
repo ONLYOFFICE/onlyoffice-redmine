@@ -683,6 +683,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
       key: attachment.token,
       outputtype: to.name,
       region: I18n.locale.to_s,
+      title: "#{payload.name}#{to.extension}",
       url: download_url
     )
     result, response = client.conversion.convert(conversion)
@@ -789,6 +790,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
       key: attachment.token,
       outputtype: to.name,
       region: I18n.locale.to_s,
+      title: "#{payload.name}#{to.extension}",
       url: download_url
     )
     result, response = client.conversion.convert(conversion)
