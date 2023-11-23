@@ -80,7 +80,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
       )
     end
 
-    if view.attachments.empty? || !view.new_url
+    if view.attachments.empty? && !view.new_url
       return ""
     end
 
