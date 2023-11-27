@@ -490,6 +490,8 @@ class OnlyOfficeAttachmentsController < ApplicationController
     view.format = format.type
     view.basename = attachment.filename
 
+    flash[:"onlyoffice error hidden"] = I18n.t("onlyoffice_editor_cannot_be_reached")
+
     render_view(view)
   end
 

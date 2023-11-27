@@ -31,7 +31,6 @@ class Views::OnlyOffice::Editor < Views::Mustache
     @document_server_config = {}.to_json
     @save_as_url = ""
     @format = ""
-    @message = I18n.t("onlyoffice_editor_cannot_be_reached")
     @basename = ""
   end
 
@@ -88,9 +87,6 @@ class Views::OnlyOffice::Editor < Views::Mustache
 
     source
   end
-
-  sig { returns(String) }
-  attr_accessor :message
 
   sig { returns(String) }
   attr_accessor :basename
