@@ -24,20 +24,19 @@ require_relative "resource"
 module OnlyOffice; end
 
 module OnlyOffice::Resources
-  # class Templates
-  #   All = T.type_alias do
-  #     T::Set[Template]
-  #   end
-  # end
+  class Template
+    extend T::Sig
 
-  # class Template
-  #   # https://www.wikiwand.com/en/Language_code
-  #   def langauge(standard = "ISO 639"); end
-  #   def spreadsheet; end
-  #   def presentation; end
-  #   def document; end
-  #   def path(extenssion); end
-  # end
+    attr_accessor :format
+
+    sig { params(format: String, directory: Pathname).void }
+    def initialize(format:, directory:)
+      @format = format
+
+      directory = directory.dup
+      @directory = T.let(directory, Pathname)
+    end
+  end
 
   class Templates
     extend T::Sig
@@ -52,6 +51,74 @@ module OnlyOffice::Resources
     private_class_method def self.directory
       resources = super
       resources.join("document-templates")
+    end
+
+    sig { params(all: All).void }
+    def initialize(all:)
+      @all = all
+    end
+
+    sig { returns(All) }
+    def all
+      @all.dup
+    end
+  end
+
+  class Template
+    sig do
+      params(code: String, scheme: TemplatesLanguageScheme)
+        .returns(Pathname)
+    end
+    def blank(code, scheme = TemplatesLanguageScheme.iso3166_1)
+      code = scheme.resolve(code) || "en-US"
+      @directory.join("#{code}/new.#{@format}")
+    end
+  end
+
+  class TemplatesLanguageScheme
+    extend T::Sig
+
+    sig { returns(TemplatesLanguageScheme) }
+    def self.iso639_1
+      scheme = {
+        "de" => "de-DE",
+        "en" => "en-US",
+        "es" => "es-ES",
+        "fr" => "fr-FR",
+        "it" => "it-IT",
+        "ja" => "ja-JP",
+        "pt" => "pt-PT",
+        "ru" => "ru-RU",
+        "zh" => "zh-CN"
+      }
+      new(scheme:)
+    end
+
+    sig { returns(TemplatesLanguageScheme) }
+    def self.iso3166_1
+      scheme = {
+        "de-DE" => "de-DE",
+        "en-US" => "en-US",
+        "es-ES" => "es-ES",
+        "fr-FR" => "fr-FR",
+        "it-IT" => "it-IT",
+        "ja-JP" => "ja-JP",
+        "pt-BR" => "pt-BR",
+        "pt-PT" => "pt-PT",
+        "ru-RU" => "ru-RU",
+        "zh-CN" => "zh-CN"
+      }
+      new(scheme:)
+    end
+
+    sig { params(scheme: T::Hash[String, String]).void }
+    def initialize(scheme:)
+      @scheme = scheme
+    end
+
+    sig { params(code: String).returns(T.nilable(String)) }
+    def resolve(code)
+      @scheme[code]
     end
   end
 end

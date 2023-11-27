@@ -204,16 +204,6 @@ module OnlyOffice::Resources
       actions.include?("lossy-edit")
     end
 
-    # TODO: replace hard-coded format names.
-    # We need to wait for the creatable formats to be included in the submodule.
-    sig { returns(T::Boolean) }
-    def creatable?
-      name == "docx" ||
-        name == "docxf" ||
-        name == "pptx" ||
-        name == "xlsx"
-    end
-
     sig { returns(T::Boolean) }
     def spreadsheet?
       type == "cell"

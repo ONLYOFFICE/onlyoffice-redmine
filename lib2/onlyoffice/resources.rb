@@ -19,3 +19,5 @@
 
 require_relative "resources/formats"
 require_relative "resources/templates"
+require_relative "resources/formats+templates"
+require_relative "resources/templates+formats"
