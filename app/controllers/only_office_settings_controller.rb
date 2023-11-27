@@ -91,7 +91,7 @@ class OnlyOfficeSettingsController < ApplicationController
   before_action     :require_admin
   require_sudo_mode :update
 
-  before_action :require_onlyoffice_plugin
+  before_action :require_onlyoffice_plugin_to_be_exist
   rescue_from   OnlyOfficeRedmine::SettingsError, with: :handle_settings_error
 
   class UpdatePayload < T::Struct

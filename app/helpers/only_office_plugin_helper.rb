@@ -26,16 +26,25 @@ module OnlyOfficePluginHelper
 
     sig { void }
     private def require_onlyoffice_plugin
+      require_onlyoffice_plugin_to_be_exist
+      require_onlyoffice_plugin_to_be_enalbed
+    end
+
+    sig { void }
+    private def require_onlyoffice_plugin_to_be_exist
       plugin = OnlyOfficeRedmine::Plugin.current
       unless !plugin.nil? && plugin.configurable?
         raise OnlyOfficeRedmine::Error.not_found
       end
+      nil
+    end
 
+    sig { void }
+    private def require_onlyoffice_plugin_to_be_enalbed
       settings = OnlyOfficeRedmine::Settings.current
       unless settings.plugin.enabled
         raise OnlyOfficeRedmine::Error.not_found
       end
-
       nil
     end
   end
