@@ -18,6 +18,7 @@
 # frozen_string_literal: true
 
 # [Redmine Reference: File](https://github.com/redmine/redmine/blob/5.0.0/app/views/attachments/file.html.erb) \
+# [Redmine Reference: Image](https://github.com/redmine/redmine/blob/5.0.0/app/views/attachments/image.html.erb) \
 # [Redmine Reference: Other](https://github.com/redmine/redmine/blob/5.0.0/app/views/attachments/other.html.erb)
 class Views::Attachments::Show < Views::Mustache
   extend T::Sig
