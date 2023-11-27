@@ -29,6 +29,7 @@ get  "onlyoffice/attachments/:attachment_id/download",                      to: 
 get  "onlyoffice/attachments/:attachment_id/convert",                       to: "only_office_attachments#convert",     as: "onlyoffice_convert_attachment"
 post "onlyoffice/attachments/:attachment_id/save-as",                       to: "only_office_attachments#save_as",     as: "onlyoffice_save_as_attachment"
 post "onlyoffice/attachments/:attachment_id/download-as",                   to: "only_office_attachments#download_as", as: "onlyoffice_download_as_attachment"
+post "onlyoffice/attachments/:attachment_id/retrieve",                      to: "only_office_attachments#retrieve",    as: "onlyoffice_raw_retrieve_attachment"
 post "onlyoffice/attachments/:attachment_id/callback",                      to: "only_office_attachments#callback",    as: "onlyoffice_raw_callback_attachment"
 
 # Ping

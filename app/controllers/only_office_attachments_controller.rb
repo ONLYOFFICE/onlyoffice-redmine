@@ -841,6 +841,105 @@ class OnlyOfficeAttachmentsController < ApplicationController
     end
   end
 
+  class RetrievePayload < T::Struct
+    prop :format_name, String, name: "format"
+    prop :url,         String
+  end
+
+  skip_before_action :verify_authenticity_token, only: [:retrieve]
+  # before_action      :verify_jwt_token,          only: [:retrieve]
+
+  # ```http
+  # POST /onlyoffice/attachments/:attachment_id/retrieve?user_id={{user_id}} HTTP/1.1
+  # Accept: text/html
+  # Content-Type: application/x-www-form-urlencoded; charset=utf-8
+  # Host: {{plugin_url}}
+  # ```
+  def retrieve
+    user_params = UserParameters.from_hash(request.parameters)
+    user = user_params.user
+    unless user
+      logger.error("The user (#{user_params.user_id}) couldn't be found")
+      raise OnlyOfficeRedmine::Error.not_found
+    end
+
+    attachment_params = AttachmentParameters.from_hash(request.parameters)
+    attachment = attachment_params.attachment
+    unless attachment
+      logger.error("The attachment (#{attachment_params.attachment_id}) couldn't be found")
+      raise OnlyOfficeRedmine::Error.not_found
+    end
+
+    container = attachment.container
+    unless container
+      logger.error("The container for the attachment (#{attachment.id}) couldn't be found")
+      raise OnlyOfficeRedmine::Error.not_found
+    end
+
+    unless container.addition_allowed?(user)
+      logger.error("User (#{user.id}) isn't allowed to add an attachment to the #{container.type} (#{container.id})")
+      raise OnlyOfficeRedmine::Error.forbidden
+    end
+
+    raw_payload = params["onlyoffice"].permit!.to_h
+    retrieve_params = RetrievePayload.from_hash(raw_payload)
+
+    format = retrieve_params.format
+    unless format
+      logger.error("The format (#{retrieve_params.format_name}) doesn't supported")
+      raise OnlyOfficeRedmine::Error.unsupported
+    end
+
+    settings = OnlyOfficeRedmine::Settings.current
+    settings.plugin.url = helpers.home_url
+
+    response = OnlyOffice::APP::CallbackError.new
+
+    begin
+      file_url = settings.document_server.resolve_internal_url(retrieve_params.url)
+      file_uri = URI(file_url)
+      file = T.unsafe(file_uri).open(ssl_verify_mode: settings.ssl.verify_mode)
+
+      retrieved = Attachment.create(
+        file:,
+        author: user.internal,
+        content_type: format.content_type,
+        filename: "#{attachment.name}#{format.extension}",
+        description: attachment.description
+      )
+
+      container.attachments.append(retrieved)
+      saved = container.save
+      unless saved
+        logger.error("Failed to save the #{container.type} (#{container.id}) with new attachment")
+        raise OnlyOfficeRedmine::Error.internal
+      end
+
+      response.message = I18n.t("notice_successful_create")
+    rescue OnlyOfficeRedmine::Error
+      response.message = I18n.t("onlyoffice_attachment_create_error")
+    end
+
+    render(json: response.serialize)
+  end
+
+  class RetrievePayload
+    extend T::Sig
+
+    sig { params(hash: T.untyped, strict: T.untyped).returns(RetrievePayload) }
+    def self.from_hash(hash, strict = nil)
+      super(hash, strict)
+    end
+
+    sig { returns(T.nilable(OnlyOffice::Resources::Format)) }
+    def format
+      formats = OnlyOfficeRedmine::Resources::Formats.read
+      formats.all.find do |format|
+        format.name == @format_name
+      end
+    end
+  end
+
   skip_before_action :verify_authenticity_token, only: [:callback]
   before_action      :verify_jwt_token,          only: [:callback]
 
