@@ -29,7 +29,7 @@ class Views::OnlyOffice::Editor < Views::Mustache
     @document_server_api_base_url = ""
     @document_server_api_path = "/web-apps/apps/api/documents/api.js"
     @document_server_config = {}.to_json
-    @save_as_url = ""
+    @retrieve_url = ""
     @format = ""
     @basename = ""
   end
@@ -69,7 +69,7 @@ class Views::OnlyOffice::Editor < Views::Mustache
   attr_accessor :document_server_config
 
   sig { returns(String) }
-  attr_accessor :save_as_url
+  attr_accessor :retrieve_url
 
   sig { returns(String) }
   attr_accessor :format

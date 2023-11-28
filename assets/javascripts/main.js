@@ -247,13 +247,24 @@
   }
 
   /**
+   * @typedef {Object} RetrieveResponse
+   * @property {number} error
+   * @property {string} message
+   */
+
+  /**
    * [Local Reference](../../app/views/onlyoffice/editor.rb)
    */
   const OnlyOfficeEditor = {
     /**
      * @type {string | undefined}
      */
-    saveAsUrl: undefined,
+    retrieveUrl: undefined,
+
+    /**
+     * @type {typeof window.DocsAPI.DocEditor | undefined}
+     */
+    editor: undefined,
 
     /**
      * @returns {boolean}
@@ -290,20 +301,20 @@
       if (editor.dataset.faviconUrl) {
         replaceFavicon(editor.dataset.faviconUrl)
       }
-      if (editor.dataset.saveAsUrl) {
-        this.saveAsUrl = editor.dataset.saveAsUrl
+      if (editor.dataset.retrieveUrl) {
+        this.retrieveUrl = editor.dataset.retrieveUrl
       }
 
       const config = JSON.parse(editor.dataset.documentServerConfig)
-      config.event = {
-        "onError": this.onError,
-        "onRequestSaveAs": this.onRequestSaveAs
+      config.events = {
+        "onError": this.onError.bind(this),
+        "onRequestSaveAs": this.onRequestSaveAs.bind(this)
       }
       config.height = "100%"
       config.type = deviceType()
       config.width = "100%"
 
-      const _ = new window.DocsAPI.DocEditor("onlyoffice-editor-placeholder", config)
+      this.editor = new window.DocsAPI.DocEditor("onlyoffice-editor-placeholder", config)
     },
 
     /**
@@ -313,7 +324,9 @@
      * @returns {void}
      */
     onError(event) {
+      if (!this.editor) return
       console.error(event.data)
+      this.editor.showMessage(`${event.data.errorCode}: ${event.data.errorDescription}`)
     },
 
     /**
@@ -323,15 +336,25 @@
      * @returns {Promise<void>}
      */
     async onRequestSaveAs(event) {
-      if (!this.saveAsUrl) return
-      const payload = {
-        url: event.data.url,
-        title: event.data.title
-      }
-      await fetch(this.saveAsUrl, {
-        method: "POST",
-        body: JSON.stringify(payload)
+      if (!this.editor || !this.retrieveUrl) return
+      const payload = new URLSearchParams({
+        "onlyoffice[format]": event.data.fileType,
+        "onlyoffice[url]": event.data.url
       })
+      const response = await fetch(this.retrieveUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: payload
+      })
+      /** @type {RetrieveResponse} */
+      const retrieve = await response.json()
+      const log = retrieve.error == 0
+        ? console.log
+        : console.error
+      log(retrieve.message)
+      this.editor.showMessage(retrieve.message)
     }
   }
 
