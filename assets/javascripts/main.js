@@ -765,68 +765,6 @@
     }
   }
 
-  /**
-   * [Redmine Reference: View](https://github.com/redmine/redmine/blob/5.0.0/app/views/layouts/base.html.erb#L111) \
-   * [Redmine Reference: Helper](https://github.com/redmine/redmine/blob/5.0.0/app/helpers/application_helper.rb#L481)
-   */
-  const Flash = {
-    /**
-     * @returns {void}
-     */
-    setup() {
-      const heading = document.querySelector("#content h2")
-      if (!heading) return
-
-      const container = document.createElement("div")
-      container.id = "onlyoffice-flash"
-      container.classList.add("hidden")
-
-      heading.after(container)
-    },
-
-    /**
-     * @param {string} message
-     * @returns {void}
-     */
-    error(message) {
-      this.show("error", message)
-    },
-
-    /**
-     * @param {string} message
-     * @returns {void}
-     */
-    notice(message) {
-      this.show("notice", message)
-    },
-
-    /**
-     * @param {"error" | "notice"} type
-     * @param {string} message
-     * @returns {void}
-     */
-    show(type, message) {
-      const container = document.querySelector("#onlyoffice-flash")
-      if (!container) return
-
-      const flash = document.createElement("div")
-      flash.classList.add("flash", type)
-      flash.textContent = message
-
-      container.classList.remove("hidden")
-      container.append(flash)
-    },
-
-    /**
-     * @returns {void}
-     */
-    hide() {
-      const container = document.querySelector("#onlyoffice-flash")
-      if (!container) return
-      container.innerHTML = ""
-    }
-  }
-
   // Functions
 
   /**
