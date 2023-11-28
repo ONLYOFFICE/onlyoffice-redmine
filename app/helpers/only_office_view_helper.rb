@@ -80,12 +80,10 @@ module OnlyOfficeViewHelper
       attachment = OnlyOfficeRedmine::Attachment.new(attachment:)
       block = Blocks::Attachments::Attachment.new
 
-      if attachment.viewable?(user)
-        block.view_url = helpers.onlyoffice_view_attachment_path(attachment.id)
-      end
-
       if attachment.editable?(user) || attachment.fillable?(user)
         block.edit_url = helpers.onlyoffice_edit_attachment_path(attachment.id)
+      elsif attachment.viewable?(user)
+        block.view_url = helpers.onlyoffice_view_attachment_path(attachment.id)
       end
 
       if attachment.convertible?(user)
