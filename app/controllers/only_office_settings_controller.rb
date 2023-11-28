@@ -167,6 +167,7 @@ class OnlyOfficeSettingsController < ApplicationController
     def to_settings
       current = OnlyOfficeRedmine::Settings.current
       config = to_config(current)
+      config.normalize!
       OnlyOfficeRedmine::Settings.new(config:)
     end
 

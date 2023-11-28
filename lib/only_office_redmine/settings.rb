@@ -47,6 +47,7 @@ module OnlyOfficeRedmine
       raw = ::Setting.send(NAME)
       internal = InternalSettings.from_hash(raw)
       config = internal.to_config
+      config.normalize!
       new(config:)
     end
 
