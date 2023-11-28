@@ -92,7 +92,6 @@ class OnlyOfficeSettingsController < ApplicationController
   require_sudo_mode :update
 
   before_action :require_onlyoffice_plugin_to_be_exist
-  rescue_from   OnlyOfficeRedmine::SettingsError, with: :handle_settings_error
 
   class UpdatePayload < T::Struct
     prop :editor_chat_enabled,           String, default: "0"
@@ -119,21 +118,40 @@ class OnlyOfficeSettingsController < ApplicationController
   def update
     # TODO: find a way to keep user's choices in case of an error occurs.
 
-    raw_payload = params["onlyoffice"].permit!.to_h
-    payload = UpdatePayload.from_hash(raw_payload)
+    begin
+      raw_payload = params["onlyoffice"].permit!.to_h
+      payload = UpdatePayload.from_hash(raw_payload)
 
-    patch = payload.to_settings
-    patch.plugin.url = helpers.home_url
+      patch = payload.to_settings
+      patch.plugin.url = helpers.home_url
 
-    patch.save do |conversion|
-      conversion.filetype = "txt"
-      conversion.key = Time.now.to_i.to_s
-      conversion.outputtype = "docx"
-      conversion.url = helpers.onlyoffice_ping_url
-      conversion
+      patch.save do |conversion|
+        conversion.filetype = "txt"
+        conversion.key = Time.now.to_i.to_s
+        conversion.outputtype = "docx"
+        conversion.url = helpers.onlyoffice_ping_url
+        conversion
+      end
+
+      flash[:notice] = I18n.t("notice_successful_update")
+    rescue OnlyOfficeRedmine::SettingsError => error
+      code, message =
+        case error
+        when OnlyOfficeRedmine::SettingsError.trial_expired
+          [402, I18n.t("onlyoffice_editor_trial_period_ended")]
+        when OnlyOfficeRedmine::SettingsError.validation_failed
+          [422, "Internal Error"]
+        else
+          [500, "Internal Error"]
+        end
+
+      flash[:error] = message
+      response.status = code
+    rescue StandardError
+      flash[:error] = "Internal Error"
+      response.status = 500
     end
 
-    flash[:notice] = I18n.t("notice_successful_update")
     redirect_to_plugin_settings
   end
 
