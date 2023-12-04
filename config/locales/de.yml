@@ -21,6 +21,8 @@ de:
   onlyoffice_settings_editor_view_header: "Kompakten Header anzeigen"
   onlyoffice_settings_editor_view_feedback: "Feedback-& Support-Taste anzeigen"
   onlyoffice_settings_editor_view_toolbar: "Monochromen Kopfbereich der Symbolleiste anzeigen"
+  onlyoffice_settings_formats_legend: "Formate"
+  onlyoffice_settings_formats_editable_note: "Öffne die Datei zum Bearbeiten (aufgrund von Formateinschränkungen können die Daten beim Speichern in den Formaten aus der folgenden Liste verloren gehen)"
   onlyoffice_settings_banner_heading: "ONLYOFFICE Docs Cloud"
   onlyoffice_settings_banner_description: "Öffnen Sie die Editoren in der Cloud einfach ohne Herunterladen und Installation"
   onlyoffice_settings_banner_go: "Jetzt erhalten"

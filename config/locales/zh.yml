@@ -21,6 +21,8 @@ zh:
   onlyoffice_settings_editor_view_header: "更紧致的显示菜单栏"
   onlyoffice_settings_editor_view_feedback: "显示反馈&支持菜单按钮"
   onlyoffice_settings_editor_view_toolbar: "显示单色工具栏标题"
+  onlyoffice_settings_formats_legend: "格式"
+  onlyoffice_settings_formats_editable_note: "默认的文件编辑器 (由于文件格式限制，保存为下列格式时，数据可能会缺失)"
   onlyoffice_settings_banner_heading: "ONLYOFFICE 文档云"
   onlyoffice_settings_banner_description: "无需下载和安装即可轻松启动云端编辑器"
   onlyoffice_settings_banner_go: "立即获取"

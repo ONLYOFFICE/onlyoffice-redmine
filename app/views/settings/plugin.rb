@@ -74,6 +74,12 @@ class Views::Settings::Plugin < Views::Mustache
   sig { returns(Views::Input) }
   attr_accessor :editor_toolbar_tabs_disabled
 
+  sig { returns(String) }
+  attr_accessor :formats_legend
+
+  sig { returns(Views::Select) }
+  attr_accessor :formats_editable
+
   sig { override.params(helpers: T.untyped).void }
   def initialize(helpers:)
     super(helpers:)
@@ -139,5 +145,12 @@ class Views::Settings::Plugin < Views::Mustache
     editor_toolbar_tabs_disabled = Views::Input.new
     editor_toolbar_tabs_disabled.label = I18n.t("onlyoffice_settings_editor_view_toolbar")
     @editor_toolbar_tabs_disabled = T.let(editor_toolbar_tabs_disabled, Views::Input)
+
+    formats_legend = I18n.t("onlyoffice_settings_formats_legend")
+    @formats_legend = T.let(formats_legend, String)
+
+    formats_editable = Views::Select.new
+    formats_editable.label = I18n.t("onlyoffice_settings_formats_editable_note")
+    @formats_editable = T.let(formats_editable, Views::Select)
   end
 end

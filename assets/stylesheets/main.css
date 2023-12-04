@@ -74,6 +74,10 @@ limitations under the License.
   padding: 1em;
 }
 
+.onlyoffice-settings fieldset legend + p {
+  margin-top: 0;
+}
+
 .onlyoffice-settings input[type="text"] {
   max-width: calc(100% - 4px);
   width: 100%;
@@ -97,6 +101,21 @@ limitations under the License.
 .onlyoffice-settings__editor {
   gird-column: 1;
   grid-row: 4;
+}
+
+.onlyoffice-settings__formats {
+  grid-column: 1;
+  grid-row: 5;
+}
+
+.onlyoffice-editable__controls {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 1em;
+}
+
+.onlyoffice-editable__control {
+  min-width: 80px;
 }
 
 .onlyoffice-settings__banner {
