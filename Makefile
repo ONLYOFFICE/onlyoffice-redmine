@@ -78,6 +78,14 @@ notes: # Generate release notes.
 	@awk '/## [0-9]/{p++} p; /## [0-9]/{if (p > 1) exit}' CHANGELOG.md | \
 		awk 'NR>2 {print last} {last=$$0}'
 
+.PHONY: restart
+restart: # Restart the Redmine with plugin containers.
+	@docker-compose stop redmine onlyoffice-redmine
+	@docker-compose rm --force redmine onlyoffice-redmine
+	@docker volume rm onlyoffice-redmine_onlyoffice-redmine
+	@docker-compose up --build --detach redmine onlyoffice-redmine
+	@docker-compose restart nginx
+
 .PHONY: submodule
 submodule: # Update submodules.
 	@git submodule update --init --recursive
@@ -94,6 +102,10 @@ else
 	@echo "Sorbet isn't supported. The type check has been cancelled."
 	@exit 1
 endif
+
+.PHONY: up
+up: # Build and up containers in deatach.
+	@docker-compose up --build --detach
 
 .PHONY: version
 version: # Show a plugin version.

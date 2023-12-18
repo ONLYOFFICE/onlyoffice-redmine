@@ -1,0 +1,70 @@
+version: "3.8"
+name: onlyoffice-redmine
+
+services:
+  nginx:
+    container_name: onlyoffice-redmine-nginx
+    build:
+      context: .
+      target: nginx
+    depends_on:
+    - onlyoffice-document-server
+    - redmine
+    ports:
+    - 80:80
+    - 8080:8080
+
+  onlyoffice-document-server:
+    container_name: onlyoffice-redmine-onlyoffice-document-server
+    image: onlyoffice/documentserver-de:7.5.1.1
+    volumes:
+    - onlyoffice-document-server-cache:/var/lib/onlyoffice
+    - onlyoffice-document-server-certificates:/var/www/onlyoffice/Data
+    - onlyoffice-document-server-data:/var/lib/postgresql/data
+    - onlyoffice-document-server-logs:/var/log/onlyoffice
+    environment:
+    - JWT_HEADER=Authorization
+    - JWT_SECRET=secret
+
+  onlyoffice-redmine:
+    container_name: onlyoffice-redmine-onlyoffice-redmine
+    build:
+      context: .
+      target: onlyoffice-redmine
+    volumes:
+    - onlyoffice-redmine:/srv
+
+  redmine:
+    container_name: onlyoffice-redmine-redmine
+    build:
+      context: .
+      target: redmine
+    volumes:
+    - onlyoffice-redmine:/usr/src/redmine/plugins/onlyoffice_redmine
+    - redmine-files:/usr/src/redmine/files
+    environment:
+    - RAILS_RELATIVE_URL_ROOT=/
+    - REDMINE_DB_PASSWORD=redmine
+    - REDMINE_DB_POSTGRES=redmine-postgres
+    - REDMINE_DB_USERNAME=redmine
+    - REDMINE_PLUGINS_MIGRATE=true
+    - REDMINE_SECRET_KEY_BASE=redmine
+
+  redmine-postgres:
+    container_name: onlyoffice-redmine-redmine-postgres
+    image: postgres:15.4-alpine3.18
+    volumes:
+    - redmine-data:/var/lib/postgresql/data
+    environment:
+    - POSTGRES_DB=redmine
+    - POSTGRES_PASSWORD=redmine
+    - POSTGRES_USER=redmine
+
+volumes:
+  onlyoffice-document-server-cache:
+  onlyoffice-document-server-certificates:
+  onlyoffice-document-server-data:
+  onlyoffice-document-server-logs:
+  onlyoffice-redmine:
+  redmine-data:
+  redmine-files:
