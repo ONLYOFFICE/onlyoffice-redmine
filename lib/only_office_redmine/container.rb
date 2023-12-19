@@ -97,6 +97,13 @@ module OnlyOfficeRedmine
           return nil
         end
         Issue.new(issue:)
+      when Message.type
+        id = Integer(id, 10)
+        message = ::Message.find(id)
+        unless message
+          return nil
+        end
+        Message.new(message:)
       when News.type
         id = Integer(id, 10)
         news = ::News.find(id)
@@ -129,6 +136,8 @@ module OnlyOfficeRedmine
         Document.new(document: internal)
       when ::Issue
         Issue.new(issue: internal)
+      when ::Message
+        Message.new(message: internal)
       when ::News
         News.new(news: internal)
       when ::Project
@@ -276,6 +285,72 @@ module OnlyOfficeRedmine
     sig { override.params(helpers: T.untyped).returns(String) }
     def home_url(helpers)
       helpers.issue_url(@issue)
+    end
+  end
+
+  class Message
+    extend T::Sig
+    include Container
+
+    sig { params(message: ::Message).void }
+    def initialize(message:)
+      @message = message
+    end
+
+    sig { override.returns(T.any(Integer, String)) }
+    def id
+      @message.id
+    end
+
+    sig { override.returns(String) }
+    def type
+      self.class.type
+    end
+
+    sig { returns(String) }
+    def self.type
+      "Message"
+    end
+
+    sig { override.returns(::Message) }
+    def internal
+      @message
+    end
+
+    sig { override.returns(::Project) }
+    def project
+      @message.project
+    end
+
+    sig { override.returns(ActiveRecord::Associations::CollectionProxy) }
+    def attachments
+      @message.attachments
+    end
+
+    sig { override.returns(ActiveModel::Errors) }
+    def errors
+      @message.errors
+    end
+
+    sig { override.returns(T::Boolean) }
+    def save
+      @message.save
+    end
+
+    sig { override.params(user: User).returns(T::Boolean) }
+    def addition_allowed?(user)
+      # https://github.com/redmine/redmine/blob/5.0.0/app/views/messages/show.html.erb#L11
+      @message.editable_by?(user.internal)
+    end
+
+    sig { override.params(helpers: T.untyped).returns(String) }
+    def home_path(helpers)
+      helpers.board_message_path(@message.board, @message)
+    end
+
+    sig { override.params(helpers: T.untyped).returns(String) }
+    def home_url(helpers)
+      helpers.board_message_url(@message.board, @message)
     end
   end
 
