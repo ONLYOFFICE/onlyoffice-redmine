@@ -50,6 +50,10 @@ limitations under the License.
   width: 100%;
 }
 
+.onlyoffice-editor iframe {
+  position: relative !important;
+}
+
 /* Settings Plugin */
 
 .onlyoffice-settings {
