@@ -44,7 +44,7 @@ end
 
 class Blocks::Attachments::Attachment < T::Struct
   extend T::Sig
-  prop :index,       T.nilable(Integer)
+  prop :url,         T.nilable(String)
   prop :view_url,    T.nilable(String)
   prop :edit_url,    T.nilable(String)
   prop :convert_url, T.nilable(String)

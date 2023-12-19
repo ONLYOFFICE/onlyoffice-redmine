@@ -135,16 +135,8 @@
      * @returns {void}
      */
     setup() {
-      this.setupAttachments()
+      Attachments.setup()
       this.setupNew()
-    },
-
-    /**
-     * @returns {void}
-     */
-    setupAttachments() {
-      const containers = Attachments.containers()
-      Attachments.setup(containers)
     },
 
     /**
@@ -181,8 +173,7 @@
      */
     setup() {
       // https://github.com/redmine/redmine/blob/5.0.0/app/views/files/index.html.erb#L36
-      const containers = document.querySelectorAll(".files .buttons")
-      Attachments.setup(containers)
+      Attachments.setup()
     }
   }
 
@@ -201,8 +192,7 @@
      * @returns {void}
      */
     setup() {
-      const containers = Attachments.containers()
-      Attachments.setup(containers)
+      Attachments.setup()
     }
   }
 
@@ -221,8 +211,7 @@
      * @returns {void}
      */
     setup() {
-      const containers = Attachments.containers()
-      Attachments.setup(containers)
+      Attachments.setup()
     }
   }
 
@@ -241,8 +230,7 @@
      * @returns {void}
      */
     setup() {
-      const containers = Attachments.containers()
-      Attachments.setup(containers)
+      Attachments.setup()
     }
   }
 
@@ -627,12 +615,8 @@
   // Blocks
 
   /**
-   * @typedef {Attachment[]} AttachmentsData
-   */
-
-  /**
    * @typedef {Object} Attachment
-   * @property {number} index
+   * @property {string=} url
    * @property {string=} view_url
    * @property {string=} edit_url
    * @property {string=} convert_url
@@ -643,18 +627,10 @@
    */
   const Attachments = {
     /**
-     * @returns {NodeListOf<Element>}
-     */
-    containers() {
-      // https://github.com/redmine/redmine/blob/5.0.0/app/views/attachments/_links.html.erb#L28
-      return document.querySelectorAll(".attachments tr > :last-child")
-    },
-
-    /**
-     * @param {NodeListOf<Element>} containers
      * @returns {void}
      */
-    setup(containers) {
+    setup() {
+      const siblings = [...this.siblings()]
       const attachments = this.attachments()
       const view = document.querySelector("#onlyoffice-view")
       const edit = document.querySelector("#onlyoffice-edit")
@@ -665,7 +641,13 @@
         const editURL = attachment["edit_url"]
         const convertURL = attachment["convert_url"]
 
-        const container = containers[attachment.index]
+        const sibling = siblings.find((sibling) => {
+          if (!(sibling instanceof HTMLAnchorElement)) return
+          return sibling.pathname === attachment.url
+        })
+        if (!sibling) return
+
+        const container = sibling.parentElement
         if (!container || !(container instanceof HTMLElement)) return
 
         if (convert && convert instanceof HTMLTemplateElement && convertURL) {
@@ -683,7 +665,15 @@
     },
 
     /**
-     * @returns {AttachmentsData}
+     * @returns {NodeListOf<Element>}
+     */
+    siblings() {
+      // https://github.com/redmine/redmine/blob/5.0.0/app/views/attachments/_links.html.erb#L28
+      return document.querySelectorAll("a[data-method=delete][href]")
+    },
+
+    /**
+     * @returns {Attachment[]}
      */
     attachments() {
       const template = document.querySelector("#onlyoffice-attachments")

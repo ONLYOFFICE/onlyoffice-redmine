@@ -55,13 +55,11 @@ module OnlyOfficeViewHelper
           container.attachments.preload(:author).to_a
         end
 
-      attachments.each_with_index do |attachment, index|
+      attachments.each do |attachment|
         block = setup_link_to_attachment(helpers, user, attachment)
         unless block.sense?
           next
         end
-
-        block.index = index
         blocks.append(block)
       end
 
@@ -79,6 +77,8 @@ module OnlyOfficeViewHelper
     private def setup_link_to_attachment(helpers, user, attachment)
       attachment = OnlyOfficeRedmine::Attachment.new(attachment:)
       block = Blocks::Attachments::Attachment.new
+
+      block.url = helpers.attachment_path(attachment.internal)
 
       if attachment.editable?(user) || attachment.fillable?(user)
         block.edit_url = helpers.onlyoffice_edit_attachment_path(attachment.id)

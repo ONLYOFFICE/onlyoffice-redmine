@@ -107,13 +107,11 @@ class OnlyOfficeAttachmentsController < ApplicationController
     view = Views::Files::Index.new(helpers:)
 
     containers.each do |container|
-      container.attachments.each_with_index do |attachment, index|
+      container.attachments.each do |attachment|
         block = setup_link_to_attachment(helpers, user, attachment)
         unless block.sense?
           next
         end
-
-        block.index = index
         view.attachments.append(block)
       end
     end
