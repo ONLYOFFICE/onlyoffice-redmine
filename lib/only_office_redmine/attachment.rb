@@ -170,14 +170,7 @@ module OnlyOfficeRedmine
       unless format && format.convertible?
         return []
       end
-
-      formats = OnlyOfficeRedmine::Resources::Formats.read
-      convertible = formats.convertible
-      format.convert.filter do |name|
-        convertible.find do |sub|
-          sub.name == name
-        end
-      end
+      format.convert
     end
 
     sig { returns(T.nilable(OnlyOffice::Resources::Format)) }
