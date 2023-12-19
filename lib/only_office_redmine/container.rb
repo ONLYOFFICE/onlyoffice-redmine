@@ -400,12 +400,12 @@ module OnlyOfficeRedmine
 
     sig { override.params(helpers: T.untyped).returns(String) }
     def home_path(helpers)
-      helpers.project_path(@project)
+      helpers.project_files_path(@project)
     end
 
     sig { override.params(helpers: T.untyped).returns(String) }
     def home_url(helpers)
-      helpers.project_url(@project)
+      helpers.project_files_url(@project)
     end
   end
 
