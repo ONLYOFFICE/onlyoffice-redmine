@@ -46,6 +46,10 @@
       IssuesShow.setup()
       return
     }
+    if (MessagesShow.rendered()) {
+      MessagesShow.setup()
+      return
+    }
     if (NewsShow.rendered()) {
       NewsShow.setup()
       return
@@ -186,6 +190,25 @@
      */
     rendered() {
       return rendered("issues", "show")
+    },
+
+    /**
+     * @returns {void}
+     */
+    setup() {
+      Attachments.setup()
+    }
+  }
+
+  /**
+   * [Local Reference](../../app/views/messages/show.rb)
+   */
+  const MessagesShow = {
+    /**
+     * @returns {boolean}
+     */
+    rendered() {
+      return rendered("messages", "show")
     },
 
     /**

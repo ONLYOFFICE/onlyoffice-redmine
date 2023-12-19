@@ -153,6 +153,42 @@ class OnlyOfficeAttachmentsController < ApplicationController
   end
 
   # ```http
+  # GET /boards/{{board_id}}/topics/{{topic_id}}
+  # Accept: text/html
+  # Cookie: {{cookie}}
+  # Host: {{plugin_url}}
+  # ```
+  #
+  # [Redmine Reference](https://github.com/redmine/redmine/blob/5.0.0/app/controllers/messages_controller.rb#L36)
+  sig do
+    params(helpers: T.untyped, topic: ::Message, replies: T::Array[::Message])
+      .returns(String)
+  end
+  def self.show_topic(helpers, topic, replies)
+    unless onlyoffice_plugin_available?
+      return ""
+    end
+
+    user = OnlyOfficeRedmine::User.current
+    view = Views::Messages::Show.new(helpers:)
+
+    container = OnlyOfficeRedmine::Message.new(message: topic)
+    view.attachments = setup_link_to_attachments(helpers, user, container)
+
+    replies.each do |message|
+      container = OnlyOfficeRedmine::Message.new(message:)
+      view.attachments += setup_link_to_attachments(helpers, user, container)
+    end
+
+    if view.attachments.empty?
+      return ""
+    end
+
+    view.setup_assets
+    view.inline
+  end
+
+  # ```http
   # GET /news/{{news_id}}
   # Accept: text/html
   # Cookie: {{cookie}}
