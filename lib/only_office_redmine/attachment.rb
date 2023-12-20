@@ -120,14 +120,18 @@ module OnlyOfficeRedmine
       OnlyOfficeRedmine::GenericContainer.from_internal(container)
     end
 
+    sig { returns(T::Boolean) }
+    def readable?
+      @attachment.readable?
+    end
+
     sig { params(user: User).returns(T::Boolean) }
     def viewable?(user)
       format = self.format
       unless format
         return false
       end
-      @attachment.readable? &&
-        @attachment.visible?(user.internal) &&
+      @attachment.visible?(user.internal) &&
         format.viewable?
     end
 
@@ -137,8 +141,7 @@ module OnlyOfficeRedmine
       unless format
         return false
       end
-      @attachment.readable? &&
-        @attachment.editable?(user.internal) &&
+      @attachment.editable?(user.internal) &&
         format.editable?
     end
 
@@ -148,8 +151,7 @@ module OnlyOfficeRedmine
       unless format
         return false
       end
-      @attachment.readable? &&
-        @attachment.editable?(user.internal) &&
+      @attachment.editable?(user.internal) &&
         format.fillable?
     end
 
@@ -159,8 +161,7 @@ module OnlyOfficeRedmine
       unless format
         return false
       end
-      @attachment.readable? &&
-        @attachment.visible?(user.internal) &&
+      @attachment.visible?(user.internal) &&
         format.convertible?
     end
 
