@@ -258,7 +258,7 @@ module OnlyOffice
       end
 
       sig { params(uri: URI::Generic).returns(URI::Generic) }
-      def resolve_document_server_uri(uri)
+      def resolve_uri(uri)
         internal = uri.to_s
         pub = resolve_url(internal)
         URI(pub)
