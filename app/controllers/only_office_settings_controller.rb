@@ -149,9 +149,9 @@ class OnlyOfficeSettingsController < ApplicationController
       end
 
       flash[:notice] = I18n.t("notice_successful_update")
-    rescue OnlyOfficeRedmine::SettingsError => error
+    rescue OnlyOfficeRedmine::SettingsError => e
       code, message =
-        case error
+        case e
         when OnlyOfficeRedmine::SettingsError.trial_expired
           [402, I18n.t("onlyoffice_editor_trial_period_ended")]
         when OnlyOfficeRedmine::SettingsError.validation_failed

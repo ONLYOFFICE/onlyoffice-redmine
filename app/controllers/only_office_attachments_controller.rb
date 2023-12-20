@@ -984,8 +984,10 @@ class OnlyOfficeAttachmentsController < ApplicationController
           raise OnlyOfficeRedmine::Error.internal
         end
 
+        # rubocop:disable Style/StringHashKeys
         # We need a copy with an ID so that we can delete files from the disk.
         current = attachment.copy({ "id" => attachment.id })
+        # rubocop:enable Style/StringHashKeys
 
         attachment.file = ActionDispatch::Http::UploadedFile.new(
           tempfile:,
@@ -1015,10 +1017,10 @@ class OnlyOfficeAttachmentsController < ApplicationController
         # nothing
       end
       # rubocop:enable Lint/DuplicateBranch
-    rescue OnlyOfficeRedmine::Error => error
+    rescue OnlyOfficeRedmine::Error => e
       callback_error = OnlyOffice::APP::CallbackError.new(
         error: 1,
-        message: "#{error.message}: #{callback.description}"
+        message: "#{e.message}: #{callback.description}"
       )
       return render(json: callback_error.serialize)
     end
