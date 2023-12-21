@@ -427,6 +427,20 @@ module OnlyOfficeRedmine
     )
   end
 
+  class Settings
+    class << self
+      extend T::Sig
+
+      sig { returns(Settings) }
+      attr_reader :defaults
+    end
+
+    @defaults = T.let(
+      InternalSettings.defaults.to_settings,
+      Settings
+    )
+  end
+
   class SettingsError < StandardError
     class << self
       extend T::Sig

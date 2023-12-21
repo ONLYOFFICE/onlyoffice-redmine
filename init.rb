@@ -44,7 +44,7 @@ Redmine::Plugin.register(OnlyOfficeRedmine::NAME.to_sym) do
   # rubocop:enable Layout/LineLength
 
   settings(
-    default: OnlyOfficeRedmine::InternalSettings.defaults.serialize,
+    default: OnlyOfficeRedmine::Settings.defaults.serialize,
     partial: "settings/onlyoffice_settings"
   )
 end
