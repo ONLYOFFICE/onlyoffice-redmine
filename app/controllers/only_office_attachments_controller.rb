@@ -418,6 +418,11 @@ class OnlyOfficeAttachmentsController < ApplicationController
       raise OnlyOfficeRedmine::Error.not_found
     end
 
+    unless attachment.readable?
+      logger.error("The attachment (#{attachment.id}) is unreadable")
+      raise OnlyOfficeRedmine::Error.not_found
+    end
+
     unless attachment.viewable?(user)
       logger.error("User (#{user.id}) isn't allowed to view the attachment (#{attachment.id})")
       raise OnlyOfficeRedmine::Error.forbidden
@@ -439,6 +444,11 @@ class OnlyOfficeAttachmentsController < ApplicationController
     attachment = params.attachment
     unless attachment
       logger.error("The attachment (#{params.attachment_id}) couldn't be found")
+      raise OnlyOfficeRedmine::Error.not_found
+    end
+
+    unless attachment.readable?
+      logger.error("The attachment (#{attachment.id}) is unreadable")
       raise OnlyOfficeRedmine::Error.not_found
     end
 
@@ -536,6 +546,11 @@ class OnlyOfficeAttachmentsController < ApplicationController
       raise OnlyOfficeRedmine::Error.not_found
     end
 
+    unless attachment.readable?
+      logger.error("The attachment (#{attachment.id}) is unreadable")
+      raise OnlyOfficeRedmine::Error.not_found
+    end
+
     user_params = UserParameters.from_hash(request.parameters)
     user = user_params.user
     unless user
@@ -575,6 +590,11 @@ class OnlyOfficeAttachmentsController < ApplicationController
     attachment = params.attachment
     unless attachment
       logger.error("The attachment (#{params.attachment_id}) couldn't be found")
+      raise OnlyOfficeRedmine::Error.not_found
+    end
+
+    unless attachment.readable?
+      logger.error("The attachment (#{attachment.id}) is unreadable")
       raise OnlyOfficeRedmine::Error.not_found
     end
 
@@ -651,6 +671,11 @@ class OnlyOfficeAttachmentsController < ApplicationController
     attachment = params.attachment
     unless attachment
       logger.error("The attachment (#{params.attachment_id}) couldn't be found")
+      raise OnlyOfficeRedmine::Error.not_found
+    end
+
+    unless attachment.readable?
+      logger.error("The attachment (#{attachment.id}) is unreadable")
       raise OnlyOfficeRedmine::Error.not_found
     end
 
@@ -763,6 +788,11 @@ class OnlyOfficeAttachmentsController < ApplicationController
     attachment = params.attachment
     unless attachment
       logger.error("The attachment (#{params.attachment_id}) couldn't be found")
+      raise OnlyOfficeRedmine::Error.not_found
+    end
+
+    unless attachment.readable?
+      logger.error("The attachment (#{attachment.id}) is unreadable")
       raise OnlyOfficeRedmine::Error.not_found
     end
 
@@ -979,6 +1009,11 @@ class OnlyOfficeAttachmentsController < ApplicationController
     attachment = attachment_params.attachment
     unless attachment
       logger.error("The attachment (#{attachment_params.attachment_id}) couldn't be found")
+      raise OnlyOfficeRedmine::Error.not_found
+    end
+
+    unless attachment.readable?
+      logger.error("The attachment (#{attachment.id}) is unreadable")
       raise OnlyOfficeRedmine::Error.not_found
     end
 

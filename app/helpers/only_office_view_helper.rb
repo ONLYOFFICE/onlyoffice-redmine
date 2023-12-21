@@ -80,6 +80,10 @@ module OnlyOfficeViewHelper
 
       block.url = helpers.attachment_path(attachment.internal)
 
+      unless attachment.readable?
+        return block
+      end
+
       if attachment.editable?(user) || attachment.fillable?(user)
         block.edit_url = helpers.onlyoffice_edit_attachment_path(attachment.id)
       elsif attachment.viewable?(user)
