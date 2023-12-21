@@ -218,7 +218,10 @@ class OnlyOfficeSettingsController < ApplicationController
       general.trial.enabled_at = current.trial.enabled_at
       general.trial.period = current.trial.period
 
-      OnlyOfficeRedmine::Settings.new(general:)
+      additional = OnlyOfficeRedmine::AdditionalSettings.new
+      additional.fallback_jwt = current.fallback_jwt
+
+      OnlyOfficeRedmine::Settings.new(general:, additional:)
     end
   end
 end

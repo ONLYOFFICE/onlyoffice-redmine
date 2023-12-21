@@ -22,6 +22,10 @@ module OnlyOfficeRedmine
     OnlyOffice::Config
   end
 
+  class AdditionalSettings < T::Struct
+    prop :fallback_jwt, OnlyOffice::Config::JWT, default: OnlyOffice::Config::JWT.new
+  end
+
   class InternalSettings < T::Struct
     prop :conversion_timeout,            String,           default: ""
     prop :editor_chat_enabled,           String,           default: "", name: "editor_chat"
@@ -35,6 +39,8 @@ module OnlyOfficeRedmine
     prop :jwt_secret,                    String,           default: "", name: "jwtsecret"
     prop :jwt_algorithm,                 String,           default: ""
     prop :jwt_http_header,               String,           default: "", name: "jwtheader"
+    prop :fallback_jwt_secret,           String,           default: "", name: "onlyoffice_key"
+    prop :fallback_jwt_algorithm,        String,           default: ""
     prop :document_server_url,           String,           default: "", name: "oo_address"
     prop :document_server_internal_url,  String,           default: "", name: "inner_editor"
     prop :plugin_internal_url,           String,           default: "", name: "inner_server"
@@ -55,9 +61,13 @@ module OnlyOfficeRedmine
       settings.normalize
     end
 
-    sig { params(general: GeneralSettings).void }
-    def initialize(general:)
+    sig do
+      params(general: GeneralSettings, additional: AdditionalSettings)
+        .void
+    end
+    def initialize(general:, additional:)
       @general = general
+      @additional = additional
     end
 
     sig { returns(OnlyOffice::Config::Conversion) }
@@ -100,24 +110,29 @@ module OnlyOfficeRedmine
       @general.trial
     end
 
+    sig { returns(OnlyOffice::Config::JWT) }
+    def fallback_jwt
+      @additional.fallback_jwt
+    end
+
     sig { returns(T.untyped) }
     def serialize
-      @general.serialize
+      @general.serialize.merge(@additional.serialize)
     end
 
     sig { returns(T.untyped) }
     def safe_serialize
-      @general.safe_serialize
+      @general.safe_serialize.merge(@additional.safe_serialize)
     end
 
     sig { returns(OnlyOfficeRedmine::Settings) }
     def with_trial
-      self.class.new(general: @general.with_trial)
+      self.class.new(general: @general.with_trial, additional: @additional)
     end
 
     sig { returns(Settings) }
     def normalize
-      self.class.new(general: @general.normalize)
+      self.class.new(general: @general.normalize, additional: @additional)
     end
 
     sig { returns(OnlyOffice::APP::Config) }
@@ -248,6 +263,28 @@ module OnlyOfficeRedmine
     end
   end
 
+  class AdditionalSettings
+    extend T::Sig
+
+    sig { returns(T.untyped) }
+    def safe_serialize
+      settings = with(fallback_jwt: fallback_jwt.safe_serialize)
+      settings.serialize
+    end
+
+    class << self
+      extend T::Sig
+
+      sig { returns(AdditionalSettings) }
+      attr_reader :defaults
+    end
+
+    @defaults = T.let(
+      new,
+      AdditionalSettings
+    )
+  end
+
   class InternalSettings
     extend T::Sig
 
@@ -283,6 +320,9 @@ module OnlyOfficeRedmine
 
       internal.jwt_algorithm = settings.jwt.algorithm
       internal.jwt_http_header = settings.jwt.http_header
+
+      internal.fallback_jwt_secret = settings.fallback_jwt.secret
+      internal.fallback_jwt_algorithm = settings.fallback_jwt.algorithm
 
       internal.document_server_url =
         begin
@@ -342,7 +382,12 @@ module OnlyOfficeRedmine
       general.trial.enabled = self.class.unmap_bool(trial_enabled)
       general.trial.enabled_at = trial_enabled_at
 
-      Settings.new(general:)
+      additional = AdditionalSettings.new
+
+      additional.fallback_jwt.secret = fallback_jwt_secret
+      additional.fallback_jwt.algorithm = fallback_jwt_algorithm
+
+      Settings.new(general:, additional:)
     end
 
     sig { params(value: String).returns(T::Boolean) }
@@ -366,7 +411,8 @@ module OnlyOfficeRedmine
       # rubocop:disable Layout/MultilineArrayLineBreaks
       begin
         general = OnlyOffice::Config.defaults
-        settings = Settings.new(general:)
+        additional = AdditionalSettings.defaults
+        settings = Settings.new(general:, additional:)
         # For backward compatibility and a more planned transition to the 3.0.0.
         settings.formats.editable = [
           "csv", "docxf", "epub", "fb2", "html", "odp", "ods", "odt", "otp",
