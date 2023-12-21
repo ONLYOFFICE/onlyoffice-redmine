@@ -364,6 +364,7 @@ module OnlyOfficeRedmine
           "csv", "docxf", "epub", "fb2", "html", "odp", "ods", "odt", "otp",
           "ots", "ott",   "pdfa", "rtf", "txt"
         ]
+        internal.jwt_secret = ""
         # Don't trim the slash. The normalized empty path ends with a slash.
         internal.document_server_url = "http://localhost/"
         internal
