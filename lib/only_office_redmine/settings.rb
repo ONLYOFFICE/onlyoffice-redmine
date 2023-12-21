@@ -47,9 +47,8 @@ module OnlyOfficeRedmine
     def self.current
       raw = ::Setting.send(NAME)
       internal = InternalSettings.from_hash(raw)
-      config = internal.to_config
-      config.normalize!
-      new(config:)
+      settings = internal.to_settings
+      settings.normalize
     end
 
     sig { params(config: OnlyOffice::Config).void }
@@ -223,7 +222,7 @@ module OnlyOfficeRedmine
 
     sig { void }
     def force_save
-      internal = InternalSettings.from_config(@config)
+      internal = InternalSettings.from_settings(self)
       raw = internal.serialize
       ::Setting.send("#{NAME}=", raw)
     end
@@ -253,55 +252,55 @@ module OnlyOfficeRedmine
       super(hash, strict)
     end
 
-    sig { params(config: OnlyOffice::Config).returns(InternalSettings) }
-    def self.from_config(config)
+    sig { params(settings: Settings).returns(InternalSettings) }
+    def self.from_settings(settings)
       internal = InternalSettings.new
 
-      internal.conversion_timeout            = config.conversion.timeout.to_s
-      internal.editor_chat_enabled           = map_bool(config.editor.chat_enabled)
-      internal.editor_compact_header_enabled = map_bool(config.editor.compact_header_enabled)
-      internal.editor_feedback_enabled       = map_bool(config.editor.feedback_enabled)
-      internal.editor_force_save_enabled     = map_bool(config.editor.force_save_enabled)
-      internal.editor_help_enabled           = map_bool(config.editor.help_enabled)
-      internal.editor_toolbar_tabs_disabled  = map_bool(config.editor.toolbar_tabs_disabled)
+      internal.conversion_timeout            = settings.conversion.timeout.to_s
+      internal.editor_chat_enabled           = map_bool(settings.editor.chat_enabled)
+      internal.editor_compact_header_enabled = map_bool(settings.editor.compact_header_enabled)
+      internal.editor_feedback_enabled       = map_bool(settings.editor.feedback_enabled)
+      internal.editor_force_save_enabled     = map_bool(settings.editor.force_save_enabled)
+      internal.editor_help_enabled           = map_bool(settings.editor.help_enabled)
+      internal.editor_toolbar_tabs_disabled  = map_bool(settings.editor.toolbar_tabs_disabled)
 
-      internal.formats_editable = config.formats.editable
+      internal.formats_editable = settings.formats.editable
 
-      internal.ssl_verification_disabled = map_bool(config.ssl.verification_disabled)
+      internal.ssl_verification_disabled = map_bool(settings.ssl.verification_disabled)
 
       internal.jwt_secret =
         begin
-          if config.jwt.enabled
-            config.jwt.secret
+          if settings.jwt.enabled
+            settings.jwt.secret
           else
             ""
           end
         end
 
-      internal.jwt_algorithm = config.jwt.algorithm
-      internal.jwt_http_header = config.jwt.http_header
+      internal.jwt_algorithm = settings.jwt.algorithm
+      internal.jwt_http_header = settings.jwt.http_header
 
       internal.document_server_url =
         begin
-          if config.plugin.enabled
-            config.document_server.url
+          if settings.plugin.enabled
+            settings.document_server.url
           else
             ""
           end
         end
 
-      internal.document_server_internal_url = config.document_server.internal_url
+      internal.document_server_internal_url = settings.document_server.internal_url
 
-      internal.plugin_internal_url = config.plugin.internal_url
+      internal.plugin_internal_url = settings.plugin.internal_url
 
-      internal.trial_enabled = map_bool(config.trial.enabled)
-      internal.trial_enabled_at = config.trial.enabled_at
+      internal.trial_enabled = map_bool(settings.trial.enabled)
+      internal.trial_enabled_at = settings.trial.enabled_at
 
       internal
     end
 
-    sig { returns(OnlyOffice::Config) }
-    def to_config
+    sig { returns(Settings) }
+    def to_settings
       config = OnlyOffice::Config.new
 
       config.conversion.timeout = Integer(conversion_timeout, 10)
@@ -339,7 +338,7 @@ module OnlyOfficeRedmine
       config.trial.enabled = self.class.unmap_bool(trial_enabled)
       config.trial.enabled_at = trial_enabled_at
 
-      config
+      Settings.new(config:)
     end
 
     sig { params(value: String).returns(T::Boolean) }
@@ -363,16 +362,16 @@ module OnlyOfficeRedmine
       # rubocop:disable Layout/MultilineArrayLineBreaks
       begin
         defaults = OnlyOffice::Config.defaults
-        internal = from_config(defaults)
+        settings = Settings.new(config: defaults)
         # For backward compatibility and a more planned transition to the 3.0.0.
-        internal.formats_editable = [
+        settings.formats.editable = [
           "csv", "docxf", "epub", "fb2", "html", "odp", "ods", "odt", "otp",
           "ots", "ott",   "pdfa", "rtf", "txt"
         ]
-        internal.jwt_secret = ""
+        settings.jwt.secret = ""
         # Don't trim the slash. The normalized empty path ends with a slash.
-        internal.document_server_url = "http://localhost/"
-        internal
+        settings.document_server.url = "http://localhost/"
+        from_settings(settings)
       end,
       # rubocop:enable Layout/MultilineArrayLineBreaks
       InternalSettings

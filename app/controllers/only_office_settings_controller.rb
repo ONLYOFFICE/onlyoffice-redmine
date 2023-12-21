@@ -181,15 +181,6 @@ class OnlyOfficeSettingsController < ApplicationController
     sig { returns(OnlyOfficeRedmine::Settings) }
     def to_settings
       current = OnlyOfficeRedmine::Settings.current
-      config = to_config(current)
-      OnlyOfficeRedmine::Settings.new(config:)
-    end
-
-    sig do
-      params(current: OnlyOfficeRedmine::Settings)
-        .returns(OnlyOffice::Config)
-    end
-    private def to_config(current)
       config = OnlyOffice::Config.new
 
       config.conversion.timeout = current.conversion.timeout
@@ -226,7 +217,7 @@ class OnlyOfficeSettingsController < ApplicationController
       config.trial.enabled_at = current.trial.enabled_at
       config.trial.period = current.trial.period
 
-      config
+      OnlyOfficeRedmine::Settings.new(config:)
     end
   end
 end
