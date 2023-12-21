@@ -137,8 +137,7 @@ module OnlyOffice
 
     sig { returns(T.untyped) }
     def safe_serialize
-      jwt = self.jwt.with(secret: "***")
-      config = with(jwt: jwt.serialize)
+      config = with(jwt: jwt.safe_serialize)
       config.serialize
     end
 
@@ -195,6 +194,16 @@ module OnlyOffice
         plugin: plugin.clone,
         trial: trial.dup
       )
+    end
+
+    class JWT
+      extend T::Sig
+
+      sig { returns(T.untyped) }
+      def safe_serialize
+        jwt = with(secret: "***")
+        jwt.serialize
+      end
     end
 
     module InP
