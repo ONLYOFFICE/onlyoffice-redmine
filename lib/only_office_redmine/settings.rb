@@ -53,7 +53,7 @@ module OnlyOfficeRedmine
 
     NAME = "plugin_#{OnlyOfficeRedmine::NAME}".freeze
 
-    sig { returns(OnlyOfficeRedmine::Settings) }
+    sig { returns(Settings) }
     def self.current
       raw = ::Setting.send(NAME)
       internal = InternalSettings.from_hash(raw)
@@ -125,7 +125,7 @@ module OnlyOfficeRedmine
       @general.safe_serialize.merge(@additional.safe_serialize)
     end
 
-    sig { returns(OnlyOfficeRedmine::Settings) }
+    sig { returns(Settings) }
     def with_trial
       self.class.new(general: @general.with_trial, additional: @additional)
     end
