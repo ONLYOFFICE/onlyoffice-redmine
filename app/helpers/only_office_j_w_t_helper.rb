@@ -33,16 +33,16 @@ module OnlyOfficeJWTHelper
       return
     end
 
-    decoder = jwt_decoder(settings)
-
     begin
       case ac.request.method
       when Net::HTTP::Get::METHOD
         header = ac.request.headers[settings.jwt.http_header]
-        payload = jwt_decode_header(header, &decoder)
+        if header
+          payload = settings.jwt.decode_header(header)
+        end
       when Net::HTTP::Post::METHOD
         input = ac.request.get_header("rack.input")
-        payload = jwt_decode_body(input, &decoder)
+        payload = settings.jwt.decode_body(input)
       else
         raise OnlyOfficeRedmine::Error.unauthorized
       end
@@ -59,104 +59,5 @@ module OnlyOfficeJWTHelper
 
     ac.request.set_header("CONTENT_LENGTH", content_length)
     ac.request.set_header("rack.input", decoded_input)
-  end
-
-  Decoder = T.type_alias do
-    T.proc
-     .params(token: String)
-     .returns([T::Hash[T.untyped, T.untyped], T.untyped])
-  end
-
-  sig do
-    params(header: T.nilable(String), decoder: Decoder)
-      .returns(T.nilable(String))
-  end
-  private def jwt_decode_header(header, &decoder)
-    unless header
-      return nil
-    end
-
-    token = header["Bearer ".length, header.length - 1]
-    unless token
-      return nil
-    end
-
-    data, = decoder.call(token)
-    payload = data["payload"]
-    unless payload
-      return nil
-    end
-
-    payload.to_json
-  end
-
-  sig do
-    params(input: T.any(IO, StringIO), decoder: Decoder)
-      .returns(T.nilable(String))
-  end
-  private def jwt_decode_body(input, &decoder)
-    if input.respond_to?(:rewind)
-      input.rewind
-    end
-
-    json = input.read
-    unless json
-      return nil
-    end
-
-    data = JSON.parse(json)
-
-    token = data["token"]
-    token = T.let(token, T.nilable(String))
-    unless token
-      return nil
-    end
-
-    payload, = decoder.call(token)
-    payload.to_json
-  end
-
-  sig { params(settings: OnlyOfficeRedmine::Settings).returns(Decoder) }
-  private def jwt_decoder(settings)
-    lambda do |token|
-      JWT.decode(
-        token,
-        settings.jwt.secret,
-        true,
-        {
-          algorithm: settings.jwt.algorithm
-        }
-      )
-    end
-  end
-
-  Encoder = T.type_alias do
-    T.proc
-     .params(payload: T::Hash[T.untyped, T.untyped])
-     .returns(T::Hash[T.untyped, T.untyped])
-  end
-
-  sig do
-    params(payload: T::Hash[T.untyped, T.untyped], encoder: Encoder)
-      .returns(String)
-  end
-  private def jwt_encode_payload(payload, &encoder)
-    payload = payload.dup
-    payload["token"] = encoder.call(payload)
-    payload.to_json
-  end
-
-  sig { params(settings: OnlyOfficeRedmine::Settings).returns(Encoder) }
-  private def jwt_encoder(settings)
-    lambda do |payload|
-      JWT.encode(
-        payload,
-        settings.jwt.secret,
-        settings.jwt.algorithm,
-        {
-          algorithm: settings.jwt.algorithm
-        }
-      )
-    end
   end
 end

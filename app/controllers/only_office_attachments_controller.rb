@@ -515,11 +515,9 @@ class OnlyOfficeAttachmentsController < ApplicationController
       .deep_merge(d.serialize)
       .deep_merge(e.serialize)
 
-    encoder = jwt_encoder(settings)
-
     view = Views::OnlyOffice::Editor.new(helpers:)
     view.document_server_api_base_url = settings.document_server.url
-    view.document_server_config = jwt_encode_payload(f, &encoder)
+    view.document_server_config = settings.jwt.encode_payload(f)
     view.retrieve_url = onlyoffice_retrieve_attachment_url(attachment.id, attachment_payload)
     view.format = format.type
     view.basename = attachment.filename
