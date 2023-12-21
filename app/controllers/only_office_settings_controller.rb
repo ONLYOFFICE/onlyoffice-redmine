@@ -181,43 +181,44 @@ class OnlyOfficeSettingsController < ApplicationController
     sig { returns(OnlyOfficeRedmine::Settings) }
     def to_settings
       current = OnlyOfficeRedmine::Settings.current
-      config = OnlyOffice::Config.new
 
-      config.conversion.timeout = current.conversion.timeout
+      general = OnlyOffice::Config.new
 
-      config.editor.chat_enabled           = OnlyOffice::STDLIB::String.to_b(editor_chat_enabled)
-      config.editor.compact_header_enabled = OnlyOffice::STDLIB::String.to_b(editor_compact_header_enabled)
-      config.editor.feedback_enabled       = OnlyOffice::STDLIB::String.to_b(editor_feedback_enabled)
-      config.editor.help_enabled           = OnlyOffice::STDLIB::String.to_b(editor_help_enabled)
-      config.editor.toolbar_tabs_disabled  = OnlyOffice::STDLIB::String.to_b(editor_toolbar_tabs_disabled)
+      general.conversion.timeout = current.conversion.timeout
 
-      config.formats.editable = formats_editable
+      general.editor.chat_enabled           = OnlyOffice::STDLIB::String.to_b(editor_chat_enabled)
+      general.editor.compact_header_enabled = OnlyOffice::STDLIB::String.to_b(editor_compact_header_enabled)
+      general.editor.feedback_enabled       = OnlyOffice::STDLIB::String.to_b(editor_feedback_enabled)
+      general.editor.help_enabled           = OnlyOffice::STDLIB::String.to_b(editor_help_enabled)
+      general.editor.toolbar_tabs_disabled  = OnlyOffice::STDLIB::String.to_b(editor_toolbar_tabs_disabled)
+
+      general.formats.editable = formats_editable
 
       ssl_verification_disabled = OnlyOffice::STDLIB::String.to_b(self.ssl_verification_disabled)
-      config.ssl.verify_mode =
+      general.ssl.verify_mode =
         if ssl_verification_disabled
           OpenSSL::SSL::VERIFY_NONE
         else
           OpenSSL::SSL::VERIFY_PEER
         end
 
-      config.jwt.enabled = jwt_secret != ""
-      config.jwt.secret = jwt_secret
-      config.jwt.algorithm = current.jwt.algorithm
-      config.jwt.http_header = jwt_http_header
+      general.jwt.enabled = jwt_secret != ""
+      general.jwt.secret = jwt_secret
+      general.jwt.algorithm = current.jwt.algorithm
+      general.jwt.http_header = jwt_http_header
 
-      config.document_server.url = document_server_url
-      config.document_server.internal_url = document_server_internal_url
+      general.document_server.url = document_server_url
+      general.document_server.internal_url = document_server_internal_url
 
-      config.plugin.enabled = document_server_url != ""
-      config.plugin.url = current.plugin.url
-      config.plugin.internal_url = plugin_internal_url
+      general.plugin.enabled = document_server_url != ""
+      general.plugin.url = current.plugin.url
+      general.plugin.internal_url = plugin_internal_url
 
-      config.trial.enabled = OnlyOffice::STDLIB::String.to_b(trial_enabled)
-      config.trial.enabled_at = current.trial.enabled_at
-      config.trial.period = current.trial.period
+      general.trial.enabled = OnlyOffice::STDLIB::String.to_b(trial_enabled)
+      general.trial.enabled_at = current.trial.enabled_at
+      general.trial.period = current.trial.period
 
-      OnlyOfficeRedmine::Settings.new(config:)
+      OnlyOfficeRedmine::Settings.new(general:)
     end
   end
 end

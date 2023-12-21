@@ -18,6 +18,10 @@
 # frozen_string_literal: true
 
 module OnlyOfficeRedmine
+  GeneralSettings = T.type_alias do
+    OnlyOffice::Config
+  end
+
   class InternalSettings < T::Struct
     prop :conversion_timeout,            String,           default: ""
     prop :editor_chat_enabled,           String,           default: "", name: "editor_chat"
@@ -51,69 +55,69 @@ module OnlyOfficeRedmine
       settings.normalize
     end
 
-    sig { params(config: OnlyOffice::Config).void }
-    def initialize(config:)
-      @config = config
+    sig { params(general: GeneralSettings).void }
+    def initialize(general:)
+      @general = general
     end
 
     sig { returns(OnlyOffice::Config::Conversion) }
     def conversion
-      @config.conversion
+      @general.conversion
     end
 
     sig { returns(OnlyOffice::Config::Editor) }
     def editor
-      @config.editor
+      @general.editor
     end
 
     sig { returns(OnlyOffice::Config::Formats) }
     def formats
-      @config.formats
+      @general.formats
     end
 
     sig { returns(OnlyOffice::Config::SSL) }
     def ssl
-      @config.ssl
+      @general.ssl
     end
 
     sig { returns(OnlyOffice::Config::JWT) }
     def jwt
-      @config.jwt
+      @general.jwt
     end
 
     sig { returns(OnlyOffice::Config::DocumentServer) }
     def document_server
-      @config.document_server
+      @general.document_server
     end
 
     sig { returns(OnlyOffice::Config::Plugin) }
     def plugin
-      @config.plugin
+      @general.plugin
     end
 
     sig { returns(OnlyOffice::Config::Trial) }
     def trial
-      @config.trial
+      @general.trial
     end
 
     sig { returns(T.untyped) }
     def serialize
-      @config.serialize
+      @general.serialize
     end
 
     sig { returns(T.untyped) }
     def safe_serialize
-      @config.safe_serialize
+      @general.safe_serialize
     end
 
     sig { returns(OnlyOfficeRedmine::Settings) }
     def with_trial
-      self.class.new(config: @config.with_trial)
+      self.class.new(general: @general.with_trial)
     end
 
     sig { returns(Settings) }
     def normalize
-      self.class.new(config: @config.normalize)
+      self.class.new(general: @general.normalize)
     end
 
     sig { returns(OnlyOffice::APP::Config) }
@@ -301,20 +305,20 @@ module OnlyOfficeRedmine
 
     sig { returns(Settings) }
     def to_settings
-      config = OnlyOffice::Config.new
+      general = OnlyOffice::Config.new
 
-      config.conversion.timeout = Integer(conversion_timeout, 10)
+      general.conversion.timeout = Integer(conversion_timeout, 10)
 
-      config.editor.chat_enabled           = self.class.unmap_bool(editor_chat_enabled)
-      config.editor.compact_header_enabled = self.class.unmap_bool(editor_compact_header_enabled)
-      config.editor.feedback_enabled       = self.class.unmap_bool(editor_feedback_enabled)
-      config.editor.force_save_enabled     = self.class.unmap_bool(editor_force_save_enabled)
-      config.editor.help_enabled           = self.class.unmap_bool(editor_help_enabled)
-      config.editor.toolbar_tabs_disabled  = self.class.unmap_bool(editor_toolbar_tabs_disabled)
+      general.editor.chat_enabled           = self.class.unmap_bool(editor_chat_enabled)
+      general.editor.compact_header_enabled = self.class.unmap_bool(editor_compact_header_enabled)
+      general.editor.feedback_enabled       = self.class.unmap_bool(editor_feedback_enabled)
+      general.editor.force_save_enabled     = self.class.unmap_bool(editor_force_save_enabled)
+      general.editor.help_enabled           = self.class.unmap_bool(editor_help_enabled)
+      general.editor.toolbar_tabs_disabled  = self.class.unmap_bool(editor_toolbar_tabs_disabled)
 
-      config.formats.editable = formats_editable
+      general.formats.editable = formats_editable
 
-      config.ssl.verify_mode =
+      general.ssl.verify_mode =
         begin
           ssl_verification_disabled = self.class.unmap_bool(self.ssl_verification_disabled)
           if ssl_verification_disabled
@@ -324,21 +328,21 @@ module OnlyOfficeRedmine
           end
         end
 
-      config.jwt.enabled = jwt_secret != ""
-      config.jwt.secret = jwt_secret
-      config.jwt.algorithm = jwt_algorithm
-      config.jwt.http_header = jwt_http_header
+      general.jwt.enabled = jwt_secret != ""
+      general.jwt.secret = jwt_secret
+      general.jwt.algorithm = jwt_algorithm
+      general.jwt.http_header = jwt_http_header
 
-      config.document_server.url = document_server_url
-      config.document_server.internal_url = document_server_internal_url
+      general.document_server.url = document_server_url
+      general.document_server.internal_url = document_server_internal_url
 
-      config.plugin.enabled = document_server_url != ""
-      config.plugin.internal_url = plugin_internal_url
+      general.plugin.enabled = document_server_url != ""
+      general.plugin.internal_url = plugin_internal_url
 
-      config.trial.enabled = self.class.unmap_bool(trial_enabled)
-      config.trial.enabled_at = trial_enabled_at
+      general.trial.enabled = self.class.unmap_bool(trial_enabled)
+      general.trial.enabled_at = trial_enabled_at
 
-      Settings.new(config:)
+      Settings.new(general:)
     end
 
     sig { params(value: String).returns(T::Boolean) }
@@ -361,8 +365,8 @@ module OnlyOfficeRedmine
     @defaults = T.let(
       # rubocop:disable Layout/MultilineArrayLineBreaks
       begin
-        defaults = OnlyOffice::Config.defaults
-        settings = Settings.new(config: defaults)
+        general = OnlyOffice::Config.defaults
+        settings = Settings.new(general:)
         # For backward compatibility and a more planned transition to the 3.0.0.
         settings.formats.editable = [
           "csv", "docxf", "epub", "fb2", "html", "odp", "ods", "odt", "otp",
