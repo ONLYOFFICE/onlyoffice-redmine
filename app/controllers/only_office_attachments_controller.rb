@@ -266,6 +266,9 @@ class OnlyOfficeAttachmentsController < ApplicationController
   before_action :require_onlyoffice_plugin
   rescue_from   OnlyOfficeRedmine::Error,  with: :handle_error
 
+  skip_before_action :verify_authenticity_token, only: [:download, :retrieve, :callback]
+  before_action      :verify_jwt_token,          only: [:download, :retrieve, :callback]
+
   # ```http
   # GET /onlyoffice/containers/{{container_type}}/{{container_id}}/attachments/new HTTP/1.1
   # Accept: text/html
@@ -537,9 +540,6 @@ class OnlyOfficeAttachmentsController < ApplicationController
 
     render_view(view)
   end
-
-  skip_before_action :verify_authenticity_token, only: [:download]
-  before_action      :verify_jwt_token,          only: [:download]
 
   # ```http
   # GET /onlyoffice/attachments/:attachment_id/download?user_id={{user_id}}&token={{fallback_jwt_token}} HTTP/1.1
@@ -915,9 +915,6 @@ class OnlyOfficeAttachmentsController < ApplicationController
     prop :url,         String
   end
 
-  skip_before_action :verify_authenticity_token, only: [:retrieve]
-  before_action      :verify_jwt_token,          only: [:retrieve]
-
   # ```http
   # POST /onlyoffice/attachments/:attachment_id/retrieve?user_id={{user_id}}&token={{fallback_jwt_token}} HTTP/1.1
   # Accept: text/html
@@ -1008,9 +1005,6 @@ class OnlyOfficeAttachmentsController < ApplicationController
       end
     end
   end
-
-  skip_before_action :verify_authenticity_token, only: [:callback]
-  before_action      :verify_jwt_token,          only: [:callback]
 
   # ```http
   # POST /onlyoffice/attachments/{{attachment_id}}/callback?user_id={{user_id}}&token={{fallback_jwt_token}} HTTP/1.1
