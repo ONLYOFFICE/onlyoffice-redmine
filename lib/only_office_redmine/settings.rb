@@ -112,6 +112,11 @@ module OnlyOfficeRedmine
       self.class.new(config: @config.with_trial)
     end
 
+    sig { returns(Settings) }
+    def normalize
+      self.class.new(config: @config.normalize)
+    end
+
     sig { returns(OnlyOffice::APP::Config) }
     def app_config
       OnlyOffice::APP::Config.new(
@@ -148,7 +153,7 @@ module OnlyOfficeRedmine
       current = self.class.current
       logger.info("Current settings: #{current.safe_serialize}")
 
-      patch = self
+      patch = normalize
       logger.info("Patched settings: #{patch.safe_serialize}")
 
       unless patch.plugin.enabled
