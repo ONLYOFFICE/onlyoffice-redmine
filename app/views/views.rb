@@ -89,6 +89,9 @@ require_relative "files/index"
 module Views::Issues; end
 require_relative "issues/show"
 
+module Views::Messages; end
+require_relative "messages/show"
+
 module Views::News; end
 require_relative "news/show"
 
