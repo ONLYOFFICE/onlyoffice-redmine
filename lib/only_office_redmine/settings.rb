@@ -156,10 +156,10 @@ module OnlyOfficeRedmine
         begin
           patch.force_save
           OnlyOfficeRedmine::Resources::Formats.read!
-        rescue StandardError => error
+        rescue StandardError => e
           current.force_save
           OnlyOfficeRedmine::Resources::Formats.read!
-          raise error
+          raise e
         end
         return
       end
@@ -207,10 +207,10 @@ module OnlyOfficeRedmine
         end
 
         OnlyOfficeRedmine::Resources::Formats.read!
-      rescue StandardError => error
+      rescue StandardError => e
         current.force_save
         OnlyOfficeRedmine::Resources::Formats.read!
-        raise error
+        raise e
       end
 
       nil

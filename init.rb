@@ -34,12 +34,14 @@ logger.progname = OnlyOfficeRedmine.logger.progname.dup
 OnlyOfficeRedmine.logger = logger
 
 Redmine::Plugin.register(OnlyOfficeRedmine::NAME.to_sym) do
+  # rubocop:disable Layout/LineLength
   name        "Redmine ONLYOFFICE integration plugin"
   author      "ONLYOFFICE"
   description "Redmine ONLYOFFICE integration plugin allows opening files uploaded to the Issues, Files, Documents, Wiki, or News modules for viewing and co-editing."
   version     OnlyOfficeRedmine::VERSION
   url         "https://github.com/ONLYOFFICE/onlyoffice-redmine"
   author_url  "https://www.onlyoffice.com"
+  # rubocop:enable Layout/LineLength
 
   settings(
     default: OnlyOfficeRedmine::InternalSettings.defaults.serialize,

@@ -21,7 +21,7 @@ group :development, :test do
   #
   # https://github.com/sorbet/sorbet/issues/4011
   # https://github.com/sorbet/sorbet/issues/4119
-  install_if -> { RUBY_PLATFORM =~ /darwin/ || RUBY_PLATFORM =~ /x86_64/ } do
+  install_if lambda { RUBY_PLATFORM =~ /darwin/ || RUBY_PLATFORM =~ /x86_64/ } do
     gem "sorbet", "~> 0.5.10969"
     gem "tapioca", "~> 0.11.8"
   end

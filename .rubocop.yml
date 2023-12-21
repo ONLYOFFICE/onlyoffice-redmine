@@ -41,6 +41,10 @@ Layout/EndOfLine:
   Enabled: true
   EnforcedStyle: lf
 
+# TODO: Wait for more smarter options.
+# https://github.com/rubocop/rubocop/issues/9518
+# Layout/ExtraSpacing
+
 # For better consistency, it's recommended to wrap the first element in a
 # multiline definition on a new line.
 Layout/FirstArrayElementLineBreak:
@@ -64,6 +68,9 @@ Layout/FirstMethodParameterLineBreak:
 Layout/LineLength:
   Enabled: true
   Max: 120
+  AllowedPatterns:
+  # For the inline link. A link that ends with a backslash.
+  - '\[[\S\s]*\]\([\S\s]*\) \\$'
 
 Layout/MultilineArrayLineBreaks:
   Enabled: true
@@ -108,6 +115,10 @@ Metrics:
 
 # Naming
 
+# Sorbet doesn't support anonymous forwarding.
+Naming/BlockForwarding:
+  Enabled: false
+
 # Inclusion is a good thing.
 Naming/InclusiveLanguage:
   Enabled: true
@@ -129,16 +140,17 @@ Style/AccessorGrouping:
   Enabled: true
   EnforcedStyle: separated
 
+# Sorbet doesn't support anonymous forwarding.
+Style/ArgumentsForwarding:
+  Enabled: false
+
 # Difficult.
 Style/ArrayCoercion:
   Enabled: true
 
-# Using compact definitions is much more convenient. To prevent the problems
-# that nesting tries to solve, use the full name of the namespace and cover the
-# code with tests.
+# It's more convenient to combine these two approaches.
 Style/ClassAndModuleChildren:
-  Enabled: true
-  EnforcedStyle: compact
+  Enabled: false
 
 # Similar to the `Style/AccessModifierDeclarations`, it's more convenient to
 # think of individual elements rather than blocks.
@@ -163,6 +175,12 @@ Style/DateTime:
 Style/Documentation:
   Enabled: false
 
+# Sometimes an empty `else` isn't wrong, but it should be explicit.
+Style/EmptyElse:
+  Enabled: true
+  EnforcedStyle: empty
+  AllowComments: true
+
 # There's really no need to sacrifice overall consistency just to save three
 # keystrokes.
 Style/EndlessMethod:
@@ -180,11 +198,6 @@ Style/FrozenStringLiteralComment:
 Style/IfUnlessModifier:
   Enabled: false
 
-# Inline comments can be difficult to read and can take up a significant amount
-# of space in the code line.
-Style/InlineComment:
-  Enabled: true
-
 # There is no difference between the lambda syntaxes, so I would prefer a more
 # explicit way.
 Style/Lambda:
@@ -195,7 +208,9 @@ Style/Lambda:
 # functions with parameters, without exception, need braces.
 Style/MethodCallWithArgsParentheses:
   Enabled: true
-  AllowedMethods: []
+  AllowedMethods:
+  # Think of it as a keyword like `if`, `for`, etc.
+  - raise
   AllowedPatterns: []
 
 # Calling a method on the do-end block isn't what I expect.
@@ -223,6 +238,11 @@ Style/NumberedParameters:
 Style/ParenthesesAroundCondition:
   Enabled: true
   AllowInMultilineConditions: true
+
+# The behavior of the `&` symbol can be confusing. Sometimes we don't want to
+# raise a system error.
+Style/SafeNavigation:
+  Enabled: false
 
 # A good rule that can be turned off in special cases.
 Style/StringHashKeys:
@@ -263,3 +283,11 @@ Minitest/TestFileName:
 Rails:
   Include:
   - app/**/*.rb
+
+# This rule doesn't fit our needs because we're not exactly a typical Rails app.
+Rails/ActionOrder:
+  Enabled: false
+
+# Since we perform injections, we frequently utilize `html_safe`.
+Rails/OutputSafety:
+  Enabled: false

@@ -73,6 +73,7 @@ module OnlyOffice::Resources
   class TemplatesLanguageScheme
     extend T::Sig
 
+    # rubocop:disable Naming/VariableNumber, Style/StringHashKeys
     sig { returns(TemplatesLanguageScheme) }
     def self.iso639_1
       scheme = {
@@ -105,6 +106,7 @@ module OnlyOffice::Resources
       }
       new(scheme:)
     end
+    # rubocop:enable Naming/VariableNumber, Style/StringHashKeys
 
     sig { params(scheme: T::Hash[String, String]).void }
     def initialize(scheme:)
