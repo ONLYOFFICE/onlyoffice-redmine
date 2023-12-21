@@ -219,7 +219,7 @@ class OnlyOfficeSettingsController < ApplicationController
       config.document_server.url = document_server_url
       config.document_server.internal_url = document_server_internal_url
 
-      config.plugin.enabled = document_server_internal_url != ""
+      config.plugin.enabled = document_server_url != ""
       config.plugin.url = current.plugin.url
       config.plugin.internal_url = plugin_internal_url
 
