@@ -27,7 +27,7 @@ class OnlyOfficePingController < ApplicationController
   before_action      :verify_jwt_token,          only: [:index]
 
   # ```http
-  # GET /onlyoffice/ping
+  # GET /onlyoffice/ping?token={{fallback_jwt_token}} HTTP/1.1
   # Accept: text/plain
   # Host: {{plugin_internal_url}}
   # {{jwt_header}}: Bearer {{jwt_token}}

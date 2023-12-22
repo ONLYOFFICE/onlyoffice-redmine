@@ -25,24 +25,30 @@ module OnlyOfficeJWTHelper
 
   sig { void }
   private def verify_jwt_token
-    ac = T.cast(self, ApplicationController)
-
     settings = OnlyOfficeRedmine::Settings.current
-
-    unless settings.jwt.enabled
-      return
+    if settings.jwt.enabled
+      verify_general_jwt_token(settings.jwt)
     end
+    if settings.fallback_jwt.enabled
+      verify_fallback_jwt_token(settings.fallback_jwt)
+    end
+    nil
+  end
+
+  sig { params(jwt: OnlyOffice::Config::JWT).void }
+  private def verify_general_jwt_token(jwt)
+    ac = T.cast(self, ApplicationController)
 
     begin
       case ac.request.method
       when Net::HTTP::Get::METHOD
-        header = ac.request.headers[settings.jwt.http_header]
+        header = ac.request.headers[jwt.http_header]
         if header
-          payload = settings.jwt.decode_header(header)
+          payload = jwt.decode_header(header)
         end
       when Net::HTTP::Post::METHOD
         input = ac.request.get_header("rack.input")
-        payload = settings.jwt.decode_body(input)
+        payload = jwt.decode_body(input)
       else
         raise OnlyOfficeRedmine::Error.unauthorized
       end
@@ -59,5 +65,22 @@ module OnlyOfficeJWTHelper
 
     ac.request.set_header("CONTENT_LENGTH", content_length)
     ac.request.set_header("rack.input", decoded_input)
+  end
+
+  sig { params(jwt: OnlyOffice::Config::JWT).void }
+  private def verify_fallback_jwt_token(jwt)
+    ac = T.cast(self, ApplicationController)
+
+    begin
+      url = jwt.decode_url(ac.request.url)
+    rescue JWT::DecodeError
+      raise OnlyOfficeRedmine::Error.unauthorized
+    end
+
+    unless url
+      raise OnlyOfficeRedmine::Error.unauthorized
+    end
+
+    nil
   end
 end

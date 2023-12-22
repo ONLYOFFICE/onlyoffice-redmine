@@ -140,11 +140,16 @@ class OnlyOfficeSettingsController < ApplicationController
       patch = payload.to_settings
       patch.plugin.url = helpers.home_url
 
-      patch.save do |conversion|
+      patch.save do |patched, conversion|
+        url = helpers.onlyoffice_ping_url
+        url = patched.plugin.resolve_internal_url(url)
+        if patched.fallback_jwt.enabled
+          url = patched.fallback_jwt.encode_url(url)
+        end
         conversion.filetype = "txt"
         conversion.key = Time.now.to_i.to_s
         conversion.outputtype = "docx"
-        conversion.url = helpers.onlyoffice_ping_url
+        conversion.url = url
         conversion
       end
 

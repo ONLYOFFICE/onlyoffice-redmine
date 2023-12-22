@@ -160,7 +160,7 @@ module OnlyOfficeRedmine
 
     SaveCallback = T.type_alias do
       T.proc
-       .params(callback: OnlyOffice::API::Conversion)
+       .params(patch: Settings, callback: OnlyOffice::API::Conversion)
        .returns(OnlyOffice::API::Conversion)
     end
 
@@ -220,8 +220,7 @@ module OnlyOfficeRedmine
         end
 
         conversion = OnlyOffice::API::Conversion.new
-        conversion = callback.call(conversion)
-        conversion.url = patch.plugin.resolve_internal_url(conversion.url)
+        conversion = callback.call(patch, conversion)
 
         result, response = client.conversion.convert(conversion)
         if result.is_a?(OnlyOffice::API::ConversionError)

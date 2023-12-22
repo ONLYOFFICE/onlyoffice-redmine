@@ -68,6 +68,43 @@ module OnlyOffice
         payload.to_json
       end
 
+      sig { params(url: String).returns(T.nilable(String)) }
+      def decode_url(url)
+        uri = URI(url)
+
+        query = uri.query
+        unless query
+          return nil
+        end
+
+        form = URI.decode_www_form(query)
+
+        pair = form.assoc("token")
+        unless pair
+          return nil
+        end
+
+        token = pair.last
+        data, = decode(token)
+
+        url = data["url"]
+        url = T.let(url, T.nilable(String))
+        unless url
+          return nil
+        end
+
+        form.delete(["token", token])
+        uri.query = URI.encode_www_form(form)
+
+        # If the uri only has a token in the query, the uri will end with
+        # the `?` after removing the token.
+        unless url == uri.to_s || url == "#{uri}?"
+          return nil
+        end
+
+        url
+      end
+
       sig do
         params(token: String)
           .returns([T::Hash[T.untyped, T.untyped], T.untyped])
@@ -81,6 +118,17 @@ module OnlyOffice
         payload = payload.dup
         payload["token"] = encode(payload)
         payload.to_json
+      end
+
+      sig { params(url: String).returns(String) }
+      def encode_url(url)
+        uri = URI(url)
+        query = uri.query || ""
+        form = URI.decode_www_form(query)
+        token = encode({ url: })
+        form.append(["token", token])
+        uri.query = URI.encode_www_form(form)
+        uri.to_s
       end
 
       sig { params(payload: T.untyped).returns(String) }
