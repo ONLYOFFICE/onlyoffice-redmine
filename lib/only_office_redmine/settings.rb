@@ -284,6 +284,35 @@ module OnlyOfficeRedmine
     )
   end
 
+  class Settings
+    class << self
+      extend T::Sig
+
+      sig { returns(Settings) }
+      attr_reader :defaults
+    end
+
+    @defaults = T.let(
+      # rubocop:disable Layout/MultilineArrayLineBreaks
+      begin
+        general = OnlyOffice::Config.defaults
+        additional = AdditionalSettings.defaults
+        settings = Settings.new(general:, additional:)
+        # For backward compatibility and a more planned transition to the 3.0.0.
+        settings.formats.editable = [
+          "csv", "docxf", "epub", "fb2", "html", "odp", "ods", "odt", "otp",
+          "ots", "ott",   "pdfa", "rtf", "txt"
+        ]
+        settings.jwt.secret = ""
+        # Don't trim the slash. The normalized empty path ends with a slash.
+        settings.document_server.url = "http://localhost/"
+        settings
+      end,
+      # rubocop:enable Layout/MultilineArrayLineBreaks
+      Settings
+    )
+  end
+
   class InternalSettings
     extend T::Sig
 
@@ -407,37 +436,8 @@ module OnlyOfficeRedmine
     end
 
     @defaults = T.let(
-      # rubocop:disable Layout/MultilineArrayLineBreaks
-      begin
-        general = OnlyOffice::Config.defaults
-        additional = AdditionalSettings.defaults
-        settings = Settings.new(general:, additional:)
-        # For backward compatibility and a more planned transition to the 3.0.0.
-        settings.formats.editable = [
-          "csv", "docxf", "epub", "fb2", "html", "odp", "ods", "odt", "otp",
-          "ots", "ott",   "pdfa", "rtf", "txt"
-        ]
-        settings.jwt.secret = ""
-        # Don't trim the slash. The normalized empty path ends with a slash.
-        settings.document_server.url = "http://localhost/"
-        from_settings(settings)
-      end,
-      # rubocop:enable Layout/MultilineArrayLineBreaks
+      from_settings(Settings.defaults),
       InternalSettings
-    )
-  end
-
-  class Settings
-    class << self
-      extend T::Sig
-
-      sig { returns(Settings) }
-      attr_reader :defaults
-    end
-
-    @defaults = T.let(
-      InternalSettings.defaults.to_settings,
-      Settings
     )
   end
 
