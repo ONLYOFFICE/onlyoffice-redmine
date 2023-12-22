@@ -83,7 +83,7 @@ class OnlyOfficeSettingsController < ApplicationController
 
     formats = OnlyOffice::Resources::Formats.read
 
-    view.formats_editable.options = formats.lossy_editable.map do |format|
+    view.formats_editable.options = formats.lossy_editable.sort_by(&:name).map do |format|
       selected = settings.formats.editable.include?(format.name)
       Views::Option.new(
         label: format.name,
