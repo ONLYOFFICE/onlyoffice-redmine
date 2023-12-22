@@ -49,7 +49,7 @@ endif
 
 .PHONY: lint
 lint: #       Lint for the style.
-	@bundle exec rubocop
+	@bundle exec rubocop --fail-level E
 
 .PHONY: test
 test: #       Test the plugin.

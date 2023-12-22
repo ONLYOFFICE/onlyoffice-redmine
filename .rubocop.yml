@@ -43,7 +43,9 @@ Layout/EndOfLine:
 
 # TODO: Wait for more smarter options.
 # https://github.com/rubocop/rubocop/issues/9518
-# Layout/ExtraSpacing
+Layout/ExtraSpacing:
+  Enabled: true
+  Severity: warning
 
 # For better consistency, it's recommended to wrap the first element in a
 # multiline definition on a new line.
