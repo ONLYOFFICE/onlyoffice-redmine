@@ -294,7 +294,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
 
     formats = OnlyOfficeRedmine::Resources::Formats.read
     view.format.name = "onlyoffice[format]"
-    view.format.options += formats.creatable.map do |format|
+    view.format.options += formats.creatable.sort_by(&:order).map do |format|
       Views::Option.new(label: format.file_name, value: format.name)
     end
 
