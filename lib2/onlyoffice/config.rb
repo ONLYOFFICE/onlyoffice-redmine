@@ -137,37 +137,41 @@ module OnlyOffice
 
     sig { returns(T.untyped) }
     def safe_serialize
-      jwt = self.jwt.with(secret: "***")
-      config = with(jwt: jwt.serialize)
+      config = with(jwt: jwt.safe_serialize)
       config.serialize
     end
 
     sig { returns(Config) }
     def with_trial
-      trial = self.class.trial
       config = copy
-      config.jwt.define_singleton_method(:enabled) do
+      config.with_trial!
+      config
+    end
+
+    sig { void }
+    def with_trial!
+      trial = self.class.trial
+      jwt.define_singleton_method(:enabled) do
         trial.jwt.enabled
       end
-      config.jwt.define_singleton_method(:secret) do
+      jwt.define_singleton_method(:secret) do
         trial.jwt.secret
       end
-      config.jwt.define_singleton_method(:algorithm) do
+      jwt.define_singleton_method(:algorithm) do
         trial.jwt.algorithm
       end
-      config.jwt.define_singleton_method(:http_header) do
+      jwt.define_singleton_method(:http_header) do
         trial.jwt.http_header
       end
-      config.document_server.define_singleton_method(:url) do
+      document_server.define_singleton_method(:url) do
         trial.document_server.url
       end
-      config.document_server.define_singleton_method(:internal_url) do
+      document_server.define_singleton_method(:internal_url) do
         trial.document_server.internal_url
       end
-      config.plugin.define_singleton_method(:internal_url) do
+      plugin.define_singleton_method(:internal_url) do
         trial.plugin.internal_url
       end
-      config
     end
 
     sig { returns(OnlyOffice::Config) }
@@ -195,6 +199,16 @@ module OnlyOffice
         plugin: plugin.clone,
         trial: trial.dup
       )
+    end
+
+    class JWT
+      extend T::Sig
+
+      sig { returns(T.untyped) }
+      def safe_serialize
+        jwt = with(secret: "***")
+        jwt.serialize
+      end
     end
 
     module InP

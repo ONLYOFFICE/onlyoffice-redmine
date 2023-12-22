@@ -266,6 +266,9 @@ class OnlyOfficeAttachmentsController < ApplicationController
   before_action :require_onlyoffice_plugin
   rescue_from   OnlyOfficeRedmine::Error,  with: :handle_error
 
+  skip_before_action :verify_authenticity_token, only: [:download, :retrieve, :callback]
+  before_action      :verify_jwt_token,          only: [:download, :retrieve, :callback]
+
   # ```http
   # GET /onlyoffice/containers/{{container_type}}/{{container_id}}/attachments/new HTTP/1.1
   # Accept: text/html
@@ -488,9 +491,20 @@ class OnlyOfficeAttachmentsController < ApplicationController
 
     download_url = onlyoffice_download_attachment_url(attachment.id, attachment_payload)
     download_url = settings.plugin.resolve_internal_url(download_url)
+    if settings.fallback_jwt.enabled
+      download_url = settings.fallback_jwt.encode_url(download_url)
+    end
 
     callback_url = onlyoffice_callback_attachment_url(attachment.id, attachment_payload)
     callback_url = settings.plugin.resolve_internal_url(callback_url)
+    if settings.fallback_jwt.enabled
+      callback_url = settings.fallback_jwt.encode_url(callback_url)
+    end
+
+    retrieve_url = onlyoffice_retrieve_attachment_url(attachment.id, attachment_payload)
+    if settings.fallback_jwt.enabled
+      retrieve_url = settings.fallback_jwt.encode_url(retrieve_url)
+    end
 
     a = OnlyOffice::APP::Config.new(
       document: OnlyOffice::APP::Config::Document.new(
@@ -515,12 +529,10 @@ class OnlyOfficeAttachmentsController < ApplicationController
       .deep_merge(d.serialize)
       .deep_merge(e.serialize)
 
-    encoder = jwt_encoder(settings)
-
     view = Views::OnlyOffice::Editor.new(helpers:)
     view.document_server_api_base_url = settings.document_server.url
-    view.document_server_config = jwt_encode_payload(f, &encoder)
-    view.retrieve_url = onlyoffice_retrieve_attachment_url(attachment.id, attachment_payload)
+    view.document_server_config = settings.jwt.encode_payload(f)
+    view.retrieve_url = retrieve_url
     view.format = format.type
     view.basename = attachment.filename
 
@@ -529,11 +541,8 @@ class OnlyOfficeAttachmentsController < ApplicationController
     render_view(view)
   end
 
-  skip_before_action :verify_authenticity_token, only: [:download]
-  before_action      :verify_jwt_token,          only: [:download]
-
   # ```http
-  # GET /onlyoffice/attachments/:attachment_id/download?user_id={{user_id}}
+  # GET /onlyoffice/attachments/:attachment_id/download?user_id={{user_id}}&token={{fallback_jwt_token}} HTTP/1.1
   # Accept: text/*
   # Host: {{plugin_internal_url}}
   # {{jwt_http_header}}: Bearer {{jwt_token}}
@@ -717,6 +726,9 @@ class OnlyOfficeAttachmentsController < ApplicationController
 
     download_url = onlyoffice_download_attachment_url(attachment.id, attachment_payload)
     download_url = settings.plugin.resolve_internal_url(download_url)
+    if settings.fallback_jwt.enabled
+      download_url = settings.fallback_jwt.encode_url(download_url)
+    end
 
     client = settings.client
     http = client.http
@@ -829,6 +841,9 @@ class OnlyOfficeAttachmentsController < ApplicationController
 
     download_url = onlyoffice_download_attachment_url(attachment.id, attachment_payload)
     download_url = settings.plugin.resolve_internal_url(download_url)
+    if settings.fallback_jwt.enabled
+      download_url = settings.fallback_jwt.encode_url(download_url)
+    end
 
     client = settings.client
     http = client.http
@@ -900,11 +915,8 @@ class OnlyOfficeAttachmentsController < ApplicationController
     prop :url,         String
   end
 
-  skip_before_action :verify_authenticity_token, only: [:retrieve]
-  # before_action      :verify_jwt_token,          only: [:retrieve]
-
   # ```http
-  # POST /onlyoffice/attachments/:attachment_id/retrieve?user_id={{user_id}} HTTP/1.1
+  # POST /onlyoffice/attachments/:attachment_id/retrieve?user_id={{user_id}}&token={{fallback_jwt_token}} HTTP/1.1
   # Accept: text/html
   # Content-Type: application/x-www-form-urlencoded; charset=utf-8
   # Host: {{plugin_url}}
@@ -994,11 +1006,8 @@ class OnlyOfficeAttachmentsController < ApplicationController
     end
   end
 
-  skip_before_action :verify_authenticity_token, only: [:callback]
-  before_action      :verify_jwt_token,          only: [:callback]
-
   # ```http
-  # POST /onlyoffice/attachments/{{attachment_id}}/callback?user_id={{user_id}} HTTP/1.1
+  # POST /onlyoffice/attachments/{{attachment_id}}/callback?user_id={{user_id}}&token={{fallback_jwt_token}} HTTP/1.1
   # Accept: application/json
   # Content-Type: application/json; charset=utf-8
   # Host: {{plugin_internal_url}}
