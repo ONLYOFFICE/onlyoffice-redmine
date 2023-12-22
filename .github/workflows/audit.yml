@@ -24,11 +24,14 @@ jobs:
     - name: Install Dependencies
       run: make install
 
-    - name: Check for Type Safety
-      run: make type
+    # Currently, there's no way to accurately check types because there's no way
+    # to generate definitions from Redmine's source code.
+    # - name: Check for Type Safety
+    #   run: make type
 
     - name: Lint for the Style
       run: make lint
 
-    - name: Run Tests
-      run: make test
+    # We don't have tests.
+    # - name: Run Tests
+    #   run: make test
