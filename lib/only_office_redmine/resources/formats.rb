@@ -82,11 +82,6 @@ module OnlyOfficeRedmine::Resources
     end
 
     sig { returns(T::Array[Format]) }
-    def convertible
-      @all.filter(&:convertible?)
-    end
-
-    sig { returns(T::Array[Format]) }
     def creatable
       @all.filter(&:creatable?)
     end
