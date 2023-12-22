@@ -17,11 +17,23 @@ jobs:
 
     - name: Setup Ruby
       uses: ruby/setup-ruby@v1
+      with:
+        bundler-cache: true
 
     - name: Update Submodules
       run: make submodule
 
+    - name: Cache Dependencies
+      id: cache-dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          bin
+          sorbet
+        key: ${{ runner.os }}-dependencies
+
     - name: Install Dependencies
+      if: steps.cache-dependencies.outputs.cache-hit != 'true'
       run: make install
 
     - name: Check for Type Safety

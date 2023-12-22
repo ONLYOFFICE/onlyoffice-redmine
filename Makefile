@@ -31,7 +31,11 @@ submodule: #  Update submodules.
 
 .PHONY: install
 install: #    Install development dependencies.
+ifeq ($(CI),true)
+# Disable installation due to cache usage.
+else
 	@bundle install
+endif
 ifeq ($(SORBET_SUPPORTED),1)
 	@bundle exec tapioca init
 else
