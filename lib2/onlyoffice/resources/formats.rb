@@ -37,6 +37,7 @@ module OnlyOffice::Resources
     prop :actions, T::Array[String], default: []
     prop :convert, T::Array[String], default: []
     prop :mime,    T::Array[String], default: []
+    prop :order,   Integer,          default: 0
   end
 
   class Formats
@@ -70,6 +71,21 @@ module OnlyOffice::Resources
       list = JSON.parse(contents)
       list.each do |item|
         format = Format.from_hash(item)
+
+        # TODO: it should be in `formats.json`.
+        case format.name
+        when "docx"
+          format.order = -4
+        when "xlsx"
+          format.order = -3
+        when "pptx"
+          format.order = -2
+        when "docxf"
+          format.order = -1
+        else
+          # use the default
+        end
+
         all.add(format)
       end
       new(all:)
