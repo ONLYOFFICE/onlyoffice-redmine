@@ -98,7 +98,7 @@ module OnlyOffice
 
         # If the uri only has a token in the query, the uri will end with
         # the `?` after removing the token.
-        unless url == uri.to_s || url == "#{uri}?"
+        unless url == uri.to_s || "#{url}?" == uri.to_s
           return nil
         end
 
