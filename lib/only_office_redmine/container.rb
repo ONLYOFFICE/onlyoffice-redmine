@@ -89,41 +89,41 @@ module OnlyOfficeRedmine
         unless document
           return nil
         end
-        Document.new(document:)
+        Document.new(document: document)
       when Issue.type
         id = Integer(id, 10)
         issue = ::Issue.find(id)
         unless issue
           return nil
         end
-        Issue.new(issue:)
+        Issue.new(issue: issue)
       when Message.type
         id = Integer(id, 10)
         message = ::Message.find(id)
         unless message
           return nil
         end
-        Message.new(message:)
+        Message.new(message: message)
       when News.type
         id = Integer(id, 10)
         news = ::News.find(id)
         unless news
           return nil
         end
-        News.new(news:)
+        News.new(news: news)
       when Project.type
         project = ::Project.find(id)
         unless project
           return nil
         end
-        Project.new(project:)
+        Project.new(project: project)
       when WikiPage.type
         id = Integer(id, 10)
         page = ::WikiPage.find(id)
         unless page
           return nil
         end
-        WikiPage.new(page:)
+        WikiPage.new(page: page)
       else
         nil
       end

@@ -38,7 +38,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
 
     user = OnlyOfficeRedmine::User.current
 
-    view = Views::Attachments::Show.new(helpers:)
+    view = Views::Attachments::Show.new(helpers: helpers)
 
     block = setup_link_to_attachment(helpers, user, attachment)
     unless block.sense?
@@ -68,9 +68,9 @@ class OnlyOfficeAttachmentsController < ApplicationController
     end
 
     user = OnlyOfficeRedmine::User.current
-    container = OnlyOfficeRedmine::Document.new(document:)
+    container = OnlyOfficeRedmine::Document.new(document: document)
 
-    view = Views::Documents::Show.new(helpers:)
+    view = Views::Documents::Show.new(helpers: helpers)
     view.attachments = setup_link_to_attachments(helpers, user, container)
 
     if container.addition_allowed?(user)
@@ -104,7 +104,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
 
     user = OnlyOfficeRedmine::User.current
 
-    view = Views::Files::Index.new(helpers:)
+    view = Views::Files::Index.new(helpers: helpers)
 
     containers.each do |container|
       container.attachments.each do |attachment|
@@ -139,9 +139,9 @@ class OnlyOfficeAttachmentsController < ApplicationController
     end
 
     user = OnlyOfficeRedmine::User.current
-    container = OnlyOfficeRedmine::Issue.new(issue:)
+    container = OnlyOfficeRedmine::Issue.new(issue: issue)
 
-    view = Views::Issues::Show.new(helpers:)
+    view = Views::Issues::Show.new(helpers: helpers)
 
     view.attachments = setup_link_to_attachments(helpers, user, container)
     if view.attachments.empty?
@@ -170,13 +170,13 @@ class OnlyOfficeAttachmentsController < ApplicationController
     end
 
     user = OnlyOfficeRedmine::User.current
-    view = Views::Messages::Show.new(helpers:)
+    view = Views::Messages::Show.new(helpers: helpers)
 
     container = OnlyOfficeRedmine::Message.new(message: topic)
     view.attachments = setup_link_to_attachments(helpers, user, container)
 
     replies.each do |message|
-      container = OnlyOfficeRedmine::Message.new(message:)
+      container = OnlyOfficeRedmine::Message.new(message: message)
       view.attachments += setup_link_to_attachments(helpers, user, container)
     end
 
@@ -203,9 +203,9 @@ class OnlyOfficeAttachmentsController < ApplicationController
     end
 
     user = OnlyOfficeRedmine::User.current
-    container = OnlyOfficeRedmine::News.new(news:)
+    container = OnlyOfficeRedmine::News.new(news: news)
 
-    view = Views::News::Show.new(helpers:)
+    view = Views::News::Show.new(helpers: helpers)
 
     view.attachments = setup_link_to_attachments(helpers, user, container)
     if view.attachments.empty?
@@ -231,9 +231,9 @@ class OnlyOfficeAttachmentsController < ApplicationController
     end
 
     user = OnlyOfficeRedmine::User.current
-    container = OnlyOfficeRedmine::WikiPage.new(page:)
+    container = OnlyOfficeRedmine::WikiPage.new(page: page)
 
-    view = Views::News::Show.new(helpers:)
+    view = Views::News::Show.new(helpers: helpers)
 
     view.attachments = setup_link_to_attachments(helpers, user, container)
     if view.attachments.empty?
@@ -290,7 +290,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
       raise OnlyOfficeRedmine::Error.forbidden
     end
 
-    view = Views::OnlyOffice::New.new(helpers:)
+    view = Views::OnlyOffice::New.new(helpers: helpers)
     view.error_messages = helpers.error_messages_for(container)
     view.name.name = "onlyoffice[name]"
     view.description.name = "onlyoffice[description]"
@@ -359,7 +359,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
     file = File.binread(blank)
 
     attachment = Attachment.create(
-      file:,
+      file: file,
       author: user.internal,
       content_type: format.content_type,
       filename: payload.filename(format),
@@ -511,8 +511,8 @@ class OnlyOfficeAttachmentsController < ApplicationController
         url: download_url
       ),
       editor_config: OnlyOffice::APP::Config::EditorConfig.new(
-        callback_url:,
-        mode:
+        callback_url: callback_url,
+        mode: mode
       )
     )
     b = container.app_config(helpers)
@@ -529,7 +529,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
       .deep_merge(d.serialize)
       .deep_merge(e.serialize)
 
-    view = Views::OnlyOffice::Editor.new(helpers:)
+    view = Views::OnlyOffice::Editor.new(helpers: helpers)
     view.document_server_api_base_url = settings.document_server.url
     view.document_server_config = settings.jwt.encode_payload(f)
     view.retrieve_url = retrieve_url
@@ -624,7 +624,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
       raise OnlyOfficeRedmine::Error.unsupported
     end
 
-    view = Views::OnlyOffice::Convert.new(helpers:)
+    view = Views::OnlyOffice::Convert.new(helpers: helpers)
 
     view.attachment.basename = attachment.filename
     view.attachment.size = helpers.number_to_human_size(attachment.filesize)
@@ -734,7 +734,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
     http = client.http
     http.open_timeout = 5
     http.read_timeout = settings.conversion.timeout / 1000
-    client = OnlyOffice::API::Client.new(base_url: client.base_url, http:)
+    client = OnlyOffice::API::Client.new(base_url: client.base_url, http: http)
 
     conversion = OnlyOffice::API::Conversion.new(
       async: true,
@@ -760,7 +760,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
         file = T.unsafe(file_uri).open(ssl_verify_mode: settings.ssl.verify_mode)
 
         attachment = Attachment.create(
-          file:,
+          file: file,
           author: user.internal,
           content_type: to.content_type,
           filename: "#{payload.name}#{to.extension}",
@@ -849,7 +849,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
     http = client.http
     http.open_timeout = 5
     http.read_timeout = settings.conversion.timeout / 1000
-    client = OnlyOffice::API::Client.new(base_url: client.base_url, http:)
+    client = OnlyOffice::API::Client.new(base_url: client.base_url, http: http)
 
     conversion = OnlyOffice::API::Conversion.new(
       async: true,
@@ -967,7 +967,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
       file = T.unsafe(file_uri).open(ssl_verify_mode: settings.ssl.verify_mode)
 
       retrieved = Attachment.create(
-        file:,
+        file: file,
         author: user.internal,
         content_type: format.content_type,
         filename: "#{attachment.name}#{format.extension}",
@@ -1068,7 +1068,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
         # rubocop:enable Style/StringHashKeys
 
         attachment.file = ActionDispatch::Http::UploadedFile.new(
-          tempfile:,
+          tempfile: tempfile,
           type: attachment.content_type,
           filename: attachment.filename
         )

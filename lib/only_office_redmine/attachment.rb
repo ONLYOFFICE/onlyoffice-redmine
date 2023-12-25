@@ -27,7 +27,7 @@ module OnlyOfficeRedmine
       unless attachment
         return nil
       end
-      Attachment.new(attachment:)
+      Attachment.new(attachment: attachment)
     end
 
     sig { params(attachment: ::Attachment).void }
@@ -88,7 +88,7 @@ module OnlyOfficeRedmine
     sig { params(attributes: T.untyped).returns(Attachment) }
     def copy(attributes = nil)
       attachment = @attachment.copy(attributes)
-      Attachment.new(attachment:)
+      Attachment.new(attachment: attachment)
     end
 
     sig { params(file: ActionDispatch::Http::UploadedFile).void }

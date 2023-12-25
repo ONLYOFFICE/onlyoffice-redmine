@@ -110,7 +110,7 @@ module OnlyOffice
           .returns([T::Hash[T.untyped, T.untyped], T.untyped])
       end
       def decode(token)
-        ::JWT.decode(token, secret, true, { algorithm: })
+        ::JWT.decode(token, secret, true, { algorithm: algorithm })
       end
 
       sig { params(payload: T::Hash[T.untyped, T.untyped]).returns(String) }
@@ -125,7 +125,7 @@ module OnlyOffice
         uri = URI(url)
         query = uri.query || ""
         form = URI.decode_www_form(query)
-        token = encode({ url: })
+        token = encode({ url: url })
         form.append(["token", token])
         uri.query = URI.encode_www_form(form)
         uri.to_s
@@ -133,7 +133,7 @@ module OnlyOffice
 
       sig { params(payload: T.untyped).returns(String) }
       def encode(payload)
-        ::JWT.encode(payload, secret, algorithm, { algorithm: })
+        ::JWT.encode(payload, secret, algorithm, { algorithm: algorithm })
       end
     end
   end

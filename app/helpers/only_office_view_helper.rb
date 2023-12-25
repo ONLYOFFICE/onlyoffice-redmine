@@ -75,7 +75,7 @@ module OnlyOfficeViewHelper
         .returns(Blocks::Attachments::Attachment)
     end
     private def setup_link_to_attachment(helpers, user, attachment)
-      attachment = OnlyOfficeRedmine::Attachment.new(attachment:)
+      attachment = OnlyOfficeRedmine::Attachment.new(attachment: attachment)
       block = Blocks::Attachments::Attachment.new
 
       block.url = helpers.attachment_path(attachment.internal)

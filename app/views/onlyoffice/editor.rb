@@ -25,7 +25,7 @@ class Views::OnlyOffice::Editor < Views::Mustache
 
   sig { override.params(helpers: T.untyped).void }
   def initialize(helpers:)
-    super(helpers:)
+    super(helpers: helpers)
     @document_server_api_base_url = ""
     @document_server_api_path = "/web-apps/apps/api/documents/api.js"
     @document_server_config = {}.to_json

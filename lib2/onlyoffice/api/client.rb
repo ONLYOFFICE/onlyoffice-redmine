@@ -120,7 +120,7 @@ module OnlyOffice::API
         case request.method
         when Net::HTTP::Get::METHOD
           header_payload = {
-            payload:
+            payload: payload
           }
           header_token = JWT.encode(header_payload, secret, algorithm, header)
           request[http_header] = "Bearer #{header_token}"
@@ -143,7 +143,7 @@ module OnlyOffice::API
 
     sig { returns(Client) }
     private def copy
-      self.class.new(base_url: @base_url.dup, http:)
+      self.class.new(base_url: @base_url.dup, http: http)
     end
 
     sig do

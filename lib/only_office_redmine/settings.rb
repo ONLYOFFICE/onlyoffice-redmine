@@ -248,7 +248,7 @@ module OnlyOfficeRedmine
     sig { returns(OnlyOffice::API::Client) }
     def client
       base_url = document_server.resolve_internal_url(document_server.url)
-      client = OnlyOffice::API::Client.new(base_url:)
+      client = OnlyOffice::API::Client.new(base_url: base_url)
       client = client.with_ssl_verify_mode(ssl.verify_mode)
       if jwt.enabled
         client = client.with_jwt(jwt.secret, jwt.algorithm, nil, jwt.http_header)
@@ -297,7 +297,7 @@ module OnlyOfficeRedmine
       begin
         general = OnlyOffice::Config.defaults
         additional = AdditionalSettings.defaults
-        settings = Settings.new(general:, additional:)
+        settings = Settings.new(general: general, additional: additional)
         # For backward compatibility and a more planned transition to the 3.0.0.
         settings.formats.editable = [
           "csv", "docxf", "epub", "fb2", "html", "odp", "ods", "odt", "otp",
@@ -415,7 +415,7 @@ module OnlyOfficeRedmine
       additional.fallback_jwt.secret = fallback_jwt_secret
       additional.fallback_jwt.algorithm = fallback_jwt_algorithm
 
-      Settings.new(general:, additional:)
+      Settings.new(general: general, additional: additional)
     end
 
     sig { params(value: String).returns(T::Boolean) }

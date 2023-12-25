@@ -32,7 +32,7 @@ module OnlyOffice::STDLIB
     # default value.
     sig { params(default: T::Boolean).returns(T::Boolean) }
     def to_b(default: false)
-      String.to_b(self, default:)
+      String.to_b(self, default: default)
     end
 
     sig { params(string: ::String, default: T::Boolean).returns(T::Boolean) }
