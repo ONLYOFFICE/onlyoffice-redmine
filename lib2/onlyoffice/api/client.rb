@@ -142,7 +142,7 @@ module OnlyOffice::API
     end
 
     sig { returns(Client) }
-    private def copy
+    def copy
       self.class.new(base_url: @base_url.dup, http: http)
     end
 

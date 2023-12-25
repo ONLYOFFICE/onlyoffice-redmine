@@ -188,7 +188,7 @@ module OnlyOffice
     end
 
     sig { returns(Config) }
-    private def copy
+    def copy
       self.class.new(
         conversion: conversion.dup,
         editor: editor.dup,
