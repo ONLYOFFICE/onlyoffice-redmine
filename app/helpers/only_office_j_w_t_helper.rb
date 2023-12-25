@@ -35,9 +35,17 @@ module OnlyOfficeJWTHelper
     nil
   end
 
-  sig { params(jwt: OnlyOffice::Config::JWT).void }
-  private def verify_general_jwt_token(jwt)
+  sig { params(jwt: T.nilable(OnlyOffice::Config::JWT)).void }
+  private def verify_general_jwt_token(jwt = nil)
     ac = T.cast(self, ApplicationController)
+
+    unless jwt
+      settings = OnlyOfficeRedmine::Settings.current
+      unless settings.jwt.enabled
+        return nil
+      end
+      jwt = settings.jwt
+    end
 
     begin
       case ac.request.method
@@ -67,9 +75,17 @@ module OnlyOfficeJWTHelper
     ac.request.set_header("rack.input", decoded_input)
   end
 
-  sig { params(jwt: OnlyOffice::Config::JWT).void }
-  private def verify_fallback_jwt_token(jwt)
+  sig { params(jwt: T.nilable(OnlyOffice::Config::JWT)).void }
+  private def verify_fallback_jwt_token(jwt = nil)
     ac = T.cast(self, ApplicationController)
+
+    unless jwt
+      settings = OnlyOfficeRedmine::Settings.current
+      unless settings.fallback_jwt.enabled
+        return nil
+      end
+      jwt = settings.fallback_jwt
+    end
 
     begin
       url = jwt.decode_url(ac.request.url)
