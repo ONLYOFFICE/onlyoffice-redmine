@@ -267,7 +267,8 @@ class OnlyOfficeAttachmentsController < ApplicationController
   rescue_from   OnlyOfficeRedmine::Error,  with: :handle_error
 
   skip_before_action :verify_authenticity_token, only: [:download, :retrieve, :callback]
-  before_action      :verify_jwt_token,          only: [:download, :retrieve, :callback]
+  before_action      :verify_jwt_token,          only: [:download, :callback]
+  before_action      :verify_fallback_jwt_token, only: [:retrieve]
 
   # ```http
   # GET /onlyoffice/containers/{{container_type}}/{{container_id}}/attachments/new HTTP/1.1
