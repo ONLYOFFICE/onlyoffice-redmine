@@ -135,6 +135,11 @@ module OnlyOfficeRedmine
       self.class.new(general: @general.normalize, additional: @additional)
     end
 
+    sig { returns(Settings) }
+    def copy
+      self.class.new(general: @general.copy, additional: @additional.copy)
+    end
+
     sig { returns(OnlyOffice::APP::Config) }
     def app_config
       OnlyOffice::APP::Config.new(
@@ -271,6 +276,11 @@ module OnlyOfficeRedmine
       settings.serialize
     end
 
+    sig { returns(AdditionalSettings) }
+    def copy
+      self.class.new(fallback_jwt: fallback_jwt.dup)
+    end
+
     class << self
       extend T::Sig
 
@@ -295,8 +305,8 @@ module OnlyOfficeRedmine
     @defaults = T.let(
       # rubocop:disable Layout/MultilineArrayLineBreaks
       begin
-        general = OnlyOffice::Config.defaults
-        additional = AdditionalSettings.defaults
+        general = OnlyOffice::Config.defaults.copy
+        additional = AdditionalSettings.defaults.copy
         settings = Settings.new(general: general, additional: additional)
         # For backward compatibility and a more planned transition to the 3.0.0.
         settings.formats.editable = [

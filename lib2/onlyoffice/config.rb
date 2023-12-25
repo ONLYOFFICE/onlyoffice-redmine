@@ -150,7 +150,7 @@ module OnlyOffice
 
     sig { void }
     def with_trial!
-      trial = self.class.trial
+      trial = self.class.trial.copy
       jwt.define_singleton_method(:enabled) do
         trial.jwt.enabled
       end
