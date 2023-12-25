@@ -139,8 +139,16 @@
      * @returns {void}
      */
     setup() {
-      Attachments.setup()
+      this.setupAttachments()
       this.setupNew()
+    },
+
+    /**
+     * @returns {void}
+     */
+    setupAttachments() {
+      const links = Attachments.links()
+      Attachments.setup(links)
     },
 
     /**
@@ -176,8 +184,28 @@
      * @returns {void}
      */
     setup() {
+      this.setupAttachments()
+    },
+
+    /**
+     * @returns {void}
+     */
+    setupAttachments() {
       // https://github.com/redmine/redmine/blob/5.0.0/app/views/files/index.html.erb#L36
-      Attachments.setup()
+      /** @type {AttachmentLink[]} */
+      const links = []
+      const files = document.querySelectorAll(".file")
+      const _ = [...files].forEach((f) => {
+        const anchor = f.querySelector(".filename a")
+        if (!(anchor instanceof HTMLAnchorElement)) return
+        const container = f.querySelector(".buttons")
+        if (!(container instanceof HTMLElement)) return
+        return links.push({
+          url: anchor.pathname,
+          container
+        })
+      })
+      Attachments.setup(links)
     }
   }
 
@@ -196,7 +224,15 @@
      * @returns {void}
      */
     setup() {
-      Attachments.setup()
+      this.setupAttachments()
+    },
+
+    /**
+     * @returns {void}
+     */
+    setupAttachments() {
+      const links = Attachments.links()
+      Attachments.setup(links)
     }
   }
 
@@ -215,7 +251,15 @@
      * @returns {void}
      */
     setup() {
-      Attachments.setup()
+      this.setupAttachments()
+    },
+
+    /**
+     * @returns {void}
+     */
+    setupAttachments() {
+      const links = Attachments.links()
+      Attachments.setup(links)
     }
   }
 
@@ -234,7 +278,15 @@
      * @returns {void}
      */
     setup() {
-      Attachments.setup()
+      this.setupAttachments()
+    },
+
+    /**
+     * @returns {void}
+     */
+    setupAttachments() {
+      const links = Attachments.links()
+      Attachments.setup(links)
     }
   }
 
@@ -253,7 +305,15 @@
      * @returns {void}
      */
     setup() {
-      Attachments.setup()
+      this.setupAttachments()
+    },
+
+    /**
+     * @returns {void}
+     */
+    setupAttachments() {
+      const links = Attachments.links()
+      Attachments.setup(links)
     }
   }
 
@@ -646,53 +706,72 @@
    */
 
   /**
+   * @typedef {Object} AttachmentLink
+   * @property {string} url
+   * @property {HTMLElement} container
+   */
+
+  /**
    * [Local Reference](../../app/views/_blocks/attachments.rb)
    */
   const Attachments = {
     /**
+     * @param {AttachmentLink[]} links
      * @returns {void}
      */
-    setup() {
-      const siblings = [...this.siblings()]
+    setup(links) {
       const attachments = this.attachments()
       const view = document.querySelector("#onlyoffice-view")
       const edit = document.querySelector("#onlyoffice-edit")
       const convert = document.querySelector("#onlyoffice-convert")
 
       attachments.forEach((attachment) => {
+        const { url } = attachment
+        if (!url) return
+
         const viewURL = attachment["view_url"]
         const editURL = attachment["edit_url"]
         const convertURL = attachment["convert_url"]
 
-        const sibling = siblings.find((sibling) => {
-          if (!(sibling instanceof HTMLAnchorElement)) return
-          return sibling.pathname === attachment.url
-        })
-        if (!sibling) return
-
-        const container = sibling.parentElement
-        if (!container || !(container instanceof HTMLElement)) return
+        const link = links.find((link) => link.url === url)
+        if (!link) return
 
         if (convert && convert instanceof HTMLTemplateElement && convertURL) {
-          this.inject(convert, convertURL, container)
+          this.inject(convert, convertURL, link.container)
         }
 
         if (view && view instanceof HTMLTemplateElement && viewURL) {
-          this.inject(view, viewURL, container)
+          this.inject(view, viewURL, link.container)
         }
 
         if (edit && edit instanceof HTMLTemplateElement && editURL) {
-          this.inject(edit, editURL, container)
+          this.inject(edit, editURL, link.container)
         }
       })
     },
 
     /**
-     * @returns {NodeListOf<Element>}
+     * @return {AttachmentLink[]}
      */
-    siblings() {
+    links() {
       // https://github.com/redmine/redmine/blob/5.0.0/app/views/attachments/_links.html.erb#L28
-      return document.querySelectorAll("a[data-method=delete][href]")
+      /** @type {AttachmentLink[]} */
+      const links = []
+      const attachments = document.querySelectorAll(".attachments")
+      const _ = [...attachments].forEach((attachment) => {
+        const rows = attachment.querySelectorAll("tbody tr")
+        return [...rows].forEach((row) => {
+          const anchor = row.querySelector("a.icon-attachment")
+          if (!(anchor instanceof HTMLAnchorElement)) return
+          const container = row.lastElementChild
+          if (!(container instanceof HTMLElement)) return
+          links.push({
+            url: anchor.pathname,
+            container
+          })
+        })
+      })
+      return links
     },
 
     /**
