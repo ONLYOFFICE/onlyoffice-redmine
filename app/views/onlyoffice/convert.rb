@@ -40,7 +40,7 @@ class Views::OnlyOffice::Convert < Views::Mustache
 
   sig { override.params(helpers: T.untyped).void }
   def initialize(helpers:)
-    super(helpers:)
+    super(helpers: helpers)
     @helpers = helpers
 
     title = I18n.t("onlyoffice_convert_dropdown")

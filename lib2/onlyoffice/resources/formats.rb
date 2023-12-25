@@ -88,7 +88,7 @@ module OnlyOffice::Resources
 
         all.add(format)
       end
-      new(all:)
+      new(all: all)
     end
 
     sig { returns(Pathname) }

@@ -82,7 +82,7 @@ class Views::Settings::Plugin < Views::Mustache
 
   sig { override.params(helpers: T.untyped).void }
   def initialize(helpers:)
-    super(helpers:)
+    super(helpers: helpers)
 
     action = ""
     @action = T.let(action, String)

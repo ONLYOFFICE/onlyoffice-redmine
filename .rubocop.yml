@@ -196,6 +196,11 @@ Style/FrozenStringLiteralComment:
   Exclude:
   - "Gemfile"
 
+# We must support Ruby 2.
+Style/HashSyntax:
+  Enabled: true
+  EnforcedShorthandSyntax: never
+
 # Sometimes even a short condition written in one line is difficult to read.
 Style/IfUnlessModifier:
   Enabled: false

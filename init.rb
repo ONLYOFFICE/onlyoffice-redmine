@@ -25,6 +25,15 @@ require_relative "app/views/views"
 require_relative "lib/only_office_redmine"
 require_relative "lib/only_office_redmine/settings"
 
+if Redmine::VERSION::MAJOR == 4
+  require_relative "app/helpers/only_office_error_helper"
+  require_relative "app/helpers/only_office_j_w_t_helper"
+  require_relative "app/helpers/only_office_plugin_helper"
+  require_relative "app/helpers/only_office_router_helper"
+  require_relative "app/helpers/only_office_settings_helper"
+  require_relative "app/helpers/only_office_view_helper"
+end
+
 logger = Rails.logger.dup
 logger.progname = OnlyOffice.logger.progname.dup
 OnlyOffice.logger = logger

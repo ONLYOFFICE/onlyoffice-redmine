@@ -24,7 +24,7 @@ module OnlyOfficeRedmine
     sig { returns(User) }
     def self.current
       user = ::User.current
-      new(user:)
+      new(user: user)
     end
 
     sig { params(id: Integer).returns(T.nilable(User)) }
@@ -33,7 +33,7 @@ module OnlyOfficeRedmine
       unless user
         return nil
       end
-      User.new(user:)
+      User.new(user: user)
     end
 
     sig { params(user: ::User).void }

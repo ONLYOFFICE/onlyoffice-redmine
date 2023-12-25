@@ -31,7 +31,7 @@ module Blocks::Helpers
   sig { params(url: String, multipart: T::Boolean).returns(T.untyped) }
   def helpers_form_tag(url = "#", multipart: true)
     lambda do |text|
-      portalled = helpers.form_tag(url, multipart:) do
+      portalled = helpers.form_tag(url, multipart: multipart) do
         text.html_safe
       end
       T.bind(self, Mustache)

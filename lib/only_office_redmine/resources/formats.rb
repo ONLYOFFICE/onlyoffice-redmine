@@ -73,7 +73,7 @@ module OnlyOfficeRedmine::Resources
       end
 
       OnlyOffice::Resources::Formats.unread
-      new(all:)
+      new(all: all)
     end
 
     sig { params(all: All).void }

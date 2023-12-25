@@ -30,7 +30,7 @@ class OnlyOfficeSettingsController < ApplicationController
   def self.index(helpers)
     settings = OnlyOfficeRedmine::Settings.current
 
-    view = Views::Settings::Plugin.new(helpers:)
+    view = Views::Settings::Plugin.new(helpers: helpers)
     view.setup_assets
 
     view.action = helpers.onlyoffice_update_settings_url
@@ -89,7 +89,7 @@ class OnlyOfficeSettingsController < ApplicationController
         label: format.name,
         name: "onlyoffice[formats_editable][]",
         value: format.name,
-        selected:
+        selected: selected
       )
     end
 
@@ -226,7 +226,7 @@ class OnlyOfficeSettingsController < ApplicationController
       additional = OnlyOfficeRedmine::AdditionalSettings.new
       additional.fallback_jwt = current.fallback_jwt
 
-      OnlyOfficeRedmine::Settings.new(general:, additional:)
+      OnlyOfficeRedmine::Settings.new(general: general, additional: additional)
     end
   end
 end

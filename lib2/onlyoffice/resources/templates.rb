@@ -87,7 +87,7 @@ module OnlyOffice::Resources
         "ru" => "ru-RU",
         "zh" => "zh-CN"
       }
-      new(scheme:)
+      new(scheme: scheme)
     end
 
     sig { returns(TemplatesLanguageScheme) }
@@ -104,7 +104,7 @@ module OnlyOffice::Resources
         "ru-RU" => "ru-RU",
         "zh-CN" => "zh-CN"
       }
-      new(scheme:)
+      new(scheme: scheme)
     end
     # rubocop:enable Naming/VariableNumber, Style/StringHashKeys
 

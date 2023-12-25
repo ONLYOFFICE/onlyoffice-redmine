@@ -53,10 +53,10 @@ module OnlyOffice::Resources
         unless format.creatable?
           next
         end
-        template = Template.new(format: format.name, directory:)
+        template = Template.new(format: format.name, directory: directory)
         all.add(template)
       end
-      new(all:)
+      new(all: all)
     end
   end
 end

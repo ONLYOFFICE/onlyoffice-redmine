@@ -27,7 +27,7 @@ module OnlyOfficeRedmine
       unless plugin
         return nil
       end
-      new(plugin:)
+      new(plugin: plugin)
     end
 
     sig { params(plugin: Redmine::Plugin).void }
