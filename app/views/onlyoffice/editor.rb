@@ -72,12 +72,12 @@ class Views::OnlyOffice::Editor < Views::Mustache
   attr_accessor :retrieve_url
 
   sig { returns(String) }
-  attr_accessor :format
+  attr_accessor :favicon
 
   sig { returns(T.nilable(String)) }
   def favicon_url
     pattern = Regexp.new("src=\"([\\S\\s].*?)\"")
-    tag = helpers_image_tag("favicons/#{format}.ico")
+    tag = helpers_image_tag("favicons/#{favicon}")
 
     data = pattern.match(tag)
     return unless data

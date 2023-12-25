@@ -38,9 +38,22 @@ module OnlyOffice::Resources
       I18n.t("field_filename")
     end
 
+    sig { returns(String) }
+    def favicon
+      if form? || oform?
+        return "#{name}.ico"
+      end
+      "#{type}.ico"
+    end
+
     sig { returns(T::Boolean) }
     def form?
       name == "docxf"
+    end
+
+    sig { returns(T::Boolean) }
+    def oform?
+      name == "oform"
     end
 
     sig { returns(String) }
