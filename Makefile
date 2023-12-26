@@ -78,6 +78,10 @@ notes: # Generate release notes.
 	@awk '/## [0-9]/{p++} p; /## [0-9]/{if (p > 1) exit}' CHANGELOG.md | \
 		awk 'NR>2 {print last} {last=$$0}'
 
+.PHONY: readme-formats
+readme-formats: # Generate the formats table in README.md
+	@bundle exec rake readme_formats
+
 .PHONY: restart
 restart: # Restart the Redmine with plugin containers.
 	@docker-compose stop redmine onlyoffice-redmine
