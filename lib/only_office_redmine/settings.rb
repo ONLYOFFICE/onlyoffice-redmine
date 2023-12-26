@@ -55,10 +55,19 @@ module OnlyOfficeRedmine
 
     sig { returns(Settings) }
     def self.current
-      raw = ::Setting.send(NAME)
-      internal = InternalSettings.from_hash(raw)
+      internal = InternalSettings.from_hash(read)
       settings = internal.to_settings
       settings.normalize
+    end
+
+    sig { returns(T.untyped) }
+    def self.read
+      ::Setting.send(NAME)
+    end
+
+    sig { params(raw: T.untyped).void }
+    def self.write(raw)
+      ::Setting.send("#{NAME}=", raw)
     end
 
     sig do
@@ -246,8 +255,7 @@ module OnlyOfficeRedmine
     sig { void }
     def force_save
       internal = InternalSettings.from_settings(self)
-      raw = internal.serialize
-      ::Setting.send("#{NAME}=", raw)
+      self.class.write(internal.serialize)
     end
 
     sig { returns(OnlyOffice::API::Client) }

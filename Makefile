@@ -62,6 +62,7 @@ build: #      Build the plugin.
 		app \
 		assets \
 		config \
+		db \
 		lib \
 		lib2 \
 		licenses \
