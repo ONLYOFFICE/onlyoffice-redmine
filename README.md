@@ -1,143 +1,266 @@
-# Redmine ONLYOFFICE integration plugin
+# Redmine ONLYOFFICE Integration Plugin
 
-This app enables users to edit office documents from [Redmine](https://www.redmine.org/) using ONLYOFFICE Docs packaged as Document Server - [Community or Enterprise Edition](#onlyoffice-docs-editions).
+This plugin enables users to edit attachments from [Redmine](https://www.redmine.org/) using ONLYOFFICE Docs packaged as Document Server — [Community or Enterprise Edition](#onlyoffice-docs-editions).
 
 ## Features
 
-The app allows to:
+- View and edit text documents, spreadsheets, presentations, and forms.
+- Co-edit in real-time, with options for both fast and strict modes. It also tracks changes, allows comments, and provides a built-in chat.
+- Settings page to setup JWT authentication, customize the appearance of the editor appearance and connection to it.
+- Mobile view for licensed editors.
+- Create new attachment using templates that consider the user's language preference.
+- Convert attachment and save or download them.
 
-* Edit text documents, spreadsheets, and presentations.
-* Co-edit documents in real-time: use two co-editing modes (Fast and Strict), Track Changes, comments, and built-in chat.
+### Supported formats
 
-Supported formats:
-
-* For editing: DOCX, XLSX, PPTX, DOCXF, OFORM.
-* For viewing: DOC, DOCX, DOCM, DOT, DOTX, DOTM, ODT, FODT, OTT, RTF, TXT, HTML, HTM, MHT, XML, PDF, DJVU, FB2, EPUB, XPS, XLS, XLSX, XLSM, XLT, XLTX, XLTM, ODS, FODS, OTS, CSV, PPS, PPSX, PPSM, PPT, PPTX, PPTM, POT, POTX, POTM, ODP, FODP, OTP.
+<!-- DO NOT EDIT MANUALLY, THE TABLE IS GENERATED AUTOMATICALLY -->
+<!-- def-formats -->
+| |djvu|doc|docm|docx|docxf|dot|dotm|dotx|epub|fb2|fodt|htm|html|mht|mhtml|odt|oform|ott|oxps|pdf|rtf|stw|sxw|txt|wps|wpt|xml|xps|csv|et|ett|fods|ods|ots|sxc|xls|xlsb|xlsm|xlsx|xlt|xltm|xltx|dps|dpt|fodp|odp|otp|pot|potm|potx|pps|ppsm|ppsx|ppt|pptm|pptx|sxi|
+|:-|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+|View|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|+|
+|Edit|-|-|+|+|+|-|+|+|+-|+-|-|-|+-|-|-|+-|+|+-|-|-|+-|-|-|+-|-|-|-|-|+-|-|-|-|+-|+-|-|-|-|+|+|-|+|+|-|-|-|+-|+-|-|+|+|-|+|+|-|+|+|-|
+|Create|-|-|-|+|+|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|+|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|+|-|
+<!-- end-formats -->
 
 ## Installing ONLYOFFICE Docs
 
-You will need an instance of ONLYOFFICE Docs (Document Server) that is resolvable and connectable both from Redmine and any end clients. ONLYOFFICE Document Server must also be able to POST to Redmine directly.
+Before you proceed to install the plugin, make sure you have an instance of ONLYOFFICE Docs (Document Server) that is resolvable and connectable both from Redmine and any end clients. Additionally, ensure that ONLYOFFICE Docs can directly POST to Redmine.
 
-You can install free Community version of ONLYOFFICE Docs or scalable Enterprise Edition with pro features.
+ONLYOFFICE Docs has the free Community version and scalable Enterprise Edition with pro features. You can read about [their differences](#onlyoffice-docs-editions) below.
 
-To install free Community version, use [Docker](https://github.com/onlyoffice/Docker-DocumentServer) (recommended) or follow [these instructions](https://helpcenter.onlyoffice.com/installation/docs-community-install-ubuntu.aspx) for Debian, Ubuntu, or derivatives.
+We recommend using [Docker](https://github.com/onlyoffice/Docker-DocumentServer) to install the free Community version. Alternatively, you can follow [these instructions](https://helpcenter.onlyoffice.com/installation/docs-community-install-ubuntu.aspx) for Debian, Ubuntu, or derivatives.
 
-To install Enterprise Edition, follow the instructions [here](https://helpcenter.onlyoffice.com/installation/docs-enterprise-index.aspx).
+To install Enterprise Edition, follow [these instructions](https://helpcenter.onlyoffice.com/installation/docs-enterprise-index.aspx).
 
-Community Edition vs Enterprise Edition comparison can be found [here](#onlyoffice-docs-editions).
+## Installing Redmine ONLYOFFICE Integration Plugin
 
-## Installing Redmine ONLYOFFICE integration plugin
+To install the plugin, you will need Redmine version 4.2 or higher, or version 5.0 or higher. It is also important to note that the plugin is compatible with Ruby version 2.7.2 or higher, or 3.0.0 or higher. We recommend using Redmine 5 along with Ruby 3.
 
-#### Minimum version of Redmine for ONLYOFFICE integration plugin is 4.0.0.
+If you are new to Redmine, install it by following [these instructions](https://www.redmine.org/projects/redmine/wiki/RedmineInstall).
 
-1. If you're new to Redmine, install it following [these instructions](https://www.redmine.org/projects/redmine/wiki/RedmineInstall). 
+Once you have installed Redmine, [download the plugin](https://github.com/ONLYOFFICE/onlyoffice-redmine/releases) and unzip it into the plugins directory.
 
-2. Download Redmine ONLYOFFICE integration plugin.
-   You can either clone the master branch or download the latest zipped version. Before installing, make sure that the Redmine instance is stopped.
-    ```
-    git clone https://github.com/ONLYOFFICE/onlyoffice-redmine
-    ```
+```sh
+$ curl --location https://github.com/ONLYOFFICE/onlyoffice-redmine/releases/download/v3.0.0/onlyoffice_redmine.tar.zst --output onlyoffice_redmine.tar.zst
+$ tar --extract --file onlyoffice_redmine.tar.zst --directory plugins
+```
 
-   Go the Redmine ONLYOFFICE integration plugin folder and get a submodule:
-    ```
-    cd onlyoffice-redmine
-    git submodule update --init --recursive
-    ```
+Install the dependencies of the plugin if Redmine did not do it automatically.
 
-3. Put **onlyoffice_redmine** plugin directory into plugins. The plugins sub-directory must be named as **onlyoffice_redmine**. If necessary, rename **onlyoffice_redmine-x.y.z** to **onlyoffice_redmine**.
+```sh
+$ bundle install
+```
 
-4. Go to the Redmine directory:
-    ```
-    cd redmine
-    ```
+Perform the migration.
 
-5. Install dependencies:
-    ```
-    bundle install
-    ```
+```sh
+$ RAILS_ENV=production bundle exec rake redmine:plugins:migrate NAME=onlyoffice_redmine
+```
 
-6. Initialize/Update database:
-   ```
-   RAILS_ENV=production bundle exec rake db:migrate
-   RAILS_ENV=production bundle exec rake redmine:plugins:migrate NAME=onlyoffice_redmine
-   ```
+And finally, restart Redmine. Read more about the installation of the plugin on the Redmine [Wiki page](https://www.redmine.org/projects/redmine/wiki/Plugins#Installing-a-plugin).
 
-## Configuring Redmine ONLYOFFICE integration plugin
+## Configuring Redmine ONLYOFFICE Integration Plugin
 
-Configure the plugin via the Redmine interface. Go to **Administration -> Plugins -> Onlyoffice Redmine plugin -> Configure** and specify the following parameters:
+<details>
+  <summary>Show settings page of the plugin</summary>
 
-- **Document Editing Service address**:
-  The URL and port of the installed ONLYOFFICE Document Server.
+![Settings page of the plugin](docs/images/settings-page.webp)
 
-- **Secret key**:
-  Starting from version 7.2, JWT is enabled by default and the secret key is generated automatically to restrict the access to ONLYOFFICE Docs and for security reasons and data integrity. Specify your own secret key on the Redmine configuration page. In the ONLYOFFICE Docs [config file](https://api.onlyoffice.com/editors/signature/), specify the same secret key and enable the validation.
+</details>
 
-You can also configure the **Editor customization settings**:
+### General Settings
 
-- Display or hide Chat menu button
+- Document Editing Service address. \
+  The URL of the install ONLYOFFICE Document Server. Leave blank to disable the plugin.
 
-- Display the header more compact
+### Advanced Server Settings
 
-- Display or hide Feedback & Support menu button
+- ONLYOFFICE Docs address for internal requests from the server.
+- Server address for internal requests from ONLYOFFICE Docs.
+- Connect to the demo ONLYOFFICE Docs server.
 
-- Display or hide Help menu button
+### Security
 
-- Display monochrome toolbar header
+- Secret key. \
+  Starting from ONLYOFFICE Document Server 7.2, JWT authentication is enabled by default and the secret key is generated automatically to restrict the access to ONLYOFFICE Docs and for security reasons and data integrity. Specify your secret key in the ONLYOFFICE Docs [config file](https://api.onlyoffice.com/editors/signature/), then specify the same key in the settings page of the plugin. Leave blank to disable authentication.
+- Authorization header.
+- Disable certificate verification (insecure).
 
-## How it works
+### Editor customization settings
 
-The ONLYOFFICE integration follows the API documented [here](https://api.onlyoffice.com/editors/basic).
+- Display Chat menu button.
+- Display the header more compact.
+- Display Feedback & Support menu button.
+- Display Help menu button.
+- Display monochrome toolbar header.
 
-Redmine ONLYOFFICE integration plugin allows opening files uploaded to the Issues, Files, Documents, Wiki, or News modules for viewing and co-editing. For each module, the access rights to view/edit files depend on the settings (permissions) of the user role.
+### Formats
 
-#### Issues module
+- Specify the list of formats allowed to editing.
 
-Files added when creating a task or from comments to a task are available for viewing and editing.
+## How It Works
 
-File editing is available for user roles with the **Edit issues** permission.
+The plugin uses the [ONLYOFFICE Docs API](https://api.onlyoffice.com/editors/basic) and is integrated into various Redmine pages, including [Documents](#documents), [Attachments](#attachment), [Files](#files), [Issue](#issue), [News](#news), [Wiki](#wiki), and [Forums](#forums). Additionally, the plugin adds general pages such as ["Create In ONLYOFFICE"](#create-in-onlyoffice) and ["Convert In ONLYOFFICE"](#convert-in-onlyoffice).
 
-Opening files for viewing is available for user roles with the **View issues** permission.
+### Documents
 
-#### Files module
+<details>
+  <summary>Show documents page</summary>
 
-Files are available only for viewing for users who have the **View files** or **Manage files** permissions.
+![Documents page](docs/images/documents-page.webp)
 
-#### Documents module
+</details>
 
-The uploaded files in this module are available for viewing and editing.
+On the document page, the user can open the attachment to view, edit, create, or convert it. The options displayed in the interface may vary depending on the user's permissions.
 
-Document editing is available for user roles with the **Edit documents** permission.
+| Option            | Permissions                    |
+| ----------------- | ------------------------------ |
+| View              | View documents                 |
+| Edit              | View documents, Edit documents |
+| Create            | View documents, Edit documents |
+| Convert: Save     | View documents, Edit documents |
+| Convert: Download | View documents                 |
 
-Opening documents for viewing is available for user roles with the **View documents** permission.
+### Attachment
 
-#### Wiki module
+<details>
+  <summary>Show attachment page</summary>
 
-The uploaded files in this module are available for viewing and editing.
+![Attachment page](docs/images/attachment-page.webp)
 
-File editing is available for user roles with the **Edit Wiki pages** permission.
+</details>
 
-Opening files for viewing is available for user roles with the **View Wiki** permission.
+On the attachment page, the user can open the attachment to view, edit, or convert it. The options displayed in the interface may vary depending on the user's permissions for the module where the attachment is located.
 
-#### News module
+### Files
 
-The uploaded files in this module are available for viewing and editing.
+<details>
+  <summary>Show files page</summary>
 
-File editing is available for user roles with the **Manage news** permission.
+![Files page](docs/images/files-page.webp)
 
-Opening files for viewing is available for user roles with the **View news** permission.
+</details>
 
-#### Saving changes
+On the files page, the user can open the attachment to view, edit, or convert it. The options displayed in the interface may vary depending on the user's permissions.
 
-All the changes made in the document are saved in the original file.
+| Option            | Permissions              |
+| ----------------- | ------------------------ |
+| View              | View files               |
+| Edit              | View files, Manage files |
+| Convert: Save     | View files, Manage files |
+| Convert: Download | View files               |
 
-## ONLYOFFICE Docs editions
+### Issue
 
-ONLYOFFICE offers different versions of its online document editors that can be deployed on your own servers. 
+<details>
+  <summary>Show issue page</summary>
 
-**ONLYOFFICE Docs** packaged as Document Server:
+![Issue page](docs/images/issue-page.webp)
 
-* Community Edition (`onlyoffice-documentserver` package)
-* Enterprise Edition (`onlyoffice-documentserver-ee` package)
+</details>
+
+On the issue page, the user can open the attachment to view, edit, or convert it. The options displayed in the interface may vary depending on the user's permissions.
+
+| Option            | Permissions                  |
+| ----------------- | ---------------------------- |
+| View              | View issues                  |
+| Edit              | View issues, Edit own issues |
+| Convert: Save     | View issues, Edit own issues |
+| Convert: Download | View issues                  |
+
+### News
+
+<details>
+  <summary>Show news page</summary>
+
+![News page](docs/images/news-page.webp)
+
+</details>
+
+On the news page, the user can open the attachment to view, edit, or convert it. The options displayed in the interface may vary depending on the user's permissions.
+
+| Option            | Permissions            |
+| ----------------- | ---------------------- |
+| View              | View news              |
+| Edit              | View news, Manage news |
+| Convert: Save     | View news, Manage news |
+| Convert: Download | View news              |
+
+### Wiki
+
+<details>
+  <summary>Show wiki page</summary>
+
+![Wiki page](docs/images/wiki-page.webp)
+
+</details>
+
+On the wiki page, the user can open the attachment to view, edit, or convert it. The options displayed in the interface may vary depending on the user's permissions.
+
+| Option            | Permissions                |
+| ----------------- | -------------------------- |
+| View              | View wiki                  |
+| Edit              | View wiki, Edit wiki pages |
+| Convert: Save     | View wiki, Edit wiki pages |
+| Convert: Download | View wiki                  |
+
+### Forums
+
+<details>
+  <summary>Show forums page</summary>
+
+![Forums page](docs/images/forums-page.webp)
+
+</details>
+
+On the forums page, the user can open the attachment to view, edit, or convert it. The options displayed in the interface may vary depending on the user's permissions.
+
+| Option            | Permissions                  |
+| ----------------- | ---------------------------- |
+| View              | View messages                |
+| Edit              | View messages, Edit messages |
+| Convert: Save     | View messages, Edit messages |
+| Convert: Download | View messages                |
+
+### View Or Edit In ONLYOFFICE
+
+<details>
+  <summary>Show editor page</summary>
+
+![Editor page](docs/images/editor-page.webp)
+
+</details>
+
+On the "View Or Edit In ONLYOFFICE" page, the user can view or edit the attachment. The visibility of this page depends on the user's permissions for the module where the attachment is located.
+
+### Create In ONLYOFFICE
+
+<details>
+  <summary>Show create page</summary>
+
+![Create page](docs/images/create-page.webp)
+
+</details>
+
+On the "Create In ONLYOFFICE" page, the user can create the attachment using templates that consider the user's language preference. Take a look at [supported formats](#supported-formats). The visibility of this page depends on the user's permissions for the module.
+
+### Convert In ONLYOFFICE
+
+<details>
+  <summary>Show convert page</summary>
+
+![Convert page](docs/images/convert-page.webp)
+
+</details>
+
+On the "Convert In ONLYOFFICE" page, the user can convert the attachment. The visibility of this page depends on the user's permissions for the module where the attachment is located.
+
+## ONLYOFFICE Docs Editions
+
+ONLYOFFICE offers different versions of ONLYOFFICE Docs editors that can be deployed on your own servers:
+
+- Community Edition: `onlyoffice-documentserver` package.
+- Enterprise Edition: `onlyoffice-documentserver-ee` package.
 
 The table below will help you make the right choice.
 
