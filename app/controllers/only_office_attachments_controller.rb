@@ -534,6 +534,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
     view.document_server_api_base_url = settings.document_server.url
     view.document_server_config = settings.jwt.encode_payload(f)
     view.retrieve_url = retrieve_url
+    view.save_as_allowed = container.addition_allowed?(user)
     view.favicon = format.favicon
     view.basename = attachment.filename
 

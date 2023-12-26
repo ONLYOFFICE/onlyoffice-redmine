@@ -378,12 +378,15 @@
 
       const config = JSON.parse(editor.dataset.documentServerConfig)
       config.events = {
-        "onError": this.onError.bind(this),
-        "onRequestSaveAs": this.onRequestSaveAs.bind(this)
+        onError: this.onError.bind(this)
       }
       config.height = "100%"
       config.type = deviceType()
       config.width = "100%"
+
+      if (editor.dataset.saveAsAllowed) {
+        config.events.onRequestSaveAs = this.onRequestSaveAs.bind(this)
+      }
 
       this.editor = new window.DocsAPI.DocEditor("onlyoffice-editor-placeholder", config)
     },
