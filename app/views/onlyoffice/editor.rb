@@ -30,6 +30,7 @@ class Views::OnlyOffice::Editor < Views::Mustache
     @document_server_api_path = "/web-apps/apps/api/documents/api.js"
     @document_server_config = {}.to_json
     @retrieve_url = ""
+    @save_as_allowed = false
     @format = ""
     @basename = ""
   end
@@ -70,6 +71,9 @@ class Views::OnlyOffice::Editor < Views::Mustache
 
   sig { returns(String) }
   attr_accessor :retrieve_url
+
+  sig { returns(T::Boolean) }
+  attr_accessor :save_as_allowed
 
   sig { returns(String) }
   attr_accessor :favicon
