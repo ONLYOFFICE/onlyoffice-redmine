@@ -192,7 +192,7 @@ module OnlyOffice::Resources
 
     sig { returns(T::Boolean) }
     def convertible?
-      !lossy_editable? && !convert.empty?
+      !convert.empty?
     end
 
     sig { returns(T::Boolean) }
