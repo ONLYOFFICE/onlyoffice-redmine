@@ -31,6 +31,8 @@ class Views::OnlyOffice::Editor < Views::Mustache
     @document_server_config = {}.to_json
     @retrieve_url = ""
     @save_as_allowed = false
+    @form = false
+    @trial_enabled = false
     @format = ""
     @basename = ""
   end
@@ -74,6 +76,12 @@ class Views::OnlyOffice::Editor < Views::Mustache
 
   sig { returns(T::Boolean) }
   attr_accessor :save_as_allowed
+
+  sig { returns(T::Boolean) }
+  attr_accessor :form
+
+  sig { returns(T::Boolean) }
+  attr_accessor :trial_enabled
 
   sig { returns(String) }
   attr_accessor :favicon

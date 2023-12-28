@@ -338,6 +338,11 @@
     editor: undefined,
 
     /**
+     * @type {boolean}
+     */
+    trialEnabled: false,
+
+    /**
      * @returns {boolean}
      */
     rendered() {
@@ -355,14 +360,11 @@
       if (!editor || !(editor instanceof HTMLElement)) return
 
       if (!window.DocsAPI || !editor.dataset.documentServerConfig) {
-        const error = document.querySelector(".flash.onlyoffice.error.hidden")
-        if (!error) return
-
-        // To display the error normally, we should remove our custom styles.
-        // See `main.css`.
-        document.body.dataset.editorError = ""
-
-        error.classList.remove("hidden")
+        this.showNotFound()
+        return
+      }
+      if (!this.formsSupported() && editor.dataset.form === "true") {
+        this.showFormsUnsupported()
         return
       }
 
@@ -375,9 +377,13 @@
       if (editor.dataset.retrieveUrl) {
         this.retrieveUrl = editor.dataset.retrieveUrl
       }
+      if (editor.dataset.trialEnabled === "true") {
+        this.trialEnabled = true
+      }
 
       const config = JSON.parse(editor.dataset.documentServerConfig)
       config.events = {
+        onAppReady: this.onAppReady.bind(this),
         onError: this.onError.bind(this)
       }
       config.height = "100%"
@@ -389,6 +395,17 @@
       }
 
       this.editor = new window.DocsAPI.DocEditor("onlyoffice-editor-placeholder", config)
+    },
+
+    /**
+     * [OnlyOffice Reference](https://api.onlyoffice.com/editors/config/events#onAppReady)
+     *
+     * @returns {void}
+     */
+    onAppReady() {
+      if (this.trialEnabled) {
+        this.showTrialEnabled()
+      }
     },
 
     /**
@@ -429,6 +446,67 @@
         : console.error
       log(retrieve.message)
       this.editor.showMessage(retrieve.message)
+    },
+
+    /**
+     * @returns {boolean}
+     */
+    formsSupported() {
+      return this.majorVersion() >= 7
+    },
+
+    /**
+     * @returns {number}
+     */
+    majorVersion() {
+      const s = window.DocsAPI.DocEditor.version().split(".")[0]
+      return Number(s)
+    },
+
+    /**
+     * @returns {void}
+     */
+    showNotFound() {
+      this.showError(".onlyoffice-error_not-found")
+    },
+
+    /**
+     * @returns {void}
+     */
+    showFormsUnsupported() {
+      this.showError(".onlyoffice-error_forms-unsupported")
+    },
+
+    /**
+     * @returns {void}
+     */
+    showTrialEnabled() {
+      this.showWarning(".onlyoffice-warning_trial-enabled")
+    },
+
+    /**
+     * @param {string} className
+     * @returns {void}
+     */
+    showError(className) {
+      const error = document.querySelector(`.flash${className}.error.hidden`)
+      if (!error) return
+
+      // To display the error normally, we should remove our custom styles.
+      // See `main.css`.
+      document.body.dataset.editorError = ""
+
+      error.classList.remove("hidden")
+    },
+
+    /**
+     * @param {string} className
+     * @returns {void}
+     */
+    showWarning(className) {
+      const warning = document.querySelector(`.flash${className}.warning.hidden`)
+      if (!warning || !(warning instanceof HTMLElement)) return
+      this.editor.showMessage(warning.innerText)
     }
   }
 

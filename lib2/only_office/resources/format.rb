@@ -23,7 +23,7 @@ module OnlyOffice::Resources
     def file_name
       # The order makes sense, because while the `document`, `presentation`,
       # `spreadsheet` work on the format type, the `form` works on the name.
-      if form?
+      if docxf?
         return I18n.t("onlyoffice_create_docxf")
       end
       if document?
@@ -40,7 +40,7 @@ module OnlyOffice::Resources
 
     sig { returns(String) }
     def favicon
-      if form? || oform?
+      if form?
         return "#{name}.ico"
       end
       "#{type}.ico"
@@ -48,6 +48,11 @@ module OnlyOffice::Resources
 
     sig { returns(T::Boolean) }
     def form?
+      docxf? || oform?
+    end
+
+    sig { returns(T::Boolean) }
+    def docxf?
       name == "docxf"
     end
 
