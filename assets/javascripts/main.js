@@ -355,14 +355,11 @@
       if (!editor || !(editor instanceof HTMLElement)) return
 
       if (!window.DocsAPI || !editor.dataset.documentServerConfig) {
-        const error = document.querySelector(".flash.onlyoffice.error.hidden")
-        if (!error) return
-
-        // To display the error normally, we should remove our custom styles.
-        // See `main.css`.
-        document.body.dataset.editorError = ""
-
-        error.classList.remove("hidden")
+        this.showNotFound()
+        return
+      }
+      if (!this.formsSupported() && editor.dataset.form === "true") {
+        this.showFormsUnsupported()
         return
       }
 
@@ -429,6 +426,50 @@
         : console.error
       log(retrieve.message)
       this.editor.showMessage(retrieve.message)
+    },
+
+    /**
+     * @returns {boolean}
+     */
+    formsSupported() {
+      return this.majorVersion() >= 7
+    },
+
+    /**
+     * @returns {number}
+     */
+    majorVersion() {
+      const s = window.DocsAPI.DocEditor.version().split(".")[0]
+      return Number(s)
+    },
+
+    /**
+     * @returns {void}
+     */
+    showNotFound() {
+      this.showError(".onlyoffice-error_not-found")
+    },
+
+    /**
+     * @returns {void}
+     */
+    showFormsUnsupported() {
+      this.showError(".onlyoffice-error_forms-unsupported")
+    },
+
+    /**
+     * @param {string} className
+     * @returns {void}
+     */
+    showError(className) {
+      const error = document.querySelector(`.flash${className}.error.hidden`)
+      if (!error) return
+
+      // To display the error normally, we should remove our custom styles.
+      // See `main.css`.
+      document.body.dataset.editorError = ""
+
+      error.classList.remove("hidden")
     }
   }
 
