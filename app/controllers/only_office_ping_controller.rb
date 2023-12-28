@@ -19,11 +19,15 @@
 
 class OnlyOfficePingController < ApplicationController
   include OnlyOfficePluginHelper::Regular
+  include OnlyOfficeSettingsHelper
   include OnlyOfficeJWTHelper
 
   before_action      :require_onlyoffice_plugin
+  before_action      :check_trial
   skip_before_action :verify_authenticity_token
   before_action      :verify_jwt_token
+
+  rescue_from OnlyOfficeRedmine::SettingsError, with: :handle_settings_error
 
   # ```http
   # GET /onlyoffice/ping?token={{fallback_jwt_token}} HTTP/1.1

@@ -35,4 +35,32 @@ module OnlyOfficeSettingsHelper
     settings = ac.helpers.plugin_settings_path(plugin.id)
     ac.redirect_to(settings)
   end
+
+  sig { void }
+  private def check_trial
+    ac = T.cast(self, ApplicationController)
+
+    settings = OnlyOfficeRedmine::Settings.current
+    if settings.trial.enabled && settings.trial.started? && settings.trial.expired?
+      ac.logger.error("Trial expired (#{settings.trial.enabled_at})")
+      raise OnlyOfficeRedmine::SettingsError.trial_expired
+    end
+
+    nil
+  end
+
+  sig { params(error: OnlyOfficeRedmine::SettingsError).returns(T.untyped) }
+  private def handle_settings_error(error)
+    case error
+    when OnlyOfficeRedmine::SettingsError.trial_expired
+      render_error(
+        {
+          message: I18n.t("onlyoffice_editor_trial_period_ended"),
+          status: 402
+        }
+      )
+    else
+      # do nothing
+    end
+  end
 end
