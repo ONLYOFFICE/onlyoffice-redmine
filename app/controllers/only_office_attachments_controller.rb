@@ -487,6 +487,9 @@ class OnlyOfficeAttachmentsController < ApplicationController
 
     settings = OnlyOfficeRedmine::Settings.current
     settings.plugin.url = helpers.home_url
+    if settings.trial.enabled
+      settings = settings.with_trial
+    end
 
     attachment_payload = OnlyOfficeRouterHelper::AttachmentPayload.new(user_id: user.id)
 
@@ -723,6 +726,9 @@ class OnlyOfficeAttachmentsController < ApplicationController
 
     settings = OnlyOfficeRedmine::Settings.current
     settings.plugin.url = helpers.home_url
+    if settings.trial.enabled
+      settings = settings.with_trial
+    end
 
     attachment_payload = OnlyOfficeRouterHelper::AttachmentPayload.new(user_id: user.id)
 
@@ -838,6 +844,9 @@ class OnlyOfficeAttachmentsController < ApplicationController
 
     settings = OnlyOfficeRedmine::Settings.current
     settings.plugin.url = helpers.home_url
+    if settings.trial.enabled
+      settings = settings.with_trial
+    end
 
     attachment_payload = OnlyOfficeRouterHelper::AttachmentPayload.new(user_id: user.id)
 
@@ -960,6 +969,9 @@ class OnlyOfficeAttachmentsController < ApplicationController
 
     settings = OnlyOfficeRedmine::Settings.current
     settings.plugin.url = helpers.home_url
+    if settings.trial.enabled
+      settings = settings.with_trial
+    end
 
     response = OnlyOffice::APP::CallbackError.new
 
@@ -1054,6 +1066,9 @@ class OnlyOfficeAttachmentsController < ApplicationController
 
         settings = OnlyOfficeRedmine::Settings.current
         settings.plugin.url = helpers.home_url
+        if settings.trial.enabled
+          settings = settings.with_trial
+        end
 
         url = settings.document_server.resolve_internal_url(callback.url)
         uri = URI(url)

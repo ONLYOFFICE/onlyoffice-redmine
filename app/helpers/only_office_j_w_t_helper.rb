@@ -26,6 +26,9 @@ module OnlyOfficeJWTHelper
   sig { void }
   private def verify_jwt_token
     settings = OnlyOfficeRedmine::Settings.current
+    if settings.trial.enabled
+      settings = settings.with_trial
+    end
     if settings.jwt.enabled
       verify_general_jwt_token(settings.jwt)
     end
@@ -41,6 +44,9 @@ module OnlyOfficeJWTHelper
 
     unless jwt
       settings = OnlyOfficeRedmine::Settings.current
+      if settings.trial.enabled
+        settings = settings.with_trial
+      end
       unless settings.jwt.enabled
         return nil
       end
@@ -81,6 +87,9 @@ module OnlyOfficeJWTHelper
 
     unless jwt
       settings = OnlyOfficeRedmine::Settings.current
+      if settings.trial.enabled
+        settings = settings.with_trial
+      end
       unless settings.fallback_jwt.enabled
         return nil
       end
