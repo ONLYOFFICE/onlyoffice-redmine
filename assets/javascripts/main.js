@@ -338,6 +338,11 @@
     editor: undefined,
 
     /**
+     * @type {boolean}
+     */
+    trialEnabled: false,
+
+    /**
      * @returns {boolean}
      */
     rendered() {
@@ -372,9 +377,13 @@
       if (editor.dataset.retrieveUrl) {
         this.retrieveUrl = editor.dataset.retrieveUrl
       }
+      if (editor.dataset.trialEnabled === "true") {
+        this.trialEnabled = true
+      }
 
       const config = JSON.parse(editor.dataset.documentServerConfig)
       config.events = {
+        onAppReady: this.onAppReady.bind(this),
         onError: this.onError.bind(this)
       }
       config.height = "100%"
@@ -386,6 +395,17 @@
       }
 
       this.editor = new window.DocsAPI.DocEditor("onlyoffice-editor-placeholder", config)
+    },
+
+    /**
+     * [OnlyOffice Reference](https://api.onlyoffice.com/editors/config/events#onAppReady)
+     *
+     * @returns {void}
+     */
+    onAppReady() {
+      if (this.trialEnabled) {
+        this.showTrialEnabled()
+      }
     },
 
     /**
@@ -458,6 +478,13 @@
     },
 
     /**
+     * @returns {void}
+     */
+    showTrialEnabled() {
+      this.showWarning(".onlyoffice-warning_trial-enabled")
+    },
+
+    /**
      * @param {string} className
      * @returns {void}
      */
@@ -470,6 +497,16 @@
       document.body.dataset.editorError = ""
 
       error.classList.remove("hidden")
+    },
+
+    /**
+     * @param {string} className
+     * @returns {void}
+     */
+    showWarning(className) {
+      const warning = document.querySelector(`.flash${className}.warning.hidden`)
+      if (!warning || !(warning instanceof HTMLElement)) return
+      this.editor.showMessage(warning.innerText)
     }
   }
 

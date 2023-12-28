@@ -542,6 +542,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
     view.retrieve_url = retrieve_url
     view.save_as_allowed = container.addition_allowed?(user)
     view.form = format.form?
+    view.trial_enabled = settings.trial.enabled
     view.favicon = format.favicon
     view.basename = attachment.filename
 
@@ -550,6 +551,10 @@ class OnlyOfficeAttachmentsController < ApplicationController
     if format.form?
       flash[:"onlyoffice-error_forms-unsupported error hidden"] \
         = I18n.t("onlyoffice_editor_forms_error_version")
+    end
+    if settings.trial.enabled
+      flash[:"onlyoffice-warning_trial-enabled warning hidden"] \
+        = I18n.t("onlyoffice_editor_demo_enabled")
     end
 
     render_view(view)
