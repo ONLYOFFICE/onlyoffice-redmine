@@ -82,6 +82,7 @@ class OnlyOfficeNormalizeSettings < ActiveRecord::Migration[5.2]
     end
 
     settings = internal.to_settings
+    settings = settings.normalize
     settings.force_save
   end
 end
