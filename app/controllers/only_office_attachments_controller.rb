@@ -263,12 +263,12 @@ class OnlyOfficeAttachmentsController < ApplicationController
   include OnlyOfficeRouterHelper
   include OnlyOfficeViewHelper::Regular
 
-  before_action :require_onlyoffice_plugin
-  rescue_from   OnlyOfficeRedmine::Error,  with: :handle_error
-
+  before_action      :require_onlyoffice_plugin
   skip_before_action :verify_authenticity_token, only: [:download, :retrieve, :callback]
   before_action      :verify_jwt_token,          only: [:download, :callback]
   before_action      :verify_fallback_jwt_token, only: [:retrieve]
+
+  rescue_from OnlyOfficeRedmine::Error, with: :handle_error
 
   # ```http
   # GET /onlyoffice/containers/{{container_type}}/{{container_id}}/attachments/new HTTP/1.1

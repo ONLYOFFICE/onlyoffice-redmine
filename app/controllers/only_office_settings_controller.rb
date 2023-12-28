@@ -104,8 +104,7 @@ class OnlyOfficeSettingsController < ApplicationController
 
   before_action     :require_admin
   require_sudo_mode :update
-
-  before_action :require_onlyoffice_plugin_to_be_exist
+  before_action     :require_onlyoffice_plugin_to_be_exist
 
   class UpdatePayload < T::Struct
     prop :editor_chat_enabled,           String,           default: "0"

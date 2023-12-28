@@ -21,10 +21,9 @@ class OnlyOfficePingController < ApplicationController
   include OnlyOfficePluginHelper::Regular
   include OnlyOfficeJWTHelper
 
-  before_action :require_onlyoffice_plugin
-
-  skip_before_action :verify_authenticity_token, only: [:index]
-  before_action      :verify_jwt_token,          only: [:index]
+  before_action      :require_onlyoffice_plugin
+  skip_before_action :verify_authenticity_token
+  before_action      :verify_jwt_token
 
   # ```http
   # GET /onlyoffice/ping?token={{fallback_jwt_token}} HTTP/1.1
