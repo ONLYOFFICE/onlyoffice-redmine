@@ -535,7 +535,7 @@ module OnlyOfficeRedmine
 
     sig { override.params(user: User).returns(T::Boolean) }
     def addition_allowed?(user)
-      # https://github.com/redmine/redmine/blob/5.0.0/app/views/files/index.html.erb#L2
+      # https://github.com/redmine/redmine/blob/5.0.0/app/views/wiki/show.html.erb#L70
       @page.editable_by?(user.internal) &&
         user.allowed_to?(
           {
