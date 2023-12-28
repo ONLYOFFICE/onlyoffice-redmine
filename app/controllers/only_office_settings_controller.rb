@@ -104,8 +104,7 @@ class OnlyOfficeSettingsController < ApplicationController
 
   before_action     :require_admin
   require_sudo_mode :update
-
-  before_action :require_onlyoffice_plugin_to_be_exist
+  before_action     :require_onlyoffice_plugin_to_be_exist
 
   class UpdatePayload < T::Struct
     prop :editor_chat_enabled,           String,           default: "0"
@@ -225,6 +224,17 @@ class OnlyOfficeSettingsController < ApplicationController
 
       additional = OnlyOfficeRedmine::AdditionalSettings.new
       additional.fallback_jwt = current.fallback_jwt
+
+      if general.trial.enabled
+        # See the `data-disabled-for-trial` in the view.
+        general.jwt.enabled = current.jwt.enabled
+        general.jwt.secret = current.jwt.secret
+        general.jwt.http_header = current.jwt.http_header
+        general.document_server.url = current.document_server.url
+        general.document_server.internal_url = current.document_server.internal_url
+        general.plugin.enabled = true
+        general.plugin.internal_url = current.plugin.internal_url
+      end
 
       OnlyOfficeRedmine::Settings.new(general: general, additional: additional)
     end

@@ -261,14 +261,17 @@ class OnlyOfficeAttachmentsController < ApplicationController
   include OnlyOfficePluginHelper::Regular
   include OnlyOfficeJWTHelper
   include OnlyOfficeRouterHelper
+  include OnlyOfficeSettingsHelper
   include OnlyOfficeViewHelper::Regular
 
-  before_action :require_onlyoffice_plugin
-  rescue_from   OnlyOfficeRedmine::Error,  with: :handle_error
-
+  before_action      :require_onlyoffice_plugin
+  before_action      :check_trial
   skip_before_action :verify_authenticity_token, only: [:download, :retrieve, :callback]
   before_action      :verify_jwt_token,          only: [:download, :callback]
   before_action      :verify_fallback_jwt_token, only: [:retrieve]
+
+  rescue_from OnlyOfficeRedmine::Error,         with: :handle_error
+  rescue_from OnlyOfficeRedmine::SettingsError, with: :handle_settings_error
 
   # ```http
   # GET /onlyoffice/containers/{{container_type}}/{{container_id}}/attachments/new HTTP/1.1
@@ -487,6 +490,9 @@ class OnlyOfficeAttachmentsController < ApplicationController
 
     settings = OnlyOfficeRedmine::Settings.current
     settings.plugin.url = helpers.home_url
+    if settings.trial.enabled
+      settings = settings.with_trial
+    end
 
     attachment_payload = OnlyOfficeRouterHelper::AttachmentPayload.new(user_id: user.id)
 
@@ -723,6 +729,9 @@ class OnlyOfficeAttachmentsController < ApplicationController
 
     settings = OnlyOfficeRedmine::Settings.current
     settings.plugin.url = helpers.home_url
+    if settings.trial.enabled
+      settings = settings.with_trial
+    end
 
     attachment_payload = OnlyOfficeRouterHelper::AttachmentPayload.new(user_id: user.id)
 
@@ -838,6 +847,9 @@ class OnlyOfficeAttachmentsController < ApplicationController
 
     settings = OnlyOfficeRedmine::Settings.current
     settings.plugin.url = helpers.home_url
+    if settings.trial.enabled
+      settings = settings.with_trial
+    end
 
     attachment_payload = OnlyOfficeRouterHelper::AttachmentPayload.new(user_id: user.id)
 
@@ -960,6 +972,9 @@ class OnlyOfficeAttachmentsController < ApplicationController
 
     settings = OnlyOfficeRedmine::Settings.current
     settings.plugin.url = helpers.home_url
+    if settings.trial.enabled
+      settings = settings.with_trial
+    end
 
     response = OnlyOffice::APP::CallbackError.new
 
@@ -1054,6 +1069,9 @@ class OnlyOfficeAttachmentsController < ApplicationController
 
         settings = OnlyOfficeRedmine::Settings.current
         settings.plugin.url = helpers.home_url
+        if settings.trial.enabled
+          settings = settings.with_trial
+        end
 
         url = settings.document_server.resolve_internal_url(callback.url)
         uri = URI(url)

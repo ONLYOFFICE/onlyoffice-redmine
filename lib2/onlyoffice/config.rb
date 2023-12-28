@@ -151,27 +151,13 @@ module OnlyOffice
     sig { void }
     def with_trial!
       trial = self.class.trial.copy
-      jwt.define_singleton_method(:enabled) do
-        trial.jwt.enabled
-      end
-      jwt.define_singleton_method(:secret) do
-        trial.jwt.secret
-      end
-      jwt.define_singleton_method(:algorithm) do
-        trial.jwt.algorithm
-      end
-      jwt.define_singleton_method(:http_header) do
-        trial.jwt.http_header
-      end
-      document_server.define_singleton_method(:url) do
-        trial.document_server.url
-      end
-      document_server.define_singleton_method(:internal_url) do
-        trial.document_server.internal_url
-      end
-      plugin.define_singleton_method(:internal_url) do
-        trial.plugin.internal_url
-      end
+      jwt.enabled = trial.jwt.enabled
+      jwt.secret = trial.jwt.secret
+      jwt.algorithm = trial.jwt.algorithm
+      jwt.http_header = trial.jwt.http_header
+      document_server.url = trial.document_server.url
+      document_server.internal_url = trial.document_server.internal_url
+      plugin.internal_url = trial.plugin.internal_url
     end
 
     sig { returns(OnlyOffice::Config) }
@@ -194,9 +180,9 @@ module OnlyOffice
         editor: editor.dup,
         formats: formats.dup,
         ssl: ssl.dup,
-        jwt: jwt.clone,
-        document_server: document_server.clone,
-        plugin: plugin.clone,
+        jwt: jwt.dup,
+        document_server: document_server.dup,
+        plugin: plugin.dup,
         trial: trial.dup
       )
     end

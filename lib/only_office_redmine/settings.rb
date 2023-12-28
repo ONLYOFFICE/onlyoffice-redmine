@@ -188,35 +188,32 @@ module OnlyOfficeRedmine
       patch = normalize
       logger.info("Patched settings: #{patch.safe_serialize}")
 
-      unless patch.plugin.enabled
-        logger.info("Disable plugin")
-        begin
+      begin
+        unless patch.plugin.enabled
+          logger.info("Disable plugin")
           patch.force_save
           OnlyOfficeRedmine::Resources::Formats.read!
-        rescue StandardError => e
-          current.force_save
-          OnlyOfficeRedmine::Resources::Formats.read!
-          raise e
+          return
         end
-        return
-      end
 
-      if patch.trial.enabled
-        if current.trial.started?
-          if current.trial.expired?
-            logger.error("Trial expired (#{patch.trial.enabled_at})")
-            raise SettingsError.trial_expired
+        if patch.trial.enabled
+          if current.trial.started?
+            if current.trial.expired?
+              logger.error("Trial expired (#{patch.trial.enabled_at})")
+              raise SettingsError.trial_expired
+            end
+          else
+            logger.info("Starting trial")
+            patch.trial.start
           end
-        else
-          logger.info("Starting trial")
-          patch.trial.start
+          logger.info("Saving with trial")
         end
-        logger.info("Saving with trial")
-        patch = patch.with_trial
-      end
 
-      begin
         patch.force_save
+
+        if patch.trial.enabled
+          patch = patch.with_trial
+        end
 
         client = patch.client
 
