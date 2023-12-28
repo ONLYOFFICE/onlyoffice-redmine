@@ -56,8 +56,7 @@ module OnlyOfficeRedmine
     sig { returns(Settings) }
     def self.current
       internal = InternalSettings.from_hash(read)
-      settings = internal.to_settings
-      settings.normalize
+      internal.to_settings
     end
 
     sig { returns(T.untyped) }
