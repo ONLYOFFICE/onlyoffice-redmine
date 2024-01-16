@@ -17,7 +17,16 @@
 # typed: true
 # frozen_string_literal: true
 
-require_relative "only_office/api/client"
-require_relative "only_office/api/conversion"
-require_relative "only_office/resources/format"
-require_relative "only_office/config"
+module OnlyOffice::API
+  class ConversionComplete
+    extend T::Sig
+
+    sig { returns(T.nilable(OnlyOffice::Resources::Format)) }
+    def file_format
+      formats = OnlyOfficeRedmine::Resources::Formats.read
+      formats.all.find do |format|
+        format.name == file_type
+      end
+    end
+  end
+end

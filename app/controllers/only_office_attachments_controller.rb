@@ -767,6 +767,12 @@ class OnlyOfficeAttachmentsController < ApplicationController
       title: "#{payload.name}#{to.extension}",
       url: download_url
     )
+    if to.image?
+      conversion.thumbnail = OnlyOffice::API::Conversion::Thumbnail.new(
+        first: false
+      )
+    end
+
     result, response = client.conversion.convert(conversion)
 
     begin
@@ -778,6 +784,14 @@ class OnlyOfficeAttachmentsController < ApplicationController
         self.response.add_header("Cache-Control", "no-cache, no-store")
         return render(json: result.serialize)
       when OnlyOffice::API::ConversionComplete
+        if result.file_type != to.name
+          to = result.file_format
+          unless to
+            logger.error("The format (#{result.file_format}) doesn't supported")
+            raise OnlyOfficeRedmine::Error.unsupported
+          end
+        end
+
         file_uri = URI(result.file_url)
         file = T.unsafe(file_uri).open(ssl_verify_mode: settings.ssl.verify_mode)
 
@@ -885,6 +899,12 @@ class OnlyOfficeAttachmentsController < ApplicationController
       title: "#{payload.name}#{to.extension}",
       url: download_url
     )
+    if to.image?
+      conversion.thumbnail = OnlyOffice::API::Conversion::Thumbnail.new(
+        first: false
+      )
+    end
+
     result, response = client.conversion.convert(conversion)
 
     begin
