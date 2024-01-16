@@ -4,12 +4,12 @@ This plugin enables users to edit attachments from [Redmine](https://www.redmine
 
 ## Features
 
-- View and edit text documents, spreadsheets, presentations, and forms.
-- Co-edit in real-time, with options for both fast and strict modes. It also tracks changes, allows comments, and provides a built-in chat.
-- Settings page to setup JWT authentication, customize the appearance of the editor appearance and connection to it.
+- Viewing and editing text documents, spreadsheets, presentations, and forms.
+- Co-editing documents in real time using two co-editing modes (Fast and Strict), Track Changes, comments, built-in chat.
+- Settings page to set up connection to the server and JWT authentication, customize the editor's appearance.
 - Mobile view for licensed editors.
-- Create new attachment using templates that consider the user's language preference.
-- Convert attachment and save or download them.
+- Creating new attachments using templates that consider the user's language preference.
+- Converting attachments and saving or downloading them.
 
 ### Supported formats
 
@@ -24,9 +24,9 @@ This plugin enables users to edit attachments from [Redmine](https://www.redmine
 
 ## Installing ONLYOFFICE Docs
 
-Before you proceed to install the plugin, make sure you have an instance of ONLYOFFICE Docs (Document Server) that is resolvable and connectable both from Redmine and any end clients. Additionally, ensure that ONLYOFFICE Docs can directly POST to Redmine.
+Before you proceed to the plugin installation, make sure you have an instance of ONLYOFFICE Docs (Document Server) that is resolvable and connectable both from Redmine and any end clients. Additionally, ensure that ONLYOFFICE Docs can directly POST to Redmine.
 
-ONLYOFFICE Docs has the free Community version and scalable Enterprise Edition with pro features. You can read about [their differences](#onlyoffice-docs-editions) below.
+ONLYOFFICE Docs has the free Community version and scalable Enterprise Edition. You can read about [their differences](#onlyoffice-docs-editions) below.
 
 We recommend using [Docker](https://github.com/onlyoffice/Docker-DocumentServer) to install the free Community version. Alternatively, you can follow [these instructions](https://helpcenter.onlyoffice.com/installation/docs-community-install-ubuntu.aspx) for Debian, Ubuntu, or derivatives.
 
@@ -57,7 +57,7 @@ Perform the migration.
 $ RAILS_ENV=production bundle exec rake redmine:plugins:migrate NAME=onlyoffice_redmine
 ```
 
-And finally, restart Redmine. Read more about the installation of the plugin on the Redmine [Wiki page](https://www.redmine.org/projects/redmine/wiki/Plugins#Installing-a-plugin).
+And finally, restart Redmine. Read more about the plugin installation on the Redmine [Wiki page](https://www.redmine.org/projects/redmine/wiki/Plugins#Installing-a-plugin).
 
 ## Configuring Redmine ONLYOFFICE Integration Plugin
 
@@ -71,7 +71,7 @@ And finally, restart Redmine. Read more about the installation of the plugin on 
 ### General Settings
 
 - Document Editing Service address. \
-  The URL of the install ONLYOFFICE Document Server. Leave blank to disable the plugin.
+  The URL of the installed ONLYOFFICE Docs (Document Server). Leave blank to disable the plugin.
 
 ### Advanced Server Settings
 
@@ -96,7 +96,7 @@ And finally, restart Redmine. Read more about the installation of the plugin on 
 
 ### Formats
 
-- Specify the list of formats allowed to editing.
+- Specify the list of formats allowed to be opened directly for editing.
 
 ## How It Works
 
@@ -105,13 +105,13 @@ The plugin uses the [ONLYOFFICE Docs API](https://api.onlyoffice.com/editors/bas
 ### Documents
 
 <details>
-  <summary>Show documents page</summary>
+  <summary>Show Documents page</summary>
 
 ![Documents page](docs/images/documents-page.png)
 
 </details>
 
-On the document page, the user can open the attachment to view, edit, create, or convert it. The options displayed in the interface may vary depending on the user's permissions.
+On the Documents page, users can open the attachment to view, edit, create, or convert it. The options displayed in the interface may vary depending on the user permissions.
 
 | Option            | Permissions                    |
 | ----------------- | ------------------------------ |
@@ -124,24 +124,24 @@ On the document page, the user can open the attachment to view, edit, create, or
 ### Attachment
 
 <details>
-  <summary>Show attachment page</summary>
+  <summary>Show Attachment page</summary>
 
 ![Attachment page](docs/images/attachment-page.png)
 
 </details>
 
-On the attachment page, the user can open the attachment to view, edit, or convert it. The options displayed in the interface may vary depending on the user's permissions for the module where the attachment is located.
+On the Attachment page, users can open the attachment to view, edit, or convert it. The options displayed in the interface may vary depending on the user's permissions for the module where the attachment is located.
 
 ### Files
 
 <details>
-  <summary>Show files page</summary>
+  <summary>Show Files page</summary>
 
 ![Files page](docs/images/files-page.png)
 
 </details>
 
-On the files page, the user can open the attachment to view, edit, or convert it. The options displayed in the interface may vary depending on the user's permissions.
+On the Files page, users can open the attachment to view, edit, or convert it. The options displayed in the interface may vary depending on the user's permissions.
 
 | Option            | Permissions              |
 | ----------------- | ------------------------ |
@@ -150,16 +150,16 @@ On the files page, the user can open the attachment to view, edit, or convert it
 | Convert: Save     | View files, Manage files |
 | Convert: Download | View files               |
 
-### Issue
+### Issues
 
 <details>
-  <summary>Show issue page</summary>
+  <summary>Show Issue page</summary>
 
 ![Issue page](docs/images/issue-page.png)
 
 </details>
 
-On the issue page, the user can open the attachment to view, edit, or convert it. The options displayed in the interface may vary depending on the user's permissions.
+On the Issue page, users can open the attachment to view, edit, or convert it. The options displayed in the interface may vary depending on the user's permissions.
 
 | Option            | Permissions                  |
 | ----------------- | ---------------------------- |
@@ -171,13 +171,13 @@ On the issue page, the user can open the attachment to view, edit, or convert it
 ### News
 
 <details>
-  <summary>Show news page</summary>
+  <summary>Show News page</summary>
 
 ![News page](docs/images/news-page.png)
 
 </details>
 
-On the news page, the user can open the attachment to view, edit, or convert it. The options displayed in the interface may vary depending on the user's permissions.
+On the News page, users can open the attachment to view, edit, or convert it. The options displayed in the interface may vary depending on the user's permissions.
 
 | Option            | Permissions            |
 | ----------------- | ---------------------- |
@@ -189,13 +189,13 @@ On the news page, the user can open the attachment to view, edit, or convert it.
 ### Wiki
 
 <details>
-  <summary>Show wiki page</summary>
+  <summary>Show Wiki page</summary>
 
 ![Wiki page](docs/images/wiki-page.png)
 
 </details>
 
-On the wiki page, the user can open the attachment to view, edit, or convert it. The options displayed in the interface may vary depending on the user's permissions.
+On the Wiki page, users can open the attachment to view, edit, or convert it. The options displayed in the interface may vary depending on the user's permissions.
 
 | Option            | Permissions                |
 | ----------------- | -------------------------- |
@@ -207,13 +207,13 @@ On the wiki page, the user can open the attachment to view, edit, or convert it.
 ### Forums
 
 <details>
-  <summary>Show forums page</summary>
+  <summary>Show Forums page</summary>
 
 ![Forums page](docs/images/forums-page.png)
 
 </details>
 
-On the forums page, the user can open the attachment to view, edit, or convert it. The options displayed in the interface may vary depending on the user's permissions.
+On the Forums page, users can open the attachment to view, edit, or convert it. The options displayed in the interface may vary depending on the user's permissions.
 
 | Option            | Permissions                  |
 | ----------------- | ---------------------------- |
@@ -231,7 +231,7 @@ On the forums page, the user can open the attachment to view, edit, or convert i
 
 </details>
 
-On the "View Or Edit In ONLYOFFICE" page, the user can view or edit the attachment. The visibility of this page depends on the user's permissions for the module where the attachment is located.
+On the "View Or Edit In ONLYOFFICE" page, users can view or edit the attachment. The visibility of this page depends on the user's permissions for the module where the attachment is located.
 
 ### Create In ONLYOFFICE
 
@@ -242,7 +242,7 @@ On the "View Or Edit In ONLYOFFICE" page, the user can view or edit the attachme
 
 </details>
 
-On the "Create In ONLYOFFICE" page, the user can create the attachment using templates that consider the user's language preference. Take a look at [supported formats](#supported-formats). The visibility of this page depends on the user's permissions for the module.
+On the "Create In ONLYOFFICE" page, users can create the attachment using templates that consider the user's language preference. Take a look at [supported formats](#supported-formats). The visibility of this page depends on the user's permissions for the module.
 
 ### Convert In ONLYOFFICE
 
