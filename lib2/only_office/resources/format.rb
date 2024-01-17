@@ -61,6 +61,31 @@ module OnlyOffice::Resources
       name == "oform"
     end
 
+    sig { returns(T::Boolean) }
+    def image?
+      bmp? || gif? || jpg? || png?
+    end
+
+    sig { returns(T::Boolean) }
+    def bmp?
+      name == "bmp"
+    end
+
+    sig { returns(T::Boolean) }
+    def gif?
+      name == "gif"
+    end
+
+    sig { returns(T::Boolean) }
+    def jpg?
+      name == "jpg"
+    end
+
+    sig { returns(T::Boolean) }
+    def png?
+      name == "png"
+    end
+
     sig { returns(String) }
     def content_type
       mime.join(";")
