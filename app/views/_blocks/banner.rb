@@ -31,6 +31,6 @@ module Blocks::Banner
   end
 
   def banner_go_url
-    "https://www.onlyoffice.com/docs-registration.aspx"
+    "https://www.onlyoffice.com/docs-registration.aspx?referer=redmine"
   end
 end
