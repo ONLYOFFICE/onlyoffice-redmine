@@ -294,24 +294,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
       raise OnlyOfficeRedmine::Error.forbidden
     end
 
-    view = Views::OnlyOffice::New.new(helpers: helpers)
-    view.error_messages = helpers.error_messages_for(container)
-    view.name.name = "onlyoffice[name]"
-    view.description.name = "onlyoffice[description]"
-
-    formats = OnlyOfficeRedmine::Resources::Formats.read
-    view.format.name = "onlyoffice[format]"
-    view.format.options += formats.creatable.sort_by(&:order).map do |format|
-      Views::Option.new(label: format.file_name, value: format.name)
-    end
-
-    view.create.url = helpers.onlyoffice_create_attachment_url(
-      params.container_type,
-      params.container_id
-    )
-    view.cancel.url = container.home_url(helpers)
-
-    render_view(view)
+    return render_new(container)
   end
 
   # TODO: add additional options to create a new attachment.
@@ -373,7 +356,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
     saved = container.save
     unless saved
       logger.error("Failed to save the #{container.type} (#{container.id}) with new attachment")
-      raise OnlyOfficeRedmine::Error.internal
+      return render_new(container)
     end
 
     flash[:notice] = I18n.t("notice_successful_create")
@@ -407,6 +390,24 @@ class OnlyOfficeAttachmentsController < ApplicationController
         end
       "#{name}#{format.extension}"
     end
+  end
+
+  sig { params(container: OnlyOfficeRedmine::Container).returns(T.untyped) }
+  def render_new(container)
+    view = Views::OnlyOffice::New.new(helpers: helpers)
+    view.error_messages = helpers.error_messages_for(*container.attachments)
+    view.name.name = "onlyoffice[name]"
+    view.description.name = "onlyoffice[description]"
+
+    formats = OnlyOfficeRedmine::Resources::Formats.read
+    view.format.name = "onlyoffice[format]"
+    view.format.options += formats.creatable.sort_by(&:order).map do |format|
+      Views::Option.new(label: format.file_name, value: format.name)
+    end
+
+    view.create.url = helpers.onlyoffice_create_attachment_url(container.type, container.id)
+    view.cancel.url = container.home_url(helpers)
+    render_view(view)
   end
 
   # ```http
