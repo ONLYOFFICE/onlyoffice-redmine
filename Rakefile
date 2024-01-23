@@ -33,7 +33,12 @@ task :readme_formats do
     )
       next
     end
-    head += "#{format.name}|"
+    head +=
+      if format.lossy_editable?
+        "#{format.name}*|"
+      else
+        "#{format.name}|"
+      end
     align += ":-:|"
     viewable +=
       if format.viewable?
@@ -42,10 +47,8 @@ task :readme_formats do
         "-|"
       end
     editable +=
-      if format.editable? || format.fillable?
+      if format.editable? || format.fillable? || format.lossy_editable?
         "+|"
-      elsif format.lossy_editable?
-        "+-|"
       else
         "-|"
       end
