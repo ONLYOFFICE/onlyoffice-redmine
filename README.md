@@ -38,6 +38,8 @@ To install Enterprise Edition, follow [these instructions](https://helpcenter.on
 
 To install the plugin, you will need Redmine version 4.2 or higher, or version 5.0 or higher. It is also important to note that the plugin is compatible with Ruby version 2.7.2 or higher, or 3.0.0 or higher. We recommend using Redmine 5 along with Ruby 3.
 
+Additionally, you may need [zstd](https://github.com/facebook/zstd) to unzip the plugin.
+
 If you are new to Redmine, install it by following [these instructions](https://www.redmine.org/projects/redmine/wiki/RedmineInstall).
 
 Once you have installed Redmine, [download the plugin](https://github.com/ONLYOFFICE/onlyoffice-redmine/releases).
