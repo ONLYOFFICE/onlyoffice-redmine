@@ -12,6 +12,11 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v3
 
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        bundler-cache: true
+
     - name: Update Submodules
       run: make submodule
 
