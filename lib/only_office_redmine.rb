@@ -19,7 +19,7 @@
 
 module OnlyOfficeRedmine
   NAME = "onlyoffice_redmine"
-  VERSION = "2.1.0"
+  VERSION = "3.0.0"
 
   class << self
     extend T::Sig
