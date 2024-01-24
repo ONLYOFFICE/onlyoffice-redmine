@@ -1,17 +1,57 @@
 Redmine ONLYOFFICE integration plugin uses code from the following 3rd party projects.
 
-i18n          - Ruby internationalization and localization (i18n) solution. (https://raw.githubusercontent.com/ruby-i18n/i18n/master/MIT-LICENSE)
+i18n          - Internationalization (i18n) library for Ruby. (https://github.com/ruby-i18n/i18n/blob/v1.10.0/MIT-LICENSE)
 License:        MIT
 License File    i18n.license
 
-rails         - Rails is a web-application framework that includes everything needed to create database-backed web applications according to the Model-View-Controller (MVC) pattern. (https://github.com/rails/rails/blob/main/MIT-LICENSE)
+jwt           - A ruby implementation of the RFC 7519 OAuth JSON Web Token (JWT) standard. (https://github.com/jwt/ruby-jwt/raw/v2.7.1/LICENSE)
+License:        MIT
+License File    jwt.license
+
+minitest      - minitest provides a complete suite of testing facilities supporting TDD, BDD, mocking, and benchmarking. (https://github.com/minitest/minitest/blob/v5.19.0/README.rdoc#license-)
+License:        MIT
+License File:   minitest.license
+
+mustache      - Logic-less Ruby templates. (https://github.com/mustache/mustache/blob/v1.1.1/LICENSE)
+License:        MIT
+License File:   mustache.license
+
+rails         - Rails is a web-application framework that includes everything needed to create database-backed web applications according to the Model-View-Controller (MVC) pattern. (https://github.com/rails/rails/blob/v6.1.4.7/MIT-LICENSE)
 License:        MIT
 License File:   rails.license
 
-render-parent - Helper, which renders template with the same name as current but higher on the view path. (https://github.com/anteo/render-parent/blob/master/LICENSE.txt)
+rake          - A make-like build utility for Ruby. (https://github.com/ruby/rake/blob/v13.0.0/MIT-LICENSE)
+License:        MIT
+License File:   rake.license
+
+render-parent - Helper, which renders template with the same name as current but higher on the view path. (https://github.com/anteo/render-parent/blob/v0.1.0/LICENSE.txt)
 License:        MIT
 License File:   render-parent.license
 
-tzinfo-data   - TZInfo::Data contains data from the IANA Time Zone database packaged as Ruby modules for use with TZInfo. (https://github.com/tzinfo/tzinfo-data/blob/master/LICENSE)
+rubocop-minitest - Code style checking for Minitest files. (https://github.com/rubocop/rubocop-minitest/blob/v0.31.0/LICENSE.txt)
 License:        MIT
-License File:   tzinfo-data.license
+License File:   rubocop-minitest.license
+
+rubocop-rails - A RuboCop extension focused on enforcing Rails best practices and coding conventions. (https://github.com/rubocop/rubocop-rails/blob/v2.20.0/LICENSE.txt)
+License:        MIT
+License File:   rubocop-rails.license
+
+rubocop-rake  - A RuboCop plugin for Rake. (https://github.com/rubocop/rubocop-rake/blob/v0.6.0/LICENSE)
+License:        MIT
+License File:   rubocop-rake.license
+
+rubocop-sorbet - A collection of RuboCop rules for Sorbet. (https://github.com/Shopify/rubocop-sorbet/blob/v0.7.2/LICENSE.txt)
+License:        MIT
+License File:   rubocop-sorbet.license
+
+rubocop       - A Ruby static code analyzer and formatter, based on the community Ruby style guide. (https://github.com/rubocop/rubocop/blob/v1.56.0/LICENSE.txt)
+License:        MIT
+License File:   rubocop.license
+
+sorbet        - A fast, powerful type checker designed for Ruby. (https://github.com/sorbet/sorbet/blob/0.5.10969.20230815160207-3fec62a78/LICENSE)
+License:        Apache License 2.0
+License File:   sorbet.license
+
+tapioca       - The swiss army knife of RBI generation. (https://github.com/Shopify/tapioca/blob/v0.11.8/LICENSE.txt)
+License:        MIT
+License File:   tapioca.license

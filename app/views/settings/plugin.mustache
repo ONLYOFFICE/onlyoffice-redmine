@@ -1,0 +1,104 @@
+<!--
+(c) Copyright Ascensio System SIA 2024
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<div class="onlyoffice-settings" data-action="{{ action }}">
+  <div class="onlyoffice-settings__main">
+    <div class="box tabular settings">
+      <p>
+        <label for="onlyoffice-document-server-url">{{ document_server_url.label }}</label>
+        <input id="onlyoffice-document-server-url" name="{{ document_server_url.name }}" placeholder="{{ document_server_url.placeholder }}" type="text" value="{{ document_server_url.value }}" data-disabled-for-trial>
+        <em class="info">{{ document_server_url.note }}</em>
+      </p>
+    </div>
+  </div>
+  <div class="onlyoffice-settings__advanced">
+    <fieldset class="box tabular settings">
+      <legend>{{ advanced_legend }}</legend>
+      <p>
+        <label for="onlyoffice-document-server-internal-url">{{ document_server_internal_url.label }}</label>
+        <input id="onlyoffice-document-server-internal-url" name="{{ document_server_internal_url.name }}" placeholder="{{ document_server_internal_url.placeholder }}" type="text" value="{{ document_server_internal_url.value }}" data-disabled-for-trial>
+      </p>
+      <p>
+        <label for="onlyoffice-plugin-internal-url">{{ plugin_internal_url.label }}</label>
+        <input id="onlyoffice-plugin-internal-url" name="{{ plugin_internal_url.name }}" placeholder="{{ plugin_internal_url.placeholder }}" type="text" value="{{ plugin_internal_url.value }}" data-disabled-for-trial>
+      </p>
+      <label class="block">
+        <input id="onlyoffice-trial-enabled" name="{{ trial_enabled.name }}" type="checkbox" value="{{ trial_enabled.value }}" {{# trial_enabled.checked }} checked {{/ trial_enabled.checked }}>
+        {{ trial_enabled.label }}
+      </label>
+    </fieldset>
+  </div>
+  <div class="onlyoffice-settings__security">
+    <fieldset class="box tabular settings">
+      <legend>{{ security_legend }}</legend>
+      <p>
+        <label for="onlyoffice-jwt-secret">{{ jwt_secret.label }}</label>
+        <input id="onlyoffice-jwt-secret" name="{{ jwt_secret.name }}" type="text" value="{{ jwt_secret.value }}" data-disabled-for-trial>
+        <em class="info">{{ jwt_secret.note }}</em>
+      </p>
+      <p>
+        <label for="onlyoffice-jwt-http-header">{{ jwt_http_header.label }}</label>
+        <input id="onlyoffice-jwt-http-header" name="{{ jwt_http_header.name }}" type="text" value="{{ jwt_http_header.value }}" data-disabled-for-trial>
+      </p>
+      <label class="block">
+        <input name="{{ ssl_verification_disabled.name }}" type="checkbox" value="{{ ssl_verification_disabled.value }}" {{# ssl_verification_disabled.checked }} checked {{/ ssl_verification_disabled.checked }}>
+        {{ ssl_verification_disabled.label }}
+      </label>
+    </fieldset>
+  </div>
+  <div class="onlyoffice-settings__editor">
+    <fieldset class="box tabular settings">
+      <legend>{{ editor_legend }}</legend>
+      <label class="block">
+        <input name="{{ editor_chat_enabled.name }}" type="checkbox" value="{{ editor_chat_enabled.value }}" {{# editor_chat_enabled.checked }} checked {{/ editor_chat_enabled.checked }}>
+        {{ editor_chat_enabled.label }}
+      </label>
+      <label class="block">
+        <input name="{{ editor_compact_header_enabled.name }}" type="checkbox" value="{{ editor_compact_header_enabled.value }}" {{# editor_compact_header_enabled.checked }} checked {{/ editor_compact_header_enabled.checked }}>
+        {{ editor_compact_header_enabled.label }}
+      </label>
+      <label class="block">
+        <input name="{{ editor_feedback_enabled.name }}" type="checkbox" value="{{ editor_feedback_enabled.value }}" {{# editor_feedback_enabled.checked }} checked {{/ editor_feedback_enabled.checked }}>
+        {{ editor_feedback_enabled.label }}
+      </label>
+      <label class="block">
+        <input name="{{ editor_help_enabled.name }}" type="checkbox" value="{{ editor_help_enabled.value }}" {{# editor_help_enabled.checked }} checked {{/ editor_help_enabled.checked }}>
+        {{ editor_help_enabled.label }}
+      </label>
+      <label class="block">
+        <input name="{{ editor_toolbar_tabs_disabled.name }}" type="checkbox" value="{{ editor_toolbar_tabs_disabled.value }}" {{# editor_toolbar_tabs_disabled.checked }} checked {{/ editor_toolbar_tabs_disabled.checked }}>
+        {{ editor_toolbar_tabs_disabled.label }}
+      </label>
+    </fieldset>
+  </div>
+  <div class="onlyoffice-settings__formats">
+    <fieldset class="box settings">
+      <legend>{{ formats_legend }}</legend>
+      <p>{{ formats_editable.label }}</p>
+      <div class="onlyoffice-editable__controls">
+        {{# formats_editable.options }}
+        <label class="onlyoffice-editable__control">
+          <input name="{{ name }}" type="checkbox" value="{{ value }}" {{# selected }} checked {{/ selected }}>
+          {{ label }}
+        </label>
+        {{/ formats_editable.options }}
+      </div>
+    </fieldset>
+  </div>
+  <div class="onlyoffice-settings__banner">
+    {{> _blocks/banner }}
+  </div>
+</div>

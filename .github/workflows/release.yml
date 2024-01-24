@@ -3,40 +3,28 @@ name: Release
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-      - name: Get Info 
-        run: |
-          echo "version=$(awk '/version /' init.rb | awk -F"'" '$0=$2')" >> $GITHUB_OUTPUT
-        id: info
-      - name: Generate Changelog
-        run: |
-          awk '/## [0-9]/{p++} p; /## [0-9]/{if (p > 1) exit}' CHANGELOG.md | awk 'NR>2 {print last} {last=$0}' > RELEASE.md
-      - name: Install Zip
-        run: sudo apt-get install zip
-      - name: Build Plugin
-        run: |
-          cd ${{ github.workspace }}
-          git submodule update --init --recursive
-          mkdir -p ./onlyoffice_redmine
-          rsync -av --exclude='onlyoffice_redmine' ./ ./onlyoffice_redmine
-          cd ./onlyoffice_redmine
-          rm -rf ./.github/
-          rm -rf ./.git/
-          rm ./.gitmodules
-          cd ./assets/document-templates
-          rm .git
-      - name: Build Artifact
-        run: zip -r onlyoffice_redmine.zip onlyoffice_redmine/
-      - name: Create Release
-        uses: ncipollo/release-action@v1
-        id: create_release
-        with:
-          artifacts: "onlyoffice_redmine.zip"
-          bodyFile: RELEASE.md
-          tag: v${{ steps.info.outputs.version }}
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Update Submodules
+      run: make submodule
+
+    - name: Build Plugin
+      run: make build
+
+    - name: Create Artifact
+      run: make artifact
+
+    - name: Create Release
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        version="v$(make version)"
+        gh release create "$version" --notes "$(make notes)"
+        gh release upload "$version" onlyoffice_redmine.tar.zst

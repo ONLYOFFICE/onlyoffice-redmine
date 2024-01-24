@@ -1,4 +1,41 @@
-# Change Log
+# Changelog
+
+## 3.0.0
+## Breaking Changes
+
+- Support for Redmine versions below 4.2 has been dropped.
+- Support for Internet Explorer (IE) has been dropped.
+- The ability to create a document (not an attachment) has been removed.
+- Migration from Ruby version 2 to 3 has been implemented.
+- Users can now edit an attachment even if the issue is closed.
+- Support for new formats has been added.
+- User permissions have been improved for more accurate functionality.
+
+## Features
+
+- Added support for Redmine located in a subdirectory.
+- Replaced icons with more intuitive ones.
+- Changed the conversation from synchronous to asynchronous.
+- Added a dedicated page for the "Create in" action.
+- Users can now change the name and add a description when creating an attachment.
+- Added support for the user's language preferences when creating an attachment.
+- Combined the "Save as" and "Download as" actions onto one page.
+- Added the ability to add a description when converting a attachment.
+- Users can now select from available formats for editing.
+- Added the ability to view, edit, and convert attachments on the forums page.
+- Added the ability to edit and convert attachments on the files page.
+
+## Bug Fixes
+
+- Fixed the issue of settings not being saved even if validation fails.
+- Implemented a native file-saving process and fixed filename issues containing underscores.
+
+## Chores
+
+- Added ONLYOFFICE Docs Cloud banner on the settings page of the plugin.
+- Fixed formatting issues and ensured codebase uniformity.
+- Updated the appearance of the settings page of the plugin.
+- Updated README.
 
 ## 2.1.0
 ## Added

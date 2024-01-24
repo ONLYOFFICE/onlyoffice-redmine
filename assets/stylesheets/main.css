@@ -1,0 +1,233 @@
+/*
+(c) Copyright Ascensio System SIA 2024
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/* Icon */
+
+.onlyoffice-icon {
+  background-size: 16px;
+}
+
+.onlyoffice-icon__view {
+  background-image: url("../images/actions/view.svg");
+}
+
+.onlyoffice-icon__edit {
+  background-image: url("../images/actions/edit.svg");
+}
+
+.onlyoffice-icon__convert {
+  background-image: url("../images/actions/convert.svg");
+}
+
+/* Documents Show */
+
+.controller-documents.action-show .onlyoffice-new {
+  margin-left: 10px;
+}
+
+/* OnlyOffice Editor */
+
+.controller-only_office_attachments:not([data-editor-error]).action-view #content,
+.controller-only_office_attachments:not([data-editor-error]).action-edit #content {
+  padding: 0;
+}
+
+.onlyoffice-editor {
+  height: 100%;
+  width: 100%;
+}
+
+.onlyoffice-editor iframe {
+  position: relative !important;
+}
+
+/* Settings Plugin */
+
+.onlyoffice-settings {
+  column-gap: 32px;
+  display: grid;
+}
+
+@media screen and (min-width: 0px) and (max-width: 1089px) {
+  .onlyoffice-settings {
+    display: block;
+  }
+}
+
+.onlyoffice-settings div.settings {
+  margin-bottom: 1em;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.onlyoffice-settings fieldset.settings {
+  margin-bottom: 1em;
+  padding: 1em;
+}
+
+.onlyoffice-settings fieldset legend + p {
+  margin-top: 0;
+}
+
+.onlyoffice-settings input[type="text"] {
+  max-width: calc(100% - 4px);
+  width: 100%;
+}
+
+.onlyoffice-settings__main {
+  gird-column: 1;
+  grid-row: 1;
+}
+
+.onlyoffice-settings__advanced {
+  gird-column: 1;
+  grid-row: 2;
+}
+
+.onlyoffice-settings__security {
+  gird-column: 1;
+  grid-row: 3;
+}
+
+.onlyoffice-settings__editor {
+  gird-column: 1;
+  grid-row: 4;
+}
+
+.onlyoffice-settings__formats {
+  grid-column: 1;
+  grid-row: 5;
+}
+
+.onlyoffice-editable__controls {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 1em;
+}
+
+.onlyoffice-editable__control {
+  min-width: 80px;
+}
+
+.onlyoffice-settings__banner {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+
+@media screen and (min-width: 0px) and (max-width: 1089px) {
+  .onlyoffice-settings__banner {
+    margin-bottom: 1em;
+  }
+}
+
+/* Banner */
+
+.onlyoffice-banner {
+  background-color: #FFFFFF;
+  border-radius: 3px;
+  border: 1px solid #E4E4E4;
+  box-sizing: border-box;
+  display: flex;
+  max-width: 269px;
+  overflow: hidden;
+  position: relative;
+}
+
+.onlyoffice-banner::before {
+  background-image: url(../images/banner/background.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  content: "";
+  height: 108%;
+  left: -2%;
+  position: absolute;
+  top: -2%;
+  width: 104%;
+}
+
+.onlyoffice-banner__inner {
+  display: grid;
+  gap: 10px 13px;
+  grid-template-columns: min-content 1fr;
+  padding: 10px 16px 16px 16px;
+  z-index: 1;
+}
+
+.onlyoffice-banner__logo {
+  background-image: url(../images/banner/logo.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  grid-column: 1;
+  grid-row: 1;
+  height: 65px;
+  width: 65px;
+}
+
+.onlyoffice-banner__heading {
+  align-self: end;
+  border: none;
+  color: #505050;
+  font-family: Verdana, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0;
+  padding: 0 30px 0 0;
+}
+
+.onlyoffice-banner__description {
+  color: #555F65;
+  font-size: 12px;
+  grid-column: 1 / span 2;
+  grid-row: 2;
+  margin: 0;
+}
+
+.onlyoffice-banner-go {
+  color: #505050;
+  font-size: 13px;
+  font-weight: 700;
+  grid-column: 1 / span 2;
+  grid-row: 3;
+}
+
+.onlyoffice-banner-go:link,
+.onlyoffice-banner-go:visited {
+  color: #505050;
+}
+
+.onlyoffice-banner-go:active,
+.onlyoffice-banner-go:focus-visible,
+.onlyoffice-banner-go:hover {
+  color: #505050;
+  text-decoration: none;
+}
+
+.onlyoffice-banner-go__contents {
+  border-bottom: 1px dashed #505050;
+}
+
+.onlyoffice-banner-go:focus-visible > .onlyoffice-banner-go__contents,
+.onlyoffice-banner-go:hover > .onlyoffice-banner-go__contents {
+  border-bottom: none;
+}
+
+.onlyoffice-banner-go__pointer {
+  fill: #505050;
+  margin-left: 6px;
+}
