@@ -40,23 +40,28 @@ To install the plugin, you will need Redmine version 4.2 or higher, or version 5
 
 If you are new to Redmine, install it by following [these instructions](https://www.redmine.org/projects/redmine/wiki/RedmineInstall).
 
-Once you have installed Redmine, [download the plugin](https://github.com/ONLYOFFICE/onlyoffice-redmine/releases) and unzip it into the plugins directory.
+Once you have installed Redmine, [download the plugin](https://github.com/ONLYOFFICE/onlyoffice-redmine/releases).
 
 ```sh
-$ curl --location https://github.com/ONLYOFFICE/onlyoffice-redmine/releases/latest/download/onlyoffice_redmine.tar.zst --output onlyoffice_redmine.tar.zst
-$ tar --extract --file onlyoffice_redmine.tar.zst --directory plugins
+curl --location https://github.com/ONLYOFFICE/onlyoffice-redmine/releases/latest/download/onlyoffice_redmine.tar.zst --output onlyoffice_redmine.tar.zst
+```
+
+Unzip it into the plugins directory.
+
+```sh
+tar --extract --file onlyoffice_redmine.tar.zst --directory plugins
 ```
 
 Install the dependencies of the plugin if Redmine did not do it automatically.
 
 ```sh
-$ bundle install
+bundle install
 ```
 
 Perform the migration.
 
 ```sh
-$ RAILS_ENV=production bundle exec rake redmine:plugins:migrate NAME=onlyoffice_redmine
+RAILS_ENV=production bundle exec rake redmine:plugins:migrate NAME=onlyoffice_redmine
 ```
 
 And finally, restart Redmine. Read more about the plugin installation on the Redmine [Wiki page](https://www.redmine.org/projects/redmine/wiki/Plugins#Installing-a-plugin).
