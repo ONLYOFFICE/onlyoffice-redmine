@@ -228,16 +228,26 @@ module OnlyOffice
         # ```
 
         uri = self.uri.normalize
-        if uri.to_s == "/" && url != "/"
+        nu = uri.to_s
+        if nu == "/" && url != "/"
           self.url = ""
         else
+          if !nu.end_with?("/")
+            nu = "#{nu}/"
+            uri = URI(nu)
+          end
           self.uri = uri
         end
 
         uri = internal_uri.normalize
-        if uri.to_s == "/" && internal_url != "/"
+        nu = uri.to_s
+        if nu == "/" && internal_url != "/"
           self.internal_url = ""
         else
+          if !uri.to_s.end_with?("/")
+            nu = "#{nu}/"
+            uri = URI(nu)
+          end
           self.internal_uri = uri
         end
       end
