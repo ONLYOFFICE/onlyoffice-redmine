@@ -56,7 +56,7 @@ module OnlyOffice::API
     end
     def execute(command)
       request = command.serialize
-      http_request = @client.post("/coauthoring/CommandService.ashx", request)
+      http_request = @client.post("coauthoring/CommandService.ashx", request)
       response, http_response = @client.start(http_request)
 
       begin
