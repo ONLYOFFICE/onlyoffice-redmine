@@ -31,5 +31,5 @@ jobs:
         GH_TOKEN: ${{ github.token }}
       run: |
         version="v$(make version)"
-        gh release create "$version" --notes "$(make notes)"
+        gh release create "$version" --title "$version" --notes "$(make notes)"
         gh release upload "$version" onlyoffice_redmine.tar.zst
