@@ -1,6 +1,10 @@
 # Changelog
 
 ## 3.0.1
+## Bug Fixes
+
+- Support for the Document Server URL with virtual path.
+- Support for the Redmine "Authentication Required" setting.
 
 ## 3.0.0
 ## Breaking Changes
