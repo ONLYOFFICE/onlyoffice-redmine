@@ -262,6 +262,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
   include OnlyOfficeJWTHelper
   include OnlyOfficeRouterHelper
   include OnlyOfficeSettingsHelper
+  include OnlyOfficeUserHelper
   include OnlyOfficeViewHelper::Regular
 
   before_action      :require_onlyoffice_plugin
@@ -272,6 +273,16 @@ class OnlyOfficeAttachmentsController < ApplicationController
 
   rescue_from OnlyOfficeRedmine::Error,         with: :handle_error
   rescue_from OnlyOfficeRedmine::SettingsError, with: :handle_settings_error
+
+  def user_setup
+    super
+    case action_name
+    when "download", "retrieve", "callback"
+      resetup_user
+    else
+      # nothing
+    end
+  end
 
   # ```http
   # GET /onlyoffice/containers/{{container_type}}/{{container_id}}/attachments/new HTTP/1.1

@@ -110,7 +110,7 @@ module OnlyOffice::API
     end
     def convert(conversion)
       request = conversion.serialize
-      http_request = @client.post("/ConvertService.ashx", request)
+      http_request = @client.post("ConvertService.ashx", request)
       response, http_response = @client.start(http_request)
 
       begin

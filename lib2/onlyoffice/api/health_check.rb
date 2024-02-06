@@ -26,7 +26,7 @@ module OnlyOffice::API
   class HealthCheckService < Service
     sig { returns([T::Boolean, Net::HTTPResponse]) }
     def check
-      http_request = @client.get("/healthcheck")
+      http_request = @client.get("healthcheck")
       response, http_response = @client.start(http_request)
       unless response.is_a?(TrueClass)
         return [false, http_response]
