@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "jwt", "~> 2.7.1"
-gem "mustache", "~> 1.1.1"
-gem "render_parent", "~> 0.1.0"
-gem "sorbet-runtime", "~> 0.5.10969"
+gem "jwt"
+gem "mustache"
+gem "render_parent"
+gem "sorbet-runtime"

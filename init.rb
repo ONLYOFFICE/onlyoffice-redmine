@@ -19,6 +19,7 @@
 # frozen_string_literal: true
 
 require "redmine"
+require "rubygems"
 require_relative "lib2/onlyoffice"
 require_relative "lib2/only_office"
 require_relative "app/views/views"
@@ -41,6 +42,20 @@ OnlyOffice.logger = logger
 logger = Rails.logger.dup
 logger.progname = OnlyOfficeRedmine.logger.progname.dup
 OnlyOfficeRedmine.logger = logger
+
+def check_gem(name, version)
+  Gem::Specification.find_by_name(name, version)
+rescue Gem::MissingSpecVersionError
+  spec = Gem::Specification.find_by_name(name)
+  OnlyOfficeRedmine.logger.error("Gem '#{name}' version '#{version}' not found, found version '#{spec.version}'")
+rescue Gem::MissingSpecError
+  OnlyOfficeRedmine.logger.error("Gem '#{name}' version '#{version}' not found")
+end
+
+check_gem("jwt", "~> 2.7.1")
+check_gem("mustache", "~> 1.1.1")
+check_gem("render_parent", "~> 0.1.0")
+check_gem("sorbet-runtime", "~> 0.5.10969")
 
 Redmine::Plugin.register(OnlyOfficeRedmine::NAME.to_sym) do
   # rubocop:disable Layout/LineLength
