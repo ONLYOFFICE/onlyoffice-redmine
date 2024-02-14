@@ -32,6 +32,5 @@ fr:
   onlyoffice_create_docx: "Document"
   onlyoffice_create_xlsx: "Feuille de calcul"
   onlyoffice_create_pptx: "Présentation"
-  onlyoffice_create_docxf: "Modèle de formulaire"
   onlyoffice_attachment_create_error: "Une erreur lors de la création"
   onlyoffice_editor_demo_enabled: "Vous utilisez la version démo de ONLYOFFICE Docs, proposée à des fins de tests. Veuillez ne pas stocker vos données confidentielles."
