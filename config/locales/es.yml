@@ -32,6 +32,5 @@ es:
   onlyoffice_create_docx: "Documento"
   onlyoffice_create_xlsx: "Libro de Excel"
   onlyoffice_create_pptx: "Presentación"
-  onlyoffice_create_docxf: "Plantilla de formulario"
   onlyoffice_attachment_create_error: "Error al crear"
   onlyoffice_editor_demo_enabled: "Estás usando el servidor de ONLYOFFICE Docs de demostración. Por favor, no almacenes tus datos confidenciales aquí."
