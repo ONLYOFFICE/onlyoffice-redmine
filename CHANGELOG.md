@@ -2,7 +2,10 @@
 
 ##
 ## Features
-- Filling pdf instead of pdf
+- Filling pdf instead of oform
+
+## Bug Fixes
+- Manually check versions of dependencies
 
 ## 3.0.1
 ## Bug Fixes
