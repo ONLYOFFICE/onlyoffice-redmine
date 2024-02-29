@@ -1,5 +1,9 @@
 # Changelog
 
+##
+## Features
+- Filling pdf instead of pdf
+
 ## 3.0.1
 ## Bug Fixes
 
