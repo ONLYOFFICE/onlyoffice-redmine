@@ -89,13 +89,6 @@ module OnlyOffice::Resources
         all.add(format)
       end
 
-      # TODO: it should be in `formats.json`.
-      zip = OnlyOffice::Resources::Format.new(
-        name: "zip",
-        mime: ["application/zip"]
-      )
-      all.add(zip)
-
       new(all: all)
     end
 

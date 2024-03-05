@@ -32,6 +32,5 @@ it:
   onlyoffice_create_docx: "Documento"
   onlyoffice_create_xlsx: "Foglio di calcolo"
   onlyoffice_create_pptx: "Presentazione"
-  onlyoffice_create_docxf: "Modello di modulo"
   onlyoffice_attachment_create_error: "Errore durante la creazione"
   onlyoffice_editor_demo_enabled: "Stai utilizzando la versione demo pubblica di ONLYOFFICE Docs. Non memorizzare dati sensibili privati."

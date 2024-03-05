@@ -32,6 +32,6 @@ ru:
   onlyoffice_create_docx: "Документ"
   onlyoffice_create_xlsx: "Таблица"
   onlyoffice_create_pptx: "Презентация"
-  onlyoffice_create_docxf: "Шаблон формы"
+  onlyoffice_create_docxf: "PDF форма"
   onlyoffice_attachment_create_error: "Ошибка при создании"
   onlyoffice_editor_demo_enabled: "Вы используете публичный демонстрационный сервер ONLYOFFICE Docs. Пожалуйста, не храните конфиденциальные данные."
