@@ -49,7 +49,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
     view.edit_url = block.edit_url
     view.convert_url = block.convert_url
 
-    view.setup_assets
+    # view.setup_assets
     view.inline
   end
 
@@ -84,7 +84,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
       return ""
     end
 
-    view.setup_assets
+    # view.setup_assets
     view.inline
   end
 
@@ -97,7 +97,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
   #
   # [Redmine Reference](https://github.com/redmine/redmine/blob/5.0.0/app/controllers/files_controller.rb#L31)
   sig { params(helpers: T.untyped, containers: T.untyped).returns(String) }
-  def self.files(helpers, containers)
+  def self.show_files(helpers, containers)
     unless onlyoffice_plugin_available?
       return ""
     end
@@ -120,7 +120,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
       return ""
     end
 
-    view.setup_assets
+    # view.setup_assets
     view.inline
   end
 
@@ -148,7 +148,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
       return ""
     end
 
-    view.setup_assets
+    # view.setup_assets
     view.inline
   end
 
@@ -184,7 +184,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
       return ""
     end
 
-    view.setup_assets
+    # view.setup_assets
     view.inline
   end
 
@@ -212,7 +212,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
       return ""
     end
 
-    view.setup_assets
+    # view.setup_assets
     view.inline
   end
 
@@ -240,7 +240,7 @@ class OnlyOfficeAttachmentsController < ApplicationController
       return ""
     end
 
-    view.setup_assets
+    # view.setup_assets
     view.inline
   end
 
