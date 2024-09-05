@@ -2,6 +2,21 @@
 
 This plugin enables users to edit attachments from [Redmine](https://www.redmine.org/) using ONLYOFFICE Docs packaged as Document Server — [Community or Enterprise Edition](#onlyoffice-docs-editions).
 
+The plugin integrates into various Redmine pages, including:
+- Documents
+- Attachments
+- Files
+- Issues
+- News
+- Wiki
+- Forums
+
+Additionally, the plugin adds general pages:
+- Create in ONLYOFFICE
+- Convert with ONLYOFFICE
+
+Find out more details [here](https://api.onlyoffice.com/editors/redmine#howitworks).
+
 ## Features
 
 - Viewing and editing text documents, spreadsheets, presentations, and forms.
