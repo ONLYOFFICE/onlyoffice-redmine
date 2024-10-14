@@ -122,7 +122,7 @@ module OnlyOffice
         config.jwt.secret = "sn2puSUF7muF5Jas"
         config.jwt.http_header = "AuthorizationJWT"
         # Don't trim the slash. The normalized empty path ends with a slash.
-        config.document_server.url = "https://onlinedocs.onlyoffice.com/"
+        config.document_server.url = "https://onlinedocs.docs.onlyoffice.com/"
         config
       end,
       Config
