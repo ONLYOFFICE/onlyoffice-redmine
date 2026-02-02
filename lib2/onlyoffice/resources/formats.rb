@@ -98,7 +98,7 @@ module OnlyOffice::Resources
     end
 
     sig { override.returns(Pathname) }
-    private_class_method def self.directory
+    public_class_method def self.directory
       resources = super
       resources.join("document-formats")
     end
