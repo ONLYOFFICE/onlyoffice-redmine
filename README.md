@@ -101,7 +101,7 @@ And finally, restart Redmine. Read more about the plugin installation on the Red
 ### Security
 
 - Secret key. \
-  Starting from ONLYOFFICE Document Server 7.2, JWT authentication is enabled by default and the secret key is generated automatically to restrict the access to ONLYOFFICE Docs and for security reasons and data integrity. Specify your secret key in the ONLYOFFICE Docs [config file](https://api.onlyoffice.com/docs/docs-api/additional-api/signature/), then specify the same key in the settings page of the plugin. Leave blank to disable authentication.
+  JWT authentication is enabled by default and the secret key is generated automatically to restrict the access to ONLYOFFICE Docs and for security reasons and data integrity. If needed, specify your own secret key in the ONLYOFFICE Docs [config file](https://api.onlyoffice.com/docs/docs-api/additional-api/signature/), then specify the same key in the settings page of the plugin. Leave blank to disable authentication.
 - Authorization header.
 - Disable certificate verification (insecure).
 
