@@ -101,7 +101,7 @@ And finally, restart Redmine. Read more about the plugin installation on the Red
 ### Security
 
 - Secret key. \
-  Starting from ONLYOFFICE Document Server 7.2, JWT authentication is enabled by default and the secret key is generated automatically to restrict the access to ONLYOFFICE Docs and for security reasons and data integrity. Specify your secret key in the ONLYOFFICE Docs [config file](https://api.onlyoffice.com/docs/docs-api/additional-api/signature/), then specify the same key in the settings page of the plugin. Leave blank to disable authentication.
+  JWT authentication is enabled by default and the secret key is generated automatically to restrict the access to ONLYOFFICE Docs and for security reasons and data integrity. If needed, specify your own secret key in the ONLYOFFICE Docs [config file](https://api.onlyoffice.com/docs/docs-api/additional-api/signature/), then specify the same key in the settings page of the plugin. Leave blank to disable authentication.
 - Authorization header.
 - Disable certificate verification (insecure).
 
@@ -289,22 +289,24 @@ The table below will help you to make the right choice.
 | ------------- | ------------- | ------------- |
 | | [Get it now](https://www.onlyoffice.com/download-community?utm_source=github&utm_medium=cpc&utm_campaign=GitHubRedmine#docs-community)  | [Start Free Trial](https://www.onlyoffice.com/download?utm_source=github&utm_medium=cpc&utm_campaign=GitHubRedmine#docs-enterprise)  |
 | Cost  | FREE  | [Go to the pricing page](https://www.onlyoffice.com/docs-enterprise-prices?utm_source=github&utm_medium=cpc&utm_campaign=GitHubRedmine)  |
-| Simultaneous connections | up to 20 maximum  | As in chosen pricing plan |
 | Number of users | up to 20 recommended | As in chosen pricing plan |
 | License | GNU AGPL v.3 | Proprietary |
 | **Support** | **Community Edition** | **Enterprise Edition** |
 | Documentation | [Help Center](https://helpcenter.onlyoffice.com/docs/installation/community) | [Help Center](https://helpcenter.onlyoffice.com/docs/installation/enterprise) |
-| Standard support | [GitHub](https://github.com/ONLYOFFICE/DocumentServer/issues) or paid | 1 or 3 years support included |
+| Standard support | [GitHub](https://github.com/ONLYOFFICE/DocumentServer/issues) or [Community](https://community.onlyoffice.com/) | 1 or 3 years support included |
 | Premium support | [Contact us](mailto:sales@onlyoffice.com) | [Contact us](mailto:sales@onlyoffice.com) |
 | **Services** | **Community Edition** | **Enterprise Edition** |
 | Conversion Service                | + | + |
-| Document Builder Service          | + | + |
+| Live Viewer                       | + | + |
+| Document Builder Service          | - | - |
+| Automation API                    | - | - |
 | **Interface** | **Community Edition** | **Enterprise Edition** |
 | Tabbed interface                  | + | + |
 | Dark theme                        | + | + |
 | 125%, 150%, 175%, 200% scaling    | + | + |
 | White Label                       | - | - |
 | Integrated test example (node.js) | + | + |
+| Admin Panel                       | - | + |
 | Mobile web editors                | - | +* |
 | **Plugins & Macros** | **Community Edition** | **Enterprise Edition** |
 | Plugins                           | + | + |
@@ -325,7 +327,8 @@ The table below will help you to make the right choice.
 | Table of contents               | + | + |
 | Navigation panel                | + | + |
 | Mail Merge                      | + | + |
-| Comparing Documents             | + | + |
+| Comparing documents             | + | + |
+| Multipage View                  | + | + |
 | **Spreadsheet Editor features** | **Community Edition** | **Enterprise Edition** |
 | Font and paragraph formatting   | + | + |
 | Object insertion                | + | + |
@@ -336,6 +339,7 @@ The table below will help you to make the right choice.
 | Conditional formatting          | + | + |
 | Sparklines                      | + | + |
 | Sheet Views                     | + | + |
+| Solver                          | + | + |
 | **Presentation Editor features** | **Community Edition** | **Enterprise Edition** |
 | Font and paragraph formatting   | + | + |
 | Object insertion                | + | + |
@@ -343,15 +347,18 @@ The table below will help you to make the right choice.
 | Animations                      | + | + |
 | Presenter mode                  | + | + |
 | Notes                           | + | + |
+| Slide Master                    | + | + |
 | **Form creator features** | **Community Edition** | **Enterprise Edition** |
 | Adding form fields              | + | + |
 | Form preview                    | + | + |
 | Saving as PDF                   | + | + |
+| Role-matching colors for fields | + | + |
 | **PDF Editor features**      | **Community Edition** | **Enterprise Edition** |
 | Text editing and co-editing                                | + | + |
 | Work with pages (adding, deleting, rotating)               | + | + |
 | Inserting objects (shapes, images, hyperlinks, etc.)       | + | + |
 | Text annotations (highlight, underline, cross out, stamps) | + | + |
+| Redact                          | + | + |
 | Comments                        | + | + |
 | Freehand drawings               | + | + |
 | Form filling                    | + | + |
@@ -364,4 +371,3 @@ The table below will help you to make the right choice.
 * **🐞 Found a bug?** Please report it by creating an [issue](https://github.com/ONLYOFFICE/onlyoffice-redmine/issues).
 * **❓ Have a question?** Ask our community and developers on the [ONLYOFFICE Forum](https://community.onlyoffice.com).
 * **👨‍💻 Need help for developers?** Check our [API documentation](https://api.onlyoffice.com).
-* **💡 Want to suggest a feature?** Share your ideas on our [feedback platform](https://feedback.onlyoffice.com/forums/966080-your-voice-matters).
