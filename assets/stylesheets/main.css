@@ -46,7 +46,7 @@ limitations under the License.
 }
 
 .onlyoffice-editor {
-  height: 100%;
+  height: (100vh - 170px);
   width: 100%;
 }
 
