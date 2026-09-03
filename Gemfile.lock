@@ -65,7 +65,7 @@ GEM
     builder (3.2.4)
     concurrent-ruby (1.2.2)
     crass (1.0.6)
-    date (3.3.3)
+    date (3.5.1)
     diff-lcs (1.5.0)
     erubi (1.12.0)
     globalid (1.1.0)
@@ -75,10 +75,12 @@ GEM
     json (2.6.3)
     jwt (2.7.1)
     language_server-protocol (3.17.0.3)
+    logger (1.7.0)
     loofah (2.21.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
-    mail (2.8.1)
+    mail (2.9.1)
+      logger
       mini_mime (>= 0.1.1)
       net-imap
       net-pop
@@ -86,26 +88,20 @@ GEM
     marcel (1.0.2)
     method_source (1.0.0)
     mini_mime (1.1.5)
-    mini_portile2 (2.8.4)
     minitest (5.19.0)
     mustache (1.1.1)
-    net-imap (0.3.7)
+    net-imap (0.6.6)
       date
       net-protocol
     net-pop (0.1.2)
       net-protocol
-    net-protocol (0.2.1)
+    net-protocol (0.3.0)
       timeout
-    net-smtp (0.3.3)
+    net-smtp (0.5.1)
       net-protocol
     netrc (0.11.0)
     nio4r (2.5.9)
-    nokogiri (1.15.4)
-      mini_portile2 (~> 2.8.2)
-      racc (~> 1.4)
     nokogiri (1.15.4-arm64-darwin)
-      racc (~> 1.4)
-    nokogiri (1.15.4-x64-mingw-ucrt)
       racc (~> 1.4)
     nokogiri (1.15.4-x86_64-linux)
       racc (~> 1.4)
@@ -214,7 +210,7 @@ GEM
       thor (>= 1.2.0)
       yard-sorbet
     thor (1.2.2)
-    timeout (0.4.0)
+    timeout (0.6.1)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.4.2)
@@ -232,8 +228,6 @@ GEM
 
 PLATFORMS
   arm64-darwin-22
-  ruby
-  x64-mingw-ucrt
   x86_64-linux
 
 DEPENDENCIES
