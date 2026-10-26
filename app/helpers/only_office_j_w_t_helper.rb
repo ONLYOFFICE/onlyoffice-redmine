@@ -62,6 +62,9 @@ module OnlyOfficeJWTHelper
         end
       when Net::HTTP::Post::METHOD
         input = ac.request.get_header("rack.input")
+        input.rewind if input.respond_to?(:rewind)
+        # Rack servers may provide an IO-like stream rather than an IO instance.
+        input = StringIO.new(input.read)
         payload = jwt.decode_body(input)
       else
         raise OnlyOfficeRedmine::Error.unauthorized
